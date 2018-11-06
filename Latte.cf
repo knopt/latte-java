@@ -1,0 +1,149 @@
+-- programs ------------------------------------------------
+
+entrypoints Program ;
+
+ProgramTD.   Program ::= [TopDef] ;
+
+FnDef.	   TopDef  ::= Type Ident "(" [Arg] ")" Block ;
+ClassDecl.  TopDef ::= ClassHeader "{" [FieldDeclaration] "}";
+
+separator nonempty TopDef "" ;
+
+ArgTI.  Arg ::= Type Ident;
+
+separator  Arg "," ;
+
+-- classes -------------------------------------------------
+
+ClassDec.	ClassHeader ::= "class" Ident;
+InterDec.	ClassHeader ::= "interface" Ident;
+
+Dvar.			FieldDeclaration ::= Modifier Type [Item] ";";
+Dmth.			FieldDeclaration ::= Modifier Type Ident "(" [Arg] ")" MethodBody ;
+terminator  	FieldDeclaration "";
+
+
+EmptyMBody. MethodBody ::= ";" ;
+MBody.      MethodBody ::= Block ;
+
+--- modifiers -----------------------------------------------
+
+Mfinal.		  Modifier ::= "final";
+Mpublic.	  Modifier ::= "public";
+Mprivate.	  Modifier ::= "private";
+Mstatic.	  Modifier ::= "static";
+MEmpty.       Modifier ::= "" ;
+terminator Modifier "";
+
+
+-- statements ----------------------------------------------
+
+BlockS.     Block ::= "{" [Stmt] "}" ;
+
+separator  Stmt "" ;
+
+Empty.     Stmt ::= ";" ;
+
+BStmt.     Stmt ::= Block ;
+
+Decl.      Stmt ::= Type [Item] ";" ;
+
+NoInit.    Item ::= Ident ; 
+
+Init.      Item ::= Ident "=" Expr ;
+
+separator nonempty Item "," ;
+
+Ass.       Stmt ::= Ident "=" Expr  ";" ;
+
+Incr.      Stmt ::= Ident "++"  ";" ;
+
+Decr.      Stmt ::= Ident "--"  ";" ;
+
+Ret.       Stmt ::= "return" Expr ";" ;
+
+VRet.      Stmt ::= "return" ";" ;
+
+Cond.      Stmt ::= "if" "(" Expr ")" Stmt  ;
+
+CondElse.  Stmt ::= "if" "(" Expr ")" Stmt "else" Stmt  ;
+
+While.     Stmt ::= "while" "(" Expr ")" Stmt ;
+
+SExp.      Stmt ::= Expr  ";" ;
+
+-- Types ---------------------------------------------------
+
+Int.       BasicType ::= "int" ;
+Str.       BasicType ::= "string" ;
+Bool.      BasicType ::= "boolean" ;
+Void.      BasicType ::= "void" ;
+
+BuiltIn.   TypeName ::= BasicType ;
+ClassName. TypeName ::= Ident ;
+
+ArrayType. Type ::= TypeName [EmptyBracket] ;
+TypeNameS. Type ::= TypeName ;
+
+-- internal   Fun. Type ::= Type "(" [Type] ")" ;
+
+EBracket.   EmptyBracket ::= "[]";
+separator nonempty EmptyBracket "" ;
+
+SBracket.    SizeBracket ::= "[" Expr "]" ;
+separator nonempty SizeBracket "" ;
+
+separator  Type "," ;
+
+-- Expressions ---------------------------------------------
+
+EVar.      Expr7 ::= Ident ;
+ELitInt.   Expr7 ::= Integer ;
+ELitTrue.  Expr7 ::= "true" ;
+ELitFalse. Expr7 ::= "false" ;
+EThis.     Expr7 ::= "this" ;
+ENull.     Expr7 ::= "null" ;
+EApp.      Expr7 ::= Ident "(" [Expr] ")" ;
+EString.   Expr7 ::= String ;
+
+EConstr.   Expr7 ::= "new" Ident ;
+EArrConstr. Expr6 ::= "new" Ident [SizeBracket] ;
+ENDArrAcc.  Expr6 ::= Expr [SizeBracket] ;
+
+FieldAcc.  Expr5 ::= Expr "." Ident ;
+MethodCall. Expr5 ::= Expr "." Ident "(" [Expr] ")" ;
+
+Neg.       Expr5 ::= "-" Expr6 ;
+Not.       Expr5 ::= "!" Expr6 ;
+
+EMul.      Expr4 ::= Expr4 MulOp Expr5 ;
+EAdd.      Expr3 ::= Expr3 AddOp Expr4 ;
+ERel.      Expr2 ::= Expr2 RelOp Expr3 ;
+
+EAnd.      Expr1 ::= Expr2 "&&" Expr1 ;
+EOr.       Expr ::= Expr1 "||" Expr ;
+
+coercions  Expr 7 ;
+
+separator  Expr "," ;
+
+-- operators -----------------------------------------------
+
+Plus.      AddOp ::= "+" ;
+Minus.     AddOp ::= "-" ;
+Times.     MulOp ::= "*" ;
+Div.       MulOp ::= "/" ;
+Mod.       MulOp ::= "%" ;
+LTH.       RelOp ::= "<" ;
+LE.        RelOp ::= "<=" ;
+GTH.       RelOp ::= ">" ;
+GE.        RelOp ::= ">=" ;
+EQU.       RelOp ::= "==" ;
+NE.        RelOp ::= "!=" ;
+
+
+-- comments ------------------------------------------------
+
+comment    "#" ;
+comment    "//" ;
+comment    "/*" "*/" ;
