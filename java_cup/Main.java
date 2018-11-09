@@ -276,6 +276,7 @@ public class Main {
       /* parse the options */
       for (i=0; i<len; i++)
 	{
+	    System.err.println("Parsing arugment: " + argv[i]);
 	  /* try to get the various options */
 	  if (argv[i].equals("-package"))
 	    {

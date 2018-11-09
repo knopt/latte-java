@@ -4,8 +4,8 @@ import java.io.*;
 
 public class Test
 {
-  Latte.Yylex l;
-  Latte.parser p;
+  Yylex l;
+  parser p;
   
   public Test(String[] args)
   {
@@ -21,10 +21,10 @@ public class Test
       System.err.println("Error: File not found: " + args[0]);
       System.exit(1);
     }
-    p = new Latte.parser(l, l.getSymbolFactory());
+    p = new Latte.parser(l);
   }
   
-  public Absyn.Program parse() throws Exception
+  public Latte.Absyn.Program parse() throws Exception
   {
     /* The default parser is the first-defined entry point. */
     /* Other options are: */
