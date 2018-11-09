@@ -5,7 +5,7 @@ JAVAC_FLAGS=-sourcepath .
 JAVA=java
 JAVA_FLAGS=
 PARSER=${JAVA} ${JAVA_FLAGS} java_cup.Main
-PARSER_FLAGS=-locations -expect 200
+PARSER_FLAGS=-nopositions -expect 200
 LEXER=${JAVA} ${JAVA_FLAGS} JLex.Main
 LEXER_FLAGS=
 all: test

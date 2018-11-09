@@ -2,19 +2,79 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c0927591-448d-4989-ae6a-2567b7472fd1" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/AddOp.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/AddOp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Arg.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/Arg.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ArgTI.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/ArgTI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ArrayType.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/ArrayType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Ass.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/Ass.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/BStmt.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/BStmt.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/BasicType.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/BasicType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Block.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/Block.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/BlockS.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/BlockS.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Bool.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/Bool.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/BuiltIn.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/BuiltIn.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ClassDec.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/ClassDec.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ClassDecl.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/ClassDecl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ClassHeader.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/ClassHeader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ClassName.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/ClassName.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Cond.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/Cond.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/CondElse.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/CondElse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Decl.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/Decl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Decr.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/Decr.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Latte/Absyn/Div.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/Div.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Dmth.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/Dmth.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Dvar.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/Dvar.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/EAdd.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/EAdd.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/EAnd.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/EAnd.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/EApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/EApp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/EArrConstr.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/EArrConstr.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/EBracket.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/EBracket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/EConstr.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/EConstr.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ELitFalse.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/ELitFalse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ELitInt.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/ELitInt.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ELitTrue.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/ELitTrue.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/EMul.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/EMul.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ENDArrAcc.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/ENDArrAcc.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ENull.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/ENull.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/EOr.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/EOr.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Latte/Absyn/EQU.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/EQU.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ERel.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/ERel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/EString.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/EString.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/EThis.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/EThis.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/EVar.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/EVar.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Empty.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/Empty.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/EmptyBracket.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/EmptyBracket.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Latte/Absyn/EmptyMBody.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/EmptyMBody.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Expr.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/Expr.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/FieldAcc.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/FieldAcc.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/FieldDeclaration.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/FieldDeclaration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/FnDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/FnDef.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Latte/Absyn/GE.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/GE.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Latte/Absyn/GTH.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/GTH.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Incr.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/Incr.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Latte/Absyn/Init.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/Init.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Int.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/Int.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/InterDec.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/InterDec.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Item.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/Item.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Latte/Absyn/LE.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/LE.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Latte/Absyn/LTH.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/LTH.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ListArg.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/ListArg.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ListEmptyBracket.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/ListEmptyBracket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ListExpr.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/ListExpr.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ListFieldDeclaration.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/ListFieldDeclaration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ListItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/ListItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ListModifier.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/ListModifier.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ListSizeBracket.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/ListSizeBracket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ListStmt.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/ListStmt.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ListTopDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/ListTopDef.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ListType.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/ListType.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Latte/Absyn/MBody.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/MBody.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Latte/Absyn/MEmpty.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/MEmpty.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/MethodBody.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/MethodBody.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/MethodCall.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/MethodCall.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Latte/Absyn/Mfinal.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/Mfinal.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Minus.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/Minus.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Latte/Absyn/Mod.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/Mod.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Latte/Absyn/Modifier.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/Modifier.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Latte/Absyn/Mprivate.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/Mprivate.java" afterDir="false" />
@@ -22,13 +82,31 @@
       <change beforePath="$PROJECT_DIR$/Latte/Absyn/Mstatic.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/Mstatic.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Latte/Absyn/MulOp.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/MulOp.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Latte/Absyn/NE.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/NE.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Neg.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/Neg.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Latte/Absyn/NoInit.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/NoInit.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Not.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/Not.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Plus.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/Plus.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Latte/Absyn/Program.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/Program.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Latte/Absyn/ProgramTD.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/ProgramTD.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Latte/Absyn/RelOp.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/RelOp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Ret.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/Ret.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Latte/Absyn/SBracket.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/SBracket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/SExp.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/SExp.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Latte/Absyn/SizeBracket.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/SizeBracket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Stmt.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/Stmt.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Str.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/Str.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Latte/Absyn/Times.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/Times.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/TopDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/TopDef.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Type.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/Type.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/TypeName.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/TypeName.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/TypeNameS.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/TypeNameS.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/VRet.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/VRet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Void.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/Void.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/While.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/While.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Test.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Yylex" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Yylex" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/_cup.cup" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/_cup.cup" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/Makefile" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -54,103 +132,66 @@
           <entry key="Main" value="1" />
           <entry key="Makefile" value="1" />
           <entry key="Yylex" value="1" />
+          <entry key="bak" value="34" />
           <entry key="cf" value="1" />
           <entry key="class" value="4" />
-          <entry key="cup" value="1" />
-          <entry key="java" value="107" />
+          <entry key="cup" value="2" />
+          <entry key="java" value="255" />
           <entry key="xml" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="CLASS" value="4" />
-          <entry key="JAVA" value="107" />
-          <entry key="PLAIN_TEXT" value="6" />
+          <entry key="JAVA" value="255" />
+          <entry key="PLAIN_TEXT" value="41" />
           <entry key="XML" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="Makefile" value="8" />
+          <entry key="Makefile" value="13" />
+          <entry key="bak" value="7" />
           <entry key="cf" value="2" />
-          <entry key="java" value="1550" />
+          <entry key="dummy" value="82" />
+          <entry key="java" value="2451" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="1550" />
-          <entry key="PLAIN_TEXT" value="10" />
+          <entry key="JAVA" value="2451" />
+          <entry key="PLAIN_TEXT" value="104" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Latte/Absyn/Program.java">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Latte/Test.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="12" selection-start-line="12" selection-end-line="13" selection-end-column="72" />
+            <state relative-caret-position="351">
+              <caret line="30" column="24" lean-forward="true" selection-start-line="30" selection-start-column="24" selection-end-line="30" selection-end-column="24" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Latte/Absyn/RelOp.java">
+        <entry file="file://$PROJECT_DIR$/Latte/parser.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="345">
-              <caret line="23" column="55" selection-start-line="23" selection-start-column="55" selection-end-line="23" selection-end-column="55" />
+            <state relative-caret-position="210">
+              <caret line="17" column="28" lean-forward="true" selection-start-line="17" selection-start-column="28" selection-end-line="17" selection-end-column="28" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Latte/Absyn/LTH.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="315">
-              <caret line="25" column="45" selection-start-line="25" selection-start-column="45" selection-end-line="25" selection-end-column="45" />
-            </state>
-          </provider>
+        <entry file="file://$PROJECT_DIR$/Latte/Test.java.bak">
+          <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Latte/Absyn/LE.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="330">
-              <caret line="26" column="46" selection-start-line="26" selection-start-column="46" selection-end-line="26" selection-end-column="46" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Latte/Absyn/GTH.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="345">
-              <caret line="27" column="45" selection-start-line="27" selection-start-column="45" selection-end-line="27" selection-end-column="45" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Latte/Absyn/GE.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
-              <caret line="28" column="46" selection-start-line="28" selection-start-column="46" selection-end-line="28" selection-end-column="46" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Latte/Absyn/EQU.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="375">
-              <caret line="29" column="45" selection-start-line="29" selection-start-column="45" selection-end-line="29" selection-end-column="45" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Latte/Absyn/NE.java">
+        <entry file="file://$PROJECT_DIR$/Latte/Absyn/SExp.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="60">
               <caret line="4" column="13" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
@@ -159,25 +200,49 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Latte/Absyn/SizeBracket.java">
+        <entry file="file://$PROJECT_DIR$/Latte/Absyn/Str.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="13" column="57" selection-start-line="13" selection-start-column="57" selection-end-line="13" selection-end-column="57" />
+            <state relative-caret-position="60">
+              <caret line="4" column="13" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/Latte/Absyn/SBracket.java">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Latte/Absyn/Void.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="60">
-              <caret line="4" column="48" selection-start-line="4" selection-start-column="48" selection-end-line="4" selection-end-column="48" />
-              <folding>
-                <element signature="e#771#772#0" expanded="true" />
-                <element signature="e#792#793#0" expanded="true" />
-              </folding>
+              <caret line="4" column="13" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
             </state>
           </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Latte/Absyn/VRet.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="60">
+              <caret line="4" column="13" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Latte/Absyn/While.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="60">
+              <caret line="4" column="13" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Latte/_cup.cup.bak">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Latte/_cup.cup">
+          <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
     </leaf>
@@ -190,7 +255,20 @@
       <find>jlex.main</find>
       <find>class</find>
       <find>parser</find>
+      <find>package Latte.Absyn</find>
+      <find>o instanceof Latte.Absyn.</find>
+      <find>Latte.Absyn.</find>
     </findStrings>
+    <replaceStrings>
+      <replace>package Absyn</replace>
+      <replace>o instanceof</replace>
+      <replace />
+      <replace>Absyn.</replace>
+    </replaceStrings>
+    <dirStrings>
+      <dir>$PROJECT_DIR$/Latte/Absyn</dir>
+      <dir>$PROJECT_DIR$/Latte</dir>
+    </dirStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -198,57 +276,57 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/Latte/Absyn/EApp.java" />
-        <option value="$PROJECT_DIR$/Latte/Absyn/EArrConstr.java" />
-        <option value="$PROJECT_DIR$/Latte/Absyn/EConstr.java" />
-        <option value="$PROJECT_DIR$/Latte/Absyn/ELitFalse.java" />
-        <option value="$PROJECT_DIR$/Latte/Absyn/ELitInt.java" />
-        <option value="$PROJECT_DIR$/Latte/Absyn/ELitTrue.java" />
-        <option value="$PROJECT_DIR$/Latte/Absyn/EMul.java" />
-        <option value="$PROJECT_DIR$/Latte/Absyn/ENDArrAcc.java" />
-        <option value="$PROJECT_DIR$/Latte/Absyn/ENull.java" />
-        <option value="$PROJECT_DIR$/Latte/Absyn/EOr.java" />
-        <option value="$PROJECT_DIR$/Latte/Absyn/ERel.java" />
-        <option value="$PROJECT_DIR$/Latte/Absyn/EString.java" />
-        <option value="$PROJECT_DIR$/Latte/Absyn/EThis.java" />
-        <option value="$PROJECT_DIR$/Latte/Absyn/EVar.java" />
-        <option value="$PROJECT_DIR$/Latte/Absyn/FieldAcc.java" />
-        <option value="$PROJECT_DIR$/Latte/Absyn/MethodCall.java" />
-        <option value="$PROJECT_DIR$/Latte/Absyn/Minus.java" />
-        <option value="$PROJECT_DIR$/Latte/Absyn/Neg.java" />
-        <option value="$PROJECT_DIR$/Latte/Absyn/Not.java" />
-        <option value="$PROJECT_DIR$/Latte/Absyn/Str.java" />
-        <option value="$PROJECT_DIR$/Latte/Absyn/Void.java" />
-        <option value="$PROJECT_DIR$/Latte/Absyn/FieldDeclaration.java" />
-        <option value="$PROJECT_DIR$/Latte/Absyn/Dvar.java" />
-        <option value="$PROJECT_DIR$/Latte/Absyn/Dmth.java" />
-        <option value="$PROJECT_DIR$/Latte/Absyn/Item.java" />
-        <option value="$PROJECT_DIR$/Latte/Absyn/MethodBody.java" />
-        <option value="$PROJECT_DIR$/Latte/Absyn/MBody.java" />
-        <option value="$PROJECT_DIR$/Latte/Absyn/EmptyMBody.java" />
-        <option value="$PROJECT_DIR$/Latte/Absyn/Init.java" />
-        <option value="$PROJECT_DIR$/Latte/Absyn/Modifier.java" />
-        <option value="$PROJECT_DIR$/Latte/Absyn/Mstatic.java" />
-        <option value="$PROJECT_DIR$/Latte/Absyn/Mprivate.java" />
-        <option value="$PROJECT_DIR$/Latte/Absyn/Mfinal.java" />
-        <option value="$PROJECT_DIR$/Latte/Absyn/NoInit.java" />
-        <option value="$PROJECT_DIR$/Latte/Absyn/MEmpty.java" />
-        <option value="$PROJECT_DIR$/Latte/Absyn/MulOp.java" />
+        <option value="$PROJECT_DIR$/Latte/Absyn/Cond.java.bak" />
         <option value="$PROJECT_DIR$/Latte/Absyn/Times.java" />
-        <option value="$PROJECT_DIR$/Latte/Absyn/Mpublic.java" />
         <option value="$PROJECT_DIR$/Latte/Absyn/Div.java" />
         <option value="$PROJECT_DIR$/Latte/Absyn/Mod.java" />
-        <option value="$PROJECT_DIR$/Latte/Absyn/Program.java" />
-        <option value="$PROJECT_DIR$/Latte/Absyn/ProgramTD.java" />
+        <option value="$PROJECT_DIR$/Latte/Absyn/Dvar.java" />
+        <option value="$PROJECT_DIR$/Latte/Absyn/Dmth.java" />
+        <option value="$PROJECT_DIR$/Latte/Absyn/ENDArrAcc.java" />
+        <option value="$PROJECT_DIR$/Latte/Absyn/EVar.java" />
+        <option value="$PROJECT_DIR$/Latte/Absyn/ELitInt.java" />
+        <option value="$PROJECT_DIR$/Latte/Absyn/ELitTrue.java" />
+        <option value="$PROJECT_DIR$/Latte/Absyn/ELitFalse.java" />
+        <option value="$PROJECT_DIR$/Latte/Absyn/EThis.java" />
+        <option value="$PROJECT_DIR$/Latte/Absyn/EConstr.java" />
+        <option value="$PROJECT_DIR$/Latte/Absyn/EArrConstr.java" />
+        <option value="$PROJECT_DIR$/Latte/Absyn/FieldAcc.java" />
+        <option value="$PROJECT_DIR$/Latte/Absyn/MethodCall.java" />
+        <option value="$PROJECT_DIR$/Latte/Absyn/Neg.java" />
+        <option value="$PROJECT_DIR$/Latte/Absyn/Not.java" />
+        <option value="$PROJECT_DIR$/Latte/Absyn/EMul.java" />
+        <option value="$PROJECT_DIR$/Latte/Absyn/EAdd.java" />
+        <option value="$PROJECT_DIR$/Latte/Absyn/ERel.java" />
+        <option value="$PROJECT_DIR$/Latte/Absyn/EAnd.java" />
+        <option value="$PROJECT_DIR$/Latte/Absyn/EOr.java" />
+        <option value="$PROJECT_DIR$/Latte/Absyn/EApp.java" />
+        <option value="$PROJECT_DIR$/Latte/Absyn/EBracket.java" />
+        <option value="$PROJECT_DIR$/Latte/Absyn/EmptyMBody.java" />
+        <option value="$PROJECT_DIR$/Latte/Absyn/MBody.java" />
+        <option value="$PROJECT_DIR$/Latte/Absyn/ENull.java" />
         <option value="$PROJECT_DIR$/Latte/Absyn/RelOp.java" />
-        <option value="$PROJECT_DIR$/Latte/Absyn/NE.java" />
         <option value="$PROJECT_DIR$/Latte/Absyn/LTH.java" />
         <option value="$PROJECT_DIR$/Latte/Absyn/LE.java" />
         <option value="$PROJECT_DIR$/Latte/Absyn/GTH.java" />
         <option value="$PROJECT_DIR$/Latte/Absyn/GE.java" />
         <option value="$PROJECT_DIR$/Latte/Absyn/EQU.java" />
-        <option value="$PROJECT_DIR$/Latte/Absyn/SizeBracket.java" />
+        <option value="$PROJECT_DIR$/Latte/Absyn/NE.java" />
+        <option value="$PROJECT_DIR$/Latte/Absyn/ERel.java.bak" />
+        <option value="$PROJECT_DIR$/Latte/Absyn/EString.java" />
+        <option value="$PROJECT_DIR$/Latte/Absyn/NoInit.java" />
+        <option value="$PROJECT_DIR$/Latte/Absyn/Init.java" />
+        <option value="$PROJECT_DIR$/Latte/Absyn/Mfinal.java" />
+        <option value="$PROJECT_DIR$/Latte/Absyn/Mprivate.java" />
+        <option value="$PROJECT_DIR$/Latte/Absyn/Mpublic.java" />
+        <option value="$PROJECT_DIR$/Latte/Absyn/Mstatic.java" />
+        <option value="$PROJECT_DIR$/Latte/Absyn/MEmpty.java" />
+        <option value="$PROJECT_DIR$/Latte/Absyn/Minus.java" />
+        <option value="$PROJECT_DIR$/Latte/Absyn/Mpublic.java.bak" />
+        <option value="$PROJECT_DIR$/Latte/Absyn/NoInit.java.bak" />
+        <option value="$PROJECT_DIR$/Latte/Absyn/Plus.java" />
+        <option value="$PROJECT_DIR$/Latte/Absyn/ProgramTD.java" />
         <option value="$PROJECT_DIR$/Latte/Absyn/SBracket.java" />
+        <option value="$PROJECT_DIR$/Latte/Test.java" />
       </list>
     </option>
   </component>
@@ -282,6 +360,11 @@
               <item name="compiler" type="b2602c69:ProjectViewProjectNode" />
               <item name="compiler" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="compiler" type="b2602c69:ProjectViewProjectNode" />
+              <item name="compiler" type="462c0819:PsiDirectoryNode" />
+              <item name="Latte" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -301,7 +384,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="SearchEverywhereHistoryKey" value="parser&#9;PSI&#9;JAVA://Latte.parser&#10;jlex&#9;FILE&#9;jar:///home/tomek/inf/mrjp/compiler/bnfc/testing/data/javatools.jar!/JLex" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1541760185763" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1541774237284" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
@@ -333,8 +416,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="25" width="1366" height="743" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25378788" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25378788" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -342,7 +426,7 @@
       <window_info id="Capture Tool" order="5" />
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32952693" />
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
@@ -364,373 +448,341 @@
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/Latte/Absyn/EConstr.java</url>
+          <line>26</line>
+          <properties />
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Latte/Absyn/EArrConstr.java">
+    <entry file="file://$PROJECT_DIR$/Latte/Absyn/EQU.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" column="41" lean-forward="true" selection-start-line="6" selection-start-column="41" selection-end-line="6" selection-end-column="41" />
+        <state relative-caret-position="375">
+          <caret line="27" column="33" lean-forward="true" selection-start-line="27" selection-start-column="33" selection-end-line="27" selection-end-column="33" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Latte/Absyn/BlockS.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="13" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Latte/Absyn/EConstr.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="44" lean-forward="true" selection-start-line="4" selection-start-column="44" selection-end-line="4" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Latte/Absyn/ELitFalse.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="45" selection-start-line="4" selection-start-column="45" selection-end-line="4" selection-end-column="45" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Latte/Absyn/ELitInt.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="42" selection-start-line="4" selection-start-column="42" selection-end-line="4" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Latte/Absyn/ELitTrue.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="46" selection-start-line="4" selection-start-column="46" selection-end-line="4" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Latte/Absyn/EMul.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="40" selection-start-line="4" selection-start-column="40" selection-end-line="4" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Latte/Absyn/ENDArrAcc.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="44" lean-forward="true" selection-start-line="4" selection-start-column="44" selection-end-line="4" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Latte/Absyn/ENull.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="41" selection-start-line="4" selection-start-column="41" selection-end-line="4" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Latte/Absyn/EOr.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="38" lean-forward="true" selection-start-line="4" selection-start-column="38" selection-end-line="4" selection-end-column="38" />
-        </state>
-      </provider>
+    <entry file="file://$PROJECT_DIR$/Latte/Absyn/ERel.java.bak">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/Latte/Absyn/ERel.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" column="32" lean-forward="true" selection-start-line="5" selection-start-column="32" selection-end-line="5" selection-end-column="32" />
+        <state relative-caret-position="486">
+          <caret line="46" column="34" lean-forward="true" selection-start-line="46" selection-start-column="34" selection-end-line="46" selection-end-column="34" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Latte/Absyn/EString.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="43" lean-forward="true" selection-start-line="4" selection-start-column="43" selection-end-line="4" selection-end-column="43" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Latte/Absyn/EThis.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="42" lean-forward="true" selection-start-line="4" selection-start-column="42" selection-end-line="4" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Latte/Absyn/EVar.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="26" lean-forward="true" selection-start-line="4" selection-start-column="26" selection-end-line="4" selection-end-column="26" />
+        <state relative-caret-position="486">
+          <caret line="46" column="5" selection-start-line="46" selection-start-column="5" selection-end-line="46" selection-end-column="5" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Latte/Absyn/FieldAcc.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" column="40" lean-forward="true" selection-start-line="5" selection-start-column="40" selection-end-line="5" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Latte/Absyn/MethodCall.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="46" lean-forward="true" selection-start-line="4" selection-start-column="46" selection-end-line="4" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Latte/Absyn/Minus.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="41" selection-start-line="4" selection-start-column="41" selection-end-line="4" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Latte/Absyn/Neg.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="40" selection-start-line="4" selection-start-column="40" selection-end-line="4" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Latte/Absyn/Not.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="7" column="29" lean-forward="true" selection-start-line="7" selection-start-column="29" selection-end-line="7" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Latte/Absyn/Str.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="43" selection-start-line="4" selection-start-column="43" selection-end-line="4" selection-end-column="43" />
-          <folding>
-            <element signature="e#495#496#0" expanded="true" />
-            <element signature="e#520#521#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Latte/Absyn/Void.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="40" lean-forward="true" selection-start-line="4" selection-start-column="40" selection-end-line="4" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Latte/Absyn/FieldDeclaration.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="14" column="55" selection-start-line="14" selection-start-column="55" selection-end-line="14" selection-end-column="55" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Latte/Absyn/Dvar.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="435">
-          <caret line="33" column="45" lean-forward="true" selection-start-line="33" selection-start-column="45" selection-end-line="33" selection-end-column="45" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Latte/Absyn/Dmth.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="38" column="12" selection-start-line="38" selection-start-column="12" selection-end-line="38" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Latte/Absyn/MethodBody.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="15" column="57" lean-forward="true" selection-start-line="15" selection-start-column="57" selection-end-line="15" selection-end-column="57" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Latte/Absyn/MBody.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="28" column="49" selection-start-line="28" selection-start-column="49" selection-end-line="28" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Latte/Absyn/EmptyMBody.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="47" lean-forward="true" selection-start-line="4" selection-start-column="47" selection-end-line="4" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Latte/Absyn/Init.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="66">
-          <caret line="5" column="31" lean-forward="true" selection-start-line="5" selection-start-column="31" selection-end-line="5" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Latte/Absyn/Item.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="14" column="56" selection-start-line="14" selection-start-column="56" selection-end-line="14" selection-end-column="56" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Latte/Absyn/Modifier.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="23" column="56" lean-forward="true" selection-start-line="23" selection-start-column="56" selection-end-line="23" selection-end-column="56" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Latte/Absyn/Mstatic.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="26" column="49" selection-start-line="26" selection-start-column="49" selection-end-line="26" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Latte/Absyn/Mprivate.java">
-      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="375">
-          <caret line="29" column="36" lean-forward="true" selection-start-line="29" selection-start-column="36" selection-end-line="29" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Latte/Absyn/Mfinal.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="43" lean-forward="true" selection-start-line="4" selection-start-column="43" selection-end-line="4" selection-end-column="43" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Latte/Absyn/MEmpty.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="44" selection-start-line="4" selection-start-column="44" selection-end-line="4" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Latte/Absyn/MulOp.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="16" column="56" selection-start-line="16" selection-start-column="56" selection-end-line="16" selection-end-column="56" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Latte/Absyn/Mpublic.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="43" lean-forward="true" selection-start-line="4" selection-start-column="43" selection-end-line="4" selection-end-column="43" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Latte/Absyn/NoInit.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="29" column="24" lean-forward="true" selection-start-line="29" selection-start-column="24" selection-end-line="29" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Latte/Absyn/Times.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="25" column="43" lean-forward="true" selection-start-line="25" selection-start-column="43" selection-end-line="25" selection-end-column="43" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Latte/Absyn/Div.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="27" column="46" lean-forward="true" selection-start-line="27" selection-start-column="46" selection-end-line="27" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Latte/Absyn/Mod.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="28" column="18" selection-start-line="28" selection-start-column="18" selection-end-line="28" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Latte/Absyn/ProgramTD.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" column="38" lean-forward="true" selection-start-line="7" selection-start-column="38" selection-end-line="7" selection-end-column="38" />
-          <folding>
-            <element signature="e#805#806#0" expanded="true" />
-            <element signature="e#829#830#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Latte/Absyn/RelOp.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="23" column="55" selection-start-line="23" selection-start-column="55" selection-end-line="23" selection-end-column="55" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Latte/Absyn/LTH.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="25" column="45" selection-start-line="25" selection-start-column="45" selection-end-line="25" selection-end-column="45" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Latte/Absyn/LE.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="26" column="46" selection-start-line="26" selection-start-column="46" selection-end-line="26" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Latte/Absyn/GTH.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="27" column="45" selection-start-line="27" selection-start-column="45" selection-end-line="27" selection-end-column="45" />
+          <caret line="39" column="33" lean-forward="true" selection-start-line="39" selection-start-column="33" selection-end-line="39" selection-end-column="33" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Latte/Absyn/GE.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="360">
-          <caret line="28" column="46" selection-start-line="28" selection-start-column="46" selection-end-line="28" selection-end-column="46" />
+          <caret line="26" column="34" lean-forward="true" selection-start-line="26" selection-start-column="34" selection-end-line="26" selection-end-column="34" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Latte/Absyn/EQU.java">
+    <entry file="file://$PROJECT_DIR$/Latte/Absyn/GTH.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="29" column="45" selection-start-line="29" selection-start-column="45" selection-end-line="29" selection-end-column="45" />
+        <state relative-caret-position="345">
+          <caret line="25" column="33" selection-start-line="25" selection-start-column="33" selection-end-line="25" selection-end-column="33" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Latte/Absyn/NE.java">
+    <entry file="file://$PROJECT_DIR$/Latte/Absyn/Init.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+          <caret line="30" column="17" selection-start-line="30" selection-start-column="17" selection-end-line="30" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Latte/Absyn/Int.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="4" column="13" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Latte/Absyn/Program.java">
+    <entry file="file://$PROJECT_DIR$/Latte/Absyn/Item.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="12" selection-start-line="12" selection-end-line="13" selection-end-column="72" />
+        <state relative-caret-position="90">
+          <caret line="6" column="45" selection-start-line="6" selection-start-column="45" selection-end-line="6" selection-end-column="45" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Latte/Absyn/SizeBracket.java">
+    <entry file="file://$PROJECT_DIR$/Latte/Absyn/LTH.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="13" column="57" selection-start-line="13" selection-start-column="57" selection-end-line="13" selection-end-column="57" />
+        <state relative-caret-position="330">
+          <caret line="24" column="34" selection-start-line="24" selection-start-column="34" selection-end-line="24" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Latte/Absyn/MBody.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="27" column="33" selection-start-line="27" selection-start-column="33" selection-end-line="27" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Latte/Absyn/MEmpty.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="375">
+          <caret line="27" column="21" selection-start-line="27" selection-start-column="21" selection-end-line="27" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Latte/Absyn/MethodBody.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" selection-start-line="5" selection-end-line="6" selection-end-column="58" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Latte/Absyn/MethodCall.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="411">
+          <caret line="42" column="33" selection-start-line="42" selection-start-column="33" selection-end-line="42" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Latte/Absyn/Mfinal.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="24" column="36" selection-start-line="24" selection-start-column="36" selection-end-line="24" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Latte/Absyn/Minus.java.bak">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="375">
+          <caret line="25" selection-start-line="25" selection-end-line="28" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Latte/Absyn/AddOp.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="58" lean-forward="true" selection-start-line="6" selection-start-column="58" selection-end-line="6" selection-end-column="58" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Latte/Absyn/Minus.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Latte/Absyn/Modifier.java.bak">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Latte/Absyn/Modifier.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="45" selection-start-line="6" selection-start-column="45" selection-end-line="6" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Latte/Absyn/Mprivate.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="23" column="37" selection-start-line="23" selection-start-column="37" selection-end-line="23" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Latte/Absyn/Mpublic.java.bak">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Latte/Absyn/Mpublic.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="25" column="35" selection-start-line="25" selection-start-column="35" selection-end-line="25" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Latte/Absyn/Mstatic.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="26" column="35" lean-forward="true" selection-start-line="26" selection-start-column="35" selection-end-line="26" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Latte/Absyn/MulOp.java.bak">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Latte/Absyn/MulOp.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="22" selection-start-line="4" selection-start-column="22" selection-end-line="4" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Latte/Absyn/NoInit.java.bak">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Latte/Absyn/NoInit.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="28" column="33" lean-forward="true" selection-start-line="28" selection-start-column="33" selection-end-line="28" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Latte/Absyn/Neg.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="426">
+          <caret line="39" column="33" selection-start-line="39" selection-start-column="33" selection-end-line="39" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Latte/Absyn/Not.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="441">
+          <caret line="40" column="34" lean-forward="true" selection-start-line="40" selection-start-column="34" selection-end-line="40" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Latte/Absyn/Plus.java.bak">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="24" lean-forward="true" selection-start-line="24" selection-end-line="28" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Latte/Absyn/Plus.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Latte/Absyn/Program.java.bak">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Latte/Absyn/Program.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="22" selection-start-line="4" selection-start-column="22" selection-end-line="4" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Latte/Absyn/ProgramTD.java.bak">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+          <caret line="28" lean-forward="true" selection-start-line="28" selection-end-line="31" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Latte/Absyn/ProgramTD.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="26" column="25" selection-start-line="26" selection-start-column="25" selection-end-line="26" selection-end-column="25" />
+          <folding>
+            <element signature="e#641#642#0" expanded="true" />
+            <element signature="e#678#679#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Latte/Absyn/Ret.java.bak">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Latte/Absyn/Ret.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="13" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Latte/Absyn/SBracket.java.bak">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+          <caret line="28" lean-forward="true" selection-start-line="28" selection-end-line="31" selection-end-column="5" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Latte/Absyn/SBracket.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="48" selection-start-line="4" selection-start-column="48" selection-end-line="4" selection-end-column="48" />
+        <state relative-caret-position="135">
+          <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
           <folding>
-            <element signature="e#771#772#0" expanded="true" />
-            <element signature="e#792#793#0" expanded="true" />
+            <element signature="e#710#711#0" expanded="true" />
+            <element signature="e#753#754#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Latte/Absyn/SExp.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="13" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Latte/Absyn/Str.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="13" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Latte/Absyn/Void.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="13" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Latte/Absyn/VRet.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="13" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Latte/Absyn/While.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="13" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Latte/_cup.cup.bak">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Latte/_cup.cup">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Latte/Test.java.bak">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Latte/parser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="17" column="28" lean-forward="true" selection-start-line="17" selection-start-column="28" selection-end-line="17" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Latte/Test.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="351">
+          <caret line="30" column="24" lean-forward="true" selection-start-line="30" selection-start-column="24" selection-end-line="30" selection-end-column="24" />
         </state>
       </provider>
     </entry>
