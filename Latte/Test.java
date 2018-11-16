@@ -21,7 +21,7 @@ public class Test
       System.err.println("Error: File not found: " + args[0]);
       System.exit(1);
     }
-    p = new Latte.parser(l);
+    p = new Latte.parser(l, l.getSymbolFactory());
   }
   
   public Latte.Absyn.Program parse() throws Exception

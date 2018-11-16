@@ -1,0 +1,9 @@
+class Node {
+	Node next;
+	int value;
+
+	Node getNext() {
+		return this.next;
+	}
+}
+

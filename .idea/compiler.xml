@@ -13,4 +13,8 @@
       <module name="compiler" target="8" />
     </bytecodeTargetLevel>
   </component>
+  <component name="HaskellBuildOptions">
+    <ghcPath>/usr/bin/ghc</ghcPath>
+    <cabalPath>/usr/bin/cabal</cabalPath>
+  </component>
 </project>

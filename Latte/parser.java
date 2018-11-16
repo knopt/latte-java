@@ -7,6 +7,8 @@
 package Latte;
 
 
+import java_cup.runtime.SymbolFactory;
+
 /** CUP v0.10k generated parser.
   * @version Fri Nov 09 19:36:56 CET 2018
   */
@@ -17,6 +19,8 @@ public class parser extends java_cup.runtime.lr_parser {
 
   /** Constructor which sets the default scanner. */
   public parser(java_cup.runtime.Scanner s) {super(s);}
+
+  public parser(java_cup.runtime.Scanner s, SymbolFactory f) {super(s, f);}
 
   /** Production table. */
   protected static final short _production_table[][] = 
@@ -766,6 +770,19 @@ public java_cup.runtime.ComplexSymbolFactory.Location getLeftLocation(
 		int p_3right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Latte.Absyn.Expr p_3 = (Latte.Absyn.Expr)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
 		 RESULT = new Latte.Absyn.EOr(p_1,p_3);
+
+		 java_cup.runtime.ComplexSymbolFactory.Location p_1xleft = null;
+		 java_cup.runtime.ComplexSymbolFactory.Location p_3xleft = null;
+
+		 try {
+		   p_1xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).xleft;
+           p_3xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).xleft;
+             System.err.println("Successfull cast to complext symbol!");
+         } catch (Exception e) {
+             System.err.println((CUP$parser$stack.elementAt(CUP$parser$top-2)).getClass().getSimpleName());
+		   System.err.println(e);
+         }
+
 java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_1xleft,p_3xleft);
 if (leftLoc != null) {
   ((Latte.Absyn.EOr)RESULT).line_num = leftLoc.getLine();
@@ -806,6 +823,20 @@ if (leftLoc != null) {
 		int p_3right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Latte.Absyn.Expr p_3 = (Latte.Absyn.Expr)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
 		 RESULT = new Latte.Absyn.EAnd(p_1,p_3);
+
+              java_cup.runtime.ComplexSymbolFactory.Location p_1xleft = null;
+              java_cup.runtime.ComplexSymbolFactory.Location p_3xleft = null;
+
+              try {
+                p_1xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).xleft;
+                p_3xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).xleft;
+                  System.err.println("Successfull cast to complext symbol!");
+              } catch (Exception e) {
+
+                  System.err.println((CUP$parser$stack.elementAt(CUP$parser$top-2)).getClass().getSimpleName());
+                System.err.println(e);
+              }
+
 java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_1xleft,p_3xleft);
 if (leftLoc != null) {
   ((Latte.Absyn.EAnd)RESULT).line_num = leftLoc.getLine();
@@ -846,6 +877,22 @@ if (leftLoc != null) {
 		int p_3right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Latte.Absyn.Expr p_3 = (Latte.Absyn.Expr)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
 		 RESULT = new Latte.Absyn.ERel(p_1,p_2,p_3);
+
+        java_cup.runtime.ComplexSymbolFactory.Location p_1xleft = null;
+        java_cup.runtime.ComplexSymbolFactory.Location p_2xleft = null;
+        java_cup.runtime.ComplexSymbolFactory.Location p_3xleft = null;
+
+        try {
+          p_1xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).xleft;
+          p_2xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).xleft;
+          p_3xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).xleft;
+            System.err.println("Successfull cast to complext symbol!");
+        } catch (Exception e) {
+
+            System.err.println((CUP$parser$stack.elementAt(CUP$parser$top-2)).getClass().getSimpleName());
+          System.err.println(e);
+        }
+
 java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_1xleft,p_2xleft,p_3xleft);
 if (leftLoc != null) {
   ((Latte.Absyn.ERel)RESULT).line_num = leftLoc.getLine();
@@ -886,6 +933,22 @@ if (leftLoc != null) {
 		int p_3right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Latte.Absyn.Expr p_3 = (Latte.Absyn.Expr)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
 		 RESULT = new Latte.Absyn.EAdd(p_1,p_2,p_3);
+
+              java_cup.runtime.ComplexSymbolFactory.Location p_1xleft = null;
+              java_cup.runtime.ComplexSymbolFactory.Location p_2xleft = null;
+              java_cup.runtime.ComplexSymbolFactory.Location p_3xleft = null;
+
+              try {
+                p_1xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).xleft;
+                p_2xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).xleft;
+                p_3xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).xleft;
+                  System.err.println("Successfull cast to complext symbol!");
+              } catch (Exception e) {
+
+                  System.err.println((CUP$parser$stack.elementAt(CUP$parser$top-2)).getClass().getSimpleName());
+                System.err.println(e);
+              }
+
 java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_1xleft,p_2xleft,p_3xleft);
 if (leftLoc != null) {
   ((Latte.Absyn.EAdd)RESULT).line_num = leftLoc.getLine();
@@ -926,6 +989,22 @@ if (leftLoc != null) {
 		int p_3right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Latte.Absyn.Expr p_3 = (Latte.Absyn.Expr)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
 		 RESULT = new Latte.Absyn.EMul(p_1,p_2,p_3);
+
+        java_cup.runtime.ComplexSymbolFactory.Location p_1xleft = null;
+        java_cup.runtime.ComplexSymbolFactory.Location p_2xleft = null;
+        java_cup.runtime.ComplexSymbolFactory.Location p_3xleft = null;
+
+        try {
+          p_1xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).xleft;
+          p_2xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).xleft;
+          p_3xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).xleft;
+            System.err.println("Successfull cast to complext symbol!");
+        } catch (Exception e) {
+
+            System.err.println((CUP$parser$stack.elementAt(CUP$parser$top-2)).getClass().getSimpleName());
+          System.err.println(e);
+        }
+
 java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_1xleft,p_2xleft,p_3xleft);
 if (leftLoc != null) {
   ((Latte.Absyn.EMul)RESULT).line_num = leftLoc.getLine();
@@ -963,6 +1042,15 @@ if (leftLoc != null) {
 		int p_2right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Latte.Absyn.Expr p_2 = (Latte.Absyn.Expr)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
 		 RESULT = new Latte.Absyn.Not(p_2);
+
+              java_cup.runtime.ComplexSymbolFactory.Location p_2xleft = null;
+
+              try {
+                p_2xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).xleft;
+                  System.err.println("Successfull cast to complext symbol!");
+              } catch (Exception e) {
+                System.err.println(e);
+              }
 java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_2xleft);
 if (leftLoc != null) {
   ((Latte.Absyn.Not)RESULT).line_num = leftLoc.getLine();
@@ -988,6 +1076,19 @@ if (leftLoc != null) {
 		int p_2right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Latte.Absyn.Expr p_2 = (Latte.Absyn.Expr)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
 		 RESULT = new Latte.Absyn.Neg(p_2);
+
+          java_cup.runtime.ComplexSymbolFactory.Location p_2xleft = null;
+
+          try {
+
+              System.err.println((CUP$parser$stack.elementAt(CUP$parser$top-0)).getClass().getSimpleName());
+            p_2xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).xleft;
+              System.err.println("Successfull cast to complext symbol!");
+          } catch (Exception e) {
+            System.err.println(e);
+          }
+
+
 java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_2xleft);
 if (leftLoc != null) {
   ((Latte.Absyn.Neg)RESULT).line_num = leftLoc.getLine();
@@ -1025,6 +1126,21 @@ if (leftLoc != null) {
 		int p_6right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Object p_6 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
 		 RESULT = new Latte.Absyn.MethodCall(p_1,p_3,p_5);
+
+              java_cup.runtime.ComplexSymbolFactory.Location p_1xleft = null;
+              java_cup.runtime.ComplexSymbolFactory.Location p_5xleft = null;
+              java_cup.runtime.ComplexSymbolFactory.Location p_3xleft = null;
+
+              try {
+                p_1xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-5)).xleft;
+                p_5xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).xleft;
+                p_3xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).xleft;
+                  System.err.println("Successfull cast to complext symbol!");
+              } catch (Exception e) {
+                System.err.println(e);
+              }
+
+
 java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_1xleft,p_3xleft,p_5xleft);
 if (leftLoc != null) {
   ((Latte.Absyn.MethodCall)RESULT).line_num = leftLoc.getLine();
@@ -1053,6 +1169,19 @@ if (leftLoc != null) {
 		int p_3right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		String p_3 = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
 		 RESULT = new Latte.Absyn.FieldAcc(p_1,p_3);
+
+          java_cup.runtime.ComplexSymbolFactory.Location p_1xleft = null;
+          java_cup.runtime.ComplexSymbolFactory.Location p_2xleft = null;
+          java_cup.runtime.ComplexSymbolFactory.Location p_3xleft = null;
+
+          try {
+            p_1xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).xleft;
+            p_3xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).xleft;
+              System.err.println("Successfull cast to complext symbol!");
+          } catch (Exception e) {
+            System.err.println(e);
+          }
+
 java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_1xleft,p_3xleft);
 if (leftLoc != null) {
   ((Latte.Absyn.FieldAcc)RESULT).line_num = leftLoc.getLine();
@@ -1090,6 +1219,18 @@ if (leftLoc != null) {
 		int p_2right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Latte.Absyn.ListSizeBracket p_2 = (Latte.Absyn.ListSizeBracket)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
 		 RESULT = new Latte.Absyn.ENDArrAcc(p_1,p_2);
+
+              java_cup.runtime.ComplexSymbolFactory.Location p_1xleft = null;
+              java_cup.runtime.ComplexSymbolFactory.Location p_2xleft = null;
+
+              try {
+                p_1xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).xleft;
+                p_2xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).xleft;
+                  System.err.println("Successfull cast to complext symbol!");
+              } catch (Exception e) {
+                System.err.println(e);
+              }
+
 java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_1xleft,p_2xleft);
 if (leftLoc != null) {
   ((Latte.Absyn.ENDArrAcc)RESULT).line_num = leftLoc.getLine();
@@ -1118,6 +1259,19 @@ if (leftLoc != null) {
 		int p_3right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Latte.Absyn.ListSizeBracket p_3 = (Latte.Absyn.ListSizeBracket)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
 		 RESULT = new Latte.Absyn.EArrConstr(p_2,p_3);
+
+              java_cup.runtime.ComplexSymbolFactory.Location p_1xleft = null;
+              java_cup.runtime.ComplexSymbolFactory.Location p_2xleft = null;
+              java_cup.runtime.ComplexSymbolFactory.Location p_3xleft = null;
+
+              try {
+                p_2xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).xleft;
+                p_3xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).xleft;
+                  System.err.println("Successfull cast to complext symbol!");
+              } catch (Exception e) {
+                System.err.println(e);
+              }
+
 java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_2xleft,p_3xleft);
 if (leftLoc != null) {
   ((Latte.Absyn.EArrConstr)RESULT).line_num = leftLoc.getLine();
@@ -1161,6 +1315,18 @@ if (leftLoc != null) {
 		int p_2right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		String p_2 = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
 		 RESULT = new Latte.Absyn.EConstr(p_2);
+
+              java_cup.runtime.ComplexSymbolFactory.Location p_1xleft = null;
+              java_cup.runtime.ComplexSymbolFactory.Location p_2xleft = null;
+              java_cup.runtime.ComplexSymbolFactory.Location p_3xleft = null;
+
+              try {
+                p_2xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).xleft;
+                  System.err.println("Successfull cast to complext symbol!");
+              } catch (Exception e) {
+                System.err.println(e);
+              }
+
 java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_2xleft);
 if (leftLoc != null) {
   ((Latte.Absyn.EConstr)RESULT).line_num = leftLoc.getLine();
@@ -1183,6 +1349,18 @@ if (leftLoc != null) {
 		int p_1right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		String p_1 = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
 		 RESULT = new Latte.Absyn.EString(p_1);
+
+              java_cup.runtime.ComplexSymbolFactory.Location p_1xleft = null;
+              java_cup.runtime.ComplexSymbolFactory.Location p_2xleft = null;
+              java_cup.runtime.ComplexSymbolFactory.Location p_3xleft = null;
+
+              try {
+                p_1xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).xleft;
+                  System.err.println("Successfull cast to complext symbol!");
+              } catch (Exception e) {
+                System.err.println(e);
+              }
+
 java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_1xleft);
 if (leftLoc != null) {
   ((Latte.Absyn.EString)RESULT).line_num = leftLoc.getLine();
@@ -1214,6 +1392,18 @@ if (leftLoc != null) {
 		int p_4right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Object p_4 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
 		 RESULT = new Latte.Absyn.EApp(p_1,p_3);
+              java_cup.runtime.ComplexSymbolFactory.Location p_1xleft = null;
+              java_cup.runtime.ComplexSymbolFactory.Location p_2xleft = null;
+              java_cup.runtime.ComplexSymbolFactory.Location p_3xleft = null;
+
+              try {
+                p_1xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).xleft;
+                p_3xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).xleft;
+                  System.err.println("Successfull cast to complext symbol!");
+              } catch (Exception e) {
+                System.err.println(e);
+              }
+
 java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_1xleft,p_3xleft);
 if (leftLoc != null) {
   ((Latte.Absyn.EApp)RESULT).line_num = leftLoc.getLine();
@@ -1296,6 +1486,18 @@ if (leftLoc != null) {
 		int p_1right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Integer p_1 = (Integer)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
 		 RESULT = new Latte.Absyn.ELitInt(p_1);
+
+              java_cup.runtime.ComplexSymbolFactory.Location p_1xleft = null;
+              java_cup.runtime.ComplexSymbolFactory.Location p_2xleft = null;
+              java_cup.runtime.ComplexSymbolFactory.Location p_3xleft = null;
+
+              try {
+                p_1xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).xleft;
+                  System.err.println("Successfull cast to complext symbol!");
+
+              } catch (Exception e) {
+                System.err.println(e);
+              }
 java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_1xleft);
 if (leftLoc != null) {
   ((Latte.Absyn.ELitInt)RESULT).line_num = leftLoc.getLine();
@@ -1318,6 +1520,19 @@ if (leftLoc != null) {
 		int p_1right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		String p_1 = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
 		 RESULT = new Latte.Absyn.EVar(p_1);
+
+              java_cup.runtime.ComplexSymbolFactory.Location p_1xleft = null;
+              java_cup.runtime.ComplexSymbolFactory.Location p_2xleft = null;
+              java_cup.runtime.ComplexSymbolFactory.Location p_3xleft = null;
+
+              try {
+                p_1xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).xleft;
+                  System.err.println("Successfull cast to complext symbol!");
+
+              } catch (Exception e) {
+                System.err.println(e);
+              }
+
 java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_1xleft);
 if (leftLoc != null) {
   ((Latte.Absyn.EVar)RESULT).line_num = leftLoc.getLine();
@@ -1412,6 +1627,18 @@ if (leftLoc != null) {
 		int p_3right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Object p_3 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
 		 RESULT = new Latte.Absyn.SBracket(p_2);
+
+              java_cup.runtime.ComplexSymbolFactory.Location p_1xleft = null;
+              java_cup.runtime.ComplexSymbolFactory.Location p_2xleft = null;
+              java_cup.runtime.ComplexSymbolFactory.Location p_3xleft = null;
+
+              try {
+                p_2xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).xleft;
+                  System.err.println("Successfull cast to complext symbol!");
+              } catch (Exception e) {
+                System.err.println(e);
+              }
+
 java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_2xleft);
 if (leftLoc != null) {
   ((Latte.Absyn.SBracket)RESULT).line_num = leftLoc.getLine();
@@ -1476,6 +1703,15 @@ if (leftLoc != null) {
 		int p_1right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Latte.Absyn.TypeName p_1 = (Latte.Absyn.TypeName)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
 		 RESULT = new Latte.Absyn.TypeNameS(p_1);
+
+              java_cup.runtime.ComplexSymbolFactory.Location p_1xleft = null;
+
+              try {
+                p_1xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).xleft;
+                System.err.println("Successfull cast to complext symbol!");
+              } catch (Exception e) {
+                System.err.println(e);
+              }
 java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_1xleft);
 if (leftLoc != null) {
   ((Latte.Absyn.TypeNameS)RESULT).line_num = leftLoc.getLine();
@@ -1501,6 +1737,19 @@ if (leftLoc != null) {
 		int p_2right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Latte.Absyn.ListEmptyBracket p_2 = (Latte.Absyn.ListEmptyBracket)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
 		 RESULT = new Latte.Absyn.ArrayType(p_1,p_2);
+
+              java_cup.runtime.ComplexSymbolFactory.Location p_1xleft = null;
+              java_cup.runtime.ComplexSymbolFactory.Location p_2xleft = null;
+              java_cup.runtime.ComplexSymbolFactory.Location p_3xleft = null;
+
+              try {
+                p_1xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).xleft;
+                p_2xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).xleft;
+                  System.err.println("Successfull cast to complext symbol!");
+              } catch (Exception e) {
+                System.err.println(e);
+              }
+
 java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_1xleft,p_2xleft);
 if (leftLoc != null) {
   ((Latte.Absyn.ArrayType)RESULT).line_num = leftLoc.getLine();
@@ -1523,6 +1772,17 @@ if (leftLoc != null) {
 		int p_1right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		String p_1 = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
 		 RESULT = new Latte.Absyn.ClassName(p_1);
+
+              java_cup.runtime.ComplexSymbolFactory.Location p_1xleft = null;
+              java_cup.runtime.ComplexSymbolFactory.Location p_2xleft = null;
+              java_cup.runtime.ComplexSymbolFactory.Location p_3xleft = null;
+
+              try {
+                p_1xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).xleft;
+                  System.err.println("Successfull cast to complext symbol!");
+              } catch (Exception e) {
+                System.err.println(e);
+              }
 java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_1xleft);
 if (leftLoc != null) {
   ((Latte.Absyn.ClassName)RESULT).line_num = leftLoc.getLine();
@@ -1545,6 +1805,17 @@ if (leftLoc != null) {
 		int p_1right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Latte.Absyn.BasicType p_1 = (Latte.Absyn.BasicType)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
 		 RESULT = new Latte.Absyn.BuiltIn(p_1);
+
+              java_cup.runtime.ComplexSymbolFactory.Location p_1xleft = null;
+              java_cup.runtime.ComplexSymbolFactory.Location p_2xleft = null;
+              java_cup.runtime.ComplexSymbolFactory.Location p_3xleft = null;
+
+              try {
+                p_1xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).xleft;
+                  System.err.println("Successfull cast to complext symbol!");
+              } catch (Exception e) {
+                System.err.println(e);
+              }
 java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_1xleft);
 if (leftLoc != null) {
   ((Latte.Absyn.BuiltIn)RESULT).line_num = leftLoc.getLine();
@@ -1663,6 +1934,19 @@ if (leftLoc != null) {
 		int p_3right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Latte.Absyn.Expr p_3 = (Latte.Absyn.Expr)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
 		 RESULT = new Latte.Absyn.Init(p_1,p_3);
+
+              java_cup.runtime.ComplexSymbolFactory.Location p_1xleft = null;
+              java_cup.runtime.ComplexSymbolFactory.Location p_2xleft = null;
+              java_cup.runtime.ComplexSymbolFactory.Location p_3xleft = null;
+
+              try {
+                p_1xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).xleft;
+                p_3xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).xleft;
+                  System.err.println("Successfull cast to complext symbol!");
+              } catch (Exception e) {
+                System.err.println(e);
+              }
+
 java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_1xleft,p_3xleft);
 if (leftLoc != null) {
   ((Latte.Absyn.Init)RESULT).line_num = leftLoc.getLine();
@@ -1685,6 +1969,17 @@ if (leftLoc != null) {
 		int p_1right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		String p_1 = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
 		 RESULT = new Latte.Absyn.NoInit(p_1);
+
+              java_cup.runtime.ComplexSymbolFactory.Location p_1xleft = null;
+              java_cup.runtime.ComplexSymbolFactory.Location p_2xleft = null;
+              java_cup.runtime.ComplexSymbolFactory.Location p_3xleft = null;
+
+              try {
+                p_1xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).xleft;
+                  System.err.println("Successfull cast to complext symbol!");
+              } catch (Exception e) {
+                System.err.println(e);
+              }
 java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_1xleft);
 if (leftLoc != null) {
   ((Latte.Absyn.NoInit)RESULT).line_num = leftLoc.getLine();
@@ -1710,6 +2005,17 @@ if (leftLoc != null) {
 		int p_2right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Object p_2 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
 		 RESULT = new Latte.Absyn.SExp(p_1);
+
+              java_cup.runtime.ComplexSymbolFactory.Location p_1xleft = null;
+              java_cup.runtime.ComplexSymbolFactory.Location p_2xleft = null;
+              java_cup.runtime.ComplexSymbolFactory.Location p_3xleft = null;
+
+              try {
+                p_1xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).xleft;
+                  System.err.println("Successfull cast to complext symbol!");
+              } catch (Exception e) {
+                System.err.println(e);
+              }
 java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_1xleft);
 if (leftLoc != null) {
   ((Latte.Absyn.SExp)RESULT).line_num = leftLoc.getLine();
@@ -1744,6 +2050,19 @@ if (leftLoc != null) {
 		int p_5right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Latte.Absyn.Stmt p_5 = (Latte.Absyn.Stmt)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
 		 RESULT = new Latte.Absyn.While(p_3,p_5);
+
+              java_cup.runtime.ComplexSymbolFactory.Location p_3xleft = null;
+              java_cup.runtime.ComplexSymbolFactory.Location p_5xleft = null;
+
+              try {
+                p_5xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).xleft;
+
+                p_3xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).xleft;
+                  System.err.println("Successfull cast to complext symbol!");
+              } catch (Exception e) {
+                System.err.println(e);
+              }
+
 java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_3xleft,p_5xleft);
 if (leftLoc != null) {
   ((Latte.Absyn.While)RESULT).line_num = leftLoc.getLine();
@@ -1784,6 +2103,20 @@ if (leftLoc != null) {
 		int p_7right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Latte.Absyn.Stmt p_7 = (Latte.Absyn.Stmt)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
 		 RESULT = new Latte.Absyn.CondElse(p_3,p_5,p_7);
+
+              java_cup.runtime.ComplexSymbolFactory.Location p_3xleft = null;
+              java_cup.runtime.ComplexSymbolFactory.Location p_5xleft = null;
+              java_cup.runtime.ComplexSymbolFactory.Location p_7xleft = null;
+
+              try {
+                p_3xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-4)).xleft;
+                p_5xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).xleft;
+                p_7xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).xleft;
+                  System.err.println("Successfull cast to complext symbol!");
+              } catch (Exception e) {
+                System.err.println(e);
+              }
+
 java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_3xleft,p_5xleft,p_7xleft);
 if (leftLoc != null) {
   ((Latte.Absyn.CondElse)RESULT).line_num = leftLoc.getLine();
@@ -1818,6 +2151,17 @@ if (leftLoc != null) {
 		int p_5right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Latte.Absyn.Stmt p_5 = (Latte.Absyn.Stmt)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
 		 RESULT = new Latte.Absyn.Cond(p_3,p_5);
+
+              java_cup.runtime.ComplexSymbolFactory.Location p_5xleft = null;
+              java_cup.runtime.ComplexSymbolFactory.Location p_3xleft = null;
+
+              try {
+                p_5xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).xleft;
+                p_3xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).xleft;
+                  System.err.println("Successfull cast to complext symbol!");
+              } catch (Exception e) {
+                System.err.println(e);
+              }
 java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_3xleft,p_5xleft);
 if (leftLoc != null) {
   ((Latte.Absyn.Cond)RESULT).line_num = leftLoc.getLine();
@@ -1864,6 +2208,15 @@ if (leftLoc != null) {
 		int p_3right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Object p_3 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
 		 RESULT = new Latte.Absyn.Ret(p_2);
+
+              java_cup.runtime.ComplexSymbolFactory.Location p_2xleft = null;
+
+              try {
+                p_2xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).xleft;
+                  System.err.println("Successfull cast to complext symbol!");
+              } catch (Exception e) {
+                System.err.println(e);
+              }
 java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_2xleft);
 if (leftLoc != null) {
   ((Latte.Absyn.Ret)RESULT).line_num = leftLoc.getLine();
@@ -1892,6 +2245,17 @@ if (leftLoc != null) {
 		int p_3right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Object p_3 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
 		 RESULT = new Latte.Absyn.Decr(p_1);
+
+              java_cup.runtime.ComplexSymbolFactory.Location p_1xleft = null;
+
+              try {
+                p_1xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).xleft;
+                  System.err.println("Successfull cast to complext symbol!");
+
+              } catch (Exception e) {
+                System.err.println(e);
+              }
+
 java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_1xleft);
 if (leftLoc != null) {
   ((Latte.Absyn.Decr)RESULT).line_num = leftLoc.getLine();
@@ -1920,7 +2284,19 @@ if (leftLoc != null) {
 		int p_3right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Object p_3 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
 		 RESULT = new Latte.Absyn.Incr(p_1);
+
+              java_cup.runtime.ComplexSymbolFactory.Location p_1xleft = null;
+
+              try {
+                p_1xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).xleft;
+                  System.err.println("Successfull cast to complext symbol!");
+              } catch (Exception e) {
+                System.err.println(e);
+              }
 java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_1xleft);
+
+
+
 if (leftLoc != null) {
   ((Latte.Absyn.Incr)RESULT).line_num = leftLoc.getLine();
   ((Latte.Absyn.Incr)RESULT).col_num = leftLoc.getColumn();
@@ -1951,6 +2327,18 @@ if (leftLoc != null) {
 		int p_4right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Object p_4 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
 		 RESULT = new Latte.Absyn.Ass(p_1,p_3);
+
+              java_cup.runtime.ComplexSymbolFactory.Location p_1xleft = null;
+              java_cup.runtime.ComplexSymbolFactory.Location p_3xleft = null;
+
+              try {
+                p_1xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).xleft;
+                p_3xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).xleft;
+                  System.err.println("Successfull cast to complext symbol!");
+              } catch (Exception e) {
+                System.err.println(e);
+              }
+
 java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_1xleft,p_3xleft);
 if (leftLoc != null) {
   ((Latte.Absyn.Ass)RESULT).line_num = leftLoc.getLine();
@@ -1979,6 +2367,18 @@ if (leftLoc != null) {
 		int p_3right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Object p_3 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
 		 RESULT = new Latte.Absyn.Decl(p_1,p_2);
+
+              java_cup.runtime.ComplexSymbolFactory.Location p_1xleft = null;
+              java_cup.runtime.ComplexSymbolFactory.Location p_2xleft = null;
+
+              try {
+                p_1xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).xleft;
+                p_2xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).xleft;
+                  System.err.println("Successfull cast to complext symbol!");
+              } catch (Exception e) {
+                System.err.println(e);
+              }
+
 java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_1xleft,p_2xleft);
 if (leftLoc != null) {
   ((Latte.Absyn.Decl)RESULT).line_num = leftLoc.getLine();
@@ -2001,6 +2401,16 @@ if (leftLoc != null) {
 		int p_1right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Latte.Absyn.Block p_1 = (Latte.Absyn.Block)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
 		 RESULT = new Latte.Absyn.BStmt(p_1);
+
+              java_cup.runtime.ComplexSymbolFactory.Location p_1xleft = null;
+
+              try {
+                p_1xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).xleft;
+                  System.err.println("Successfull cast to complext symbol!");
+              } catch (Exception e) {
+                System.err.println(e);
+              }
+
 java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_1xleft);
 if (leftLoc != null) {
   ((Latte.Absyn.BStmt)RESULT).line_num = leftLoc.getLine();
@@ -2068,6 +2478,17 @@ if (leftLoc != null) {
 		int p_3right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Object p_3 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
 		 RESULT = new Latte.Absyn.BlockS(p_2);
+
+              java_cup.runtime.ComplexSymbolFactory.Location p_2xleft = null;
+
+              try {
+                p_2xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).xleft;
+                  System.err.println("Successfull cast to complext symbol!");
+
+              } catch (Exception e) {
+                System.err.println(e);
+              }
+
 java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_2xleft);
 if (leftLoc != null) {
   ((Latte.Absyn.BlockS)RESULT).line_num = leftLoc.getLine();
@@ -2186,6 +2607,18 @@ if (leftLoc != null) {
 		int p_1right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Latte.Absyn.Block p_1 = (Latte.Absyn.Block)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
 		 RESULT = new Latte.Absyn.MBody(p_1);
+
+              java_cup.runtime.ComplexSymbolFactory.Location p_1xleft = null;
+
+              try {
+                p_1xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).xleft;
+                  System.err.println("Successfull cast to complext symbol!");
+
+              } catch (Exception e) {
+                System.err.println(e);
+              }
+
+
 java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_1xleft);
 if (leftLoc != null) {
   ((Latte.Absyn.MBody)RESULT).line_num = leftLoc.getLine();
@@ -2265,6 +2698,26 @@ if (leftLoc != null) {
 		int p_7right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Latte.Absyn.MethodBody p_7 = (Latte.Absyn.MethodBody)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
 		 RESULT = new Latte.Absyn.Dmth(p_1,p_2,p_3,p_5,p_7);
+
+              java_cup.runtime.ComplexSymbolFactory.Location p_1xleft = null;
+              java_cup.runtime.ComplexSymbolFactory.Location p_2xleft = null;
+              java_cup.runtime.ComplexSymbolFactory.Location p_3xleft = null;
+              java_cup.runtime.ComplexSymbolFactory.Location p_5xleft = null;
+              java_cup.runtime.ComplexSymbolFactory.Location p_7xleft = null;
+
+
+              try {
+                p_1xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-6)).xleft;
+                p_2xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-5)).xleft;
+                p_3xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-4)).xleft;
+                p_5xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).xleft;
+                p_7xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).xleft;
+                  System.err.println("Successfull cast to complext symbol!");
+
+              } catch (Exception e) {
+                System.err.println(e);
+              }
+
 java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_1xleft,p_2xleft,p_3xleft,p_5xleft,p_7xleft);
 if (leftLoc != null) {
   ((Latte.Absyn.Dmth)RESULT).line_num = leftLoc.getLine();
@@ -2296,6 +2749,23 @@ if (leftLoc != null) {
 		int p_4right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Object p_4 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
 		 RESULT = new Latte.Absyn.Dvar(p_1,p_2,p_3);
+
+
+              java_cup.runtime.ComplexSymbolFactory.Location p_1xleft = null;
+              java_cup.runtime.ComplexSymbolFactory.Location p_2xleft = null;
+              java_cup.runtime.ComplexSymbolFactory.Location p_3xleft = null;
+
+
+              try {
+                p_1xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).xleft;
+                p_2xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).xleft;
+                p_3xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).xleft;
+                  System.err.println("Successfull cast to complext symbol!");
+
+              } catch (Exception e) {
+                System.err.println(e);
+              }
+
 java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_1xleft,p_2xleft,p_3xleft);
 if (leftLoc != null) {
   ((Latte.Absyn.Dvar)RESULT).line_num = leftLoc.getLine();
@@ -2321,6 +2791,16 @@ if (leftLoc != null) {
 		int p_2right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		String p_2 = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
 		 RESULT = new Latte.Absyn.InterDec(p_2);
+
+              java_cup.runtime.ComplexSymbolFactory.Location p_2xleft = null;
+
+              try {
+                p_2xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).xleft;
+                  System.err.println("Successfull cast to complext symbol!");
+
+              } catch (Exception e) {
+                System.err.println(e);
+              }
 java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_2xleft);
 if (leftLoc != null) {
   ((Latte.Absyn.InterDec)RESULT).line_num = leftLoc.getLine();
@@ -2346,6 +2826,19 @@ if (leftLoc != null) {
 		int p_2right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		String p_2 = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
 		 RESULT = new Latte.Absyn.ClassDec(p_2);
+
+
+              java_cup.runtime.ComplexSymbolFactory.Location p_2xleft = null;
+
+
+              try {
+                p_2xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).xleft;
+                  System.err.println("Successfull cast to complext symbol!");
+
+              } catch (Exception e) {
+                System.err.println(e);
+              }
+
 java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_2xleft);
 if (leftLoc != null) {
   ((Latte.Absyn.ClassDec)RESULT).line_num = leftLoc.getLine();
@@ -2410,6 +2903,20 @@ if (leftLoc != null) {
 		int p_2right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		String p_2 = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
 		 RESULT = new Latte.Absyn.ArgTI(p_1,p_2);
+
+
+              java_cup.runtime.ComplexSymbolFactory.Location p_1xleft = null;
+              java_cup.runtime.ComplexSymbolFactory.Location p_2xleft = null;
+
+
+              try {
+                p_1xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).xleft;
+                p_2xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).xleft;
+
+              } catch (Exception e) {
+                System.err.println(e);
+              }
+
 java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_1xleft,p_2xleft);
 if (leftLoc != null) {
   ((Latte.Absyn.ArgTI)RESULT).line_num = leftLoc.getLine();
@@ -2468,6 +2975,20 @@ if (leftLoc != null) {
 		int p_4right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Object p_4 = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
 		 RESULT = new Latte.Absyn.ClassDecl(p_1,p_3);
+
+
+              java_cup.runtime.ComplexSymbolFactory.Location p_1xleft = null;
+              java_cup.runtime.ComplexSymbolFactory.Location p_3xleft = null;
+
+
+              try {
+                p_1xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).xleft;
+                p_3xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).xleft;
+
+              } catch (Exception e) {
+                System.err.println(e);
+              }
+
 java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_1xleft,p_3xleft);
 if (leftLoc != null) {
   ((Latte.Absyn.ClassDecl)RESULT).line_num = leftLoc.getLine();
@@ -2505,6 +3026,24 @@ if (leftLoc != null) {
 		int p_6right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Latte.Absyn.Block p_6 = (Latte.Absyn.Block)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
 		 RESULT = new Latte.Absyn.FnDef(p_1,p_2,p_4,p_6);
+
+
+              java_cup.runtime.ComplexSymbolFactory.Location p_1xleft = null;
+              java_cup.runtime.ComplexSymbolFactory.Location p_2xleft = null;
+              java_cup.runtime.ComplexSymbolFactory.Location p_4xleft = null;
+              java_cup.runtime.ComplexSymbolFactory.Location p_6xleft = null;
+
+
+              try {
+                p_1xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-5)).xleft;
+                p_2xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-4)).xleft;
+                p_4xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).xleft;
+                p_6xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).xleft;
+
+              } catch (Exception e) {
+                System.err.println(e);
+              }
+
 java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_1xleft,p_2xleft,p_4xleft,p_6xleft);
 if (leftLoc != null) {
   ((Latte.Absyn.FnDef)RESULT).line_num = leftLoc.getLine();
@@ -2527,6 +3066,18 @@ if (leftLoc != null) {
 		int p_1right = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).right;
 		Latte.Absyn.ListTopDef p_1 = (Latte.Absyn.ListTopDef)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-0)).value;
 		 RESULT = new Latte.Absyn.ProgramTD(p_1);
+
+
+              java_cup.runtime.ComplexSymbolFactory.Location p_1xleft = null;
+
+
+              try {
+                p_1xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-0)).xleft;
+
+              } catch (Exception e) {
+                System.err.println(e);
+              }
+
 java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_1xleft);
 if (leftLoc != null) {
   ((Latte.Absyn.ProgramTD)RESULT).line_num = leftLoc.getLine();

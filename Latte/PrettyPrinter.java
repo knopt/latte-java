@@ -1279,7 +1279,7 @@ public class PrettyPrinter
     {
        Latte.Absyn.ProgramTD _programtd = (Latte.Absyn.ProgramTD) foo;
        render("(");
-       render("ProgramTD");
+       render("ProgramTD" + " at" + ((ProgramTD) foo).line_num + ":" + ((ProgramTD) foo).col_num + " #" + ((ProgramTD) foo).offset);
        render("[");
        sh(_programtd.listtopdef_);
        render("]");
@@ -1293,7 +1293,7 @@ public class PrettyPrinter
     {
        Latte.Absyn.FnDef _fndef = (Latte.Absyn.FnDef) foo;
        render("(");
-       render("FnDef");
+       render("FnDef" +" at" + ((FnDef) foo).line_num + ":" + ((FnDef) foo).col_num);
        sh(_fndef.type_);
        sh(_fndef.ident_);
        render("[");
@@ -1306,7 +1306,7 @@ public class PrettyPrinter
     {
        Latte.Absyn.ClassDecl _classdecl = (Latte.Absyn.ClassDecl) foo;
        render("(");
-       render("ClassDecl");
+       render("ClassDecl"+" at" + ((ClassDecl) foo).line_num + ":" + ((ClassDecl) foo).col_num);
        sh(_classdecl.classheader_);
        render("[");
        sh(_classdecl.listfielddeclaration_);
@@ -1626,7 +1626,7 @@ public class PrettyPrinter
     if (foo instanceof Latte.Absyn.Int)
     {
        Latte.Absyn.Int _int = (Latte.Absyn.Int) foo;
-       render("Int");
+       render("Int" + " at " + ((Int) foo).col_num + ";" + ((Int) foo).line_num);
     }
     if (foo instanceof Latte.Absyn.Str)
     {
@@ -1636,7 +1636,7 @@ public class PrettyPrinter
     if (foo instanceof Latte.Absyn.Bool)
     {
        Latte.Absyn.Bool _bool = (Latte.Absyn.Bool) foo;
-       render("Bool");
+       render("Bool" + " at " + ((Bool) foo).col_num + ";" + ((Bool) foo).line_num);
     }
     if (foo instanceof Latte.Absyn.Void)
     {
@@ -1651,7 +1651,7 @@ public class PrettyPrinter
     {
        Latte.Absyn.BuiltIn _builtin = (Latte.Absyn.BuiltIn) foo;
        render("(");
-       render("BuiltIn");
+       render("BuiltIn"+ " at " + ((BuiltIn) foo).col_num + ";" + ((BuiltIn) foo).line_num);
        sh(_builtin.basictype_);
        render(")");
     }
@@ -1659,7 +1659,7 @@ public class PrettyPrinter
     {
        Latte.Absyn.ClassName _classname = (Latte.Absyn.ClassName) foo;
        render("(");
-       render("ClassName");
+       render("ClassName" + " at " + ((ClassName) foo).col_num + ";" + ((ClassName) foo).line_num);
        sh(_classname.ident_);
        render(")");
     }
@@ -1682,7 +1682,7 @@ public class PrettyPrinter
     {
        Latte.Absyn.TypeNameS _typenames = (Latte.Absyn.TypeNameS) foo;
        render("(");
-       render("TypeNameS");
+       render("TypeNameS" + "at " + ((TypeNameS) foo).col_num + ";" + ((TypeNameS) foo).line_num);
        sh(_typenames.typename_);
        render(")");
     }
@@ -1928,7 +1928,7 @@ public class PrettyPrinter
     if (foo instanceof Latte.Absyn.Plus)
     {
        Latte.Absyn.Plus _plus = (Latte.Absyn.Plus) foo;
-       render("Plus");
+       render("Plus" + "at " + ((Plus) foo).col_num + ";" + ((Plus) foo).line_num);
     }
     if (foo instanceof Latte.Absyn.Minus)
     {

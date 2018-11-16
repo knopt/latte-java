@@ -1,0 +1,19 @@
+Int f() {  
+  Int x = 0;
+  Int y = 10;
+
+  return x;
+}
+
+int main() {
+
+  Int z = f();
+
+  Bool a = 5 < 3;
+
+  Int j;
+
+  j = 1 + 2;
+
+  return 0;
+}
