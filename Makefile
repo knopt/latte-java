@@ -1,10 +1,11 @@
-export CLASSPATH=".:bnfc/testing/data/java-cup-11b-runtime.jar"
+export CLASSPATH=$CLASSPATH:bnfc/testing/data/java-cup-11b-runtime.jar:.
+
 
 JAVAC=javac
 JAVAC_FLAGS=-sourcepath .
 JAVA=java
 JAVA_FLAGS=
-PARSER=${JAVA} ${JAVA_FLAGS} -cp .:java-cup-11b-runtime.jar -jar java-cup-11b.jar
+PARSER=${JAVA} ${JAVA_FLAGS} -jar java-cup-11b.jar
 PARSER_FLAGS=-locations -expect 200
 LEXER=${JAVA} ${JAVA_FLAGS} JLex.Main
 LEXER_FLAGS=

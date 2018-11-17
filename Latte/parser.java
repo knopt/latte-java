@@ -582,7 +582,7 @@ if (leftLoc != null) {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 2: // TopDef ::= Type _IDENT_ _SYMB_0 ListArg _SYMB_1 Block 
+          case 2: // TopDef ::= TypeDefinition _IDENT_ _SYMB_0 ListArg _SYMB_1 Block
             {
               Latte.Absyn.TopDef RESULT =null;
 		Location p_1xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-5)).xleft;
@@ -677,7 +677,7 @@ if (leftLoc != null) {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 6: // Arg ::= Type _IDENT_ 
+          case 6: // Arg ::= TypeDefinition _IDENT_
             {
               Latte.Absyn.Arg RESULT =null;
 		Location p_1xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).xleft;
@@ -791,7 +791,7 @@ if (leftLoc != null) {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 12: // FieldDeclaration ::= Modifier Type ListItem _SYMB_5 
+          case 12: // FieldDeclaration ::= Modifier TypeDefinition ListItem _SYMB_5
             {
               Latte.Absyn.FieldDeclaration RESULT =null;
 		Location p_1xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-3)).xleft;
@@ -822,7 +822,7 @@ if (leftLoc != null) {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 13: // FieldDeclaration ::= Modifier Type _IDENT_ _SYMB_0 ListArg _SYMB_1 MethodBody 
+          case 13: // FieldDeclaration ::= Modifier TypeDefinition _IDENT_ _SYMB_0 ListArg _SYMB_1 MethodBody
             {
               Latte.Absyn.FieldDeclaration RESULT =null;
 		Location p_1xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-6)).xleft;
@@ -1108,7 +1108,7 @@ if (leftLoc != null) {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 30: // Stmt ::= Type ListItem _SYMB_5 
+          case 30: // Stmt ::= TypeDefinition ListItem _SYMB_5
             {
               Latte.Absyn.Stmt RESULT =null;
 		Location p_1xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).xleft;
@@ -1535,7 +1535,7 @@ if (leftLoc != null) {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 46: // BasicType ::= _SYMB_33 
+          case 46: // BasicTypeDefinition ::= _SYMB_33
             {
               Latte.Absyn.BasicType RESULT =null;
 		Location p_1xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.peek()).xleft;
@@ -1545,12 +1545,12 @@ if (leftLoc != null) {
 ((Latte.Absyn.Int)RESULT).line_num = -1;
 ((Latte.Absyn.Int)RESULT).col_num = -1;
 ((Latte.Absyn.Int)RESULT).offset = -1; 
-              CUP$parser$result = parser.getSymbolFactory().newSymbol("BasicType",17, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
+              CUP$parser$result = parser.getSymbolFactory().newSymbol("BasicTypeDefinition",17, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 47: // BasicType ::= _SYMB_41 
+          case 47: // BasicTypeDefinition ::= _SYMB_41
             {
               Latte.Absyn.BasicType RESULT =null;
 		Location p_1xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.peek()).xleft;
@@ -1560,12 +1560,12 @@ if (leftLoc != null) {
 ((Latte.Absyn.Str)RESULT).line_num = -1;
 ((Latte.Absyn.Str)RESULT).col_num = -1;
 ((Latte.Absyn.Str)RESULT).offset = -1; 
-              CUP$parser$result = parser.getSymbolFactory().newSymbol("BasicType",17, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
+              CUP$parser$result = parser.getSymbolFactory().newSymbol("BasicTypeDefinition",17, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 48: // BasicType ::= _SYMB_27 
+          case 48: // BasicTypeDefinition ::= _SYMB_27
             {
               Latte.Absyn.BasicType RESULT =null;
 		Location p_1xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.peek()).xleft;
@@ -1575,12 +1575,12 @@ if (leftLoc != null) {
 ((Latte.Absyn.Bool)RESULT).line_num = -1;
 ((Latte.Absyn.Bool)RESULT).col_num = -1;
 ((Latte.Absyn.Bool)RESULT).offset = -1; 
-              CUP$parser$result = parser.getSymbolFactory().newSymbol("BasicType",17, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
+              CUP$parser$result = parser.getSymbolFactory().newSymbol("BasicTypeDefinition",17, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 49: // BasicType ::= _SYMB_44 
+          case 49: // BasicTypeDefinition ::= _SYMB_44
             {
               Latte.Absyn.BasicType RESULT =null;
 		Location p_1xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.peek()).xleft;
@@ -1590,12 +1590,12 @@ if (leftLoc != null) {
 ((Latte.Absyn.Void)RESULT).line_num = -1;
 ((Latte.Absyn.Void)RESULT).col_num = -1;
 ((Latte.Absyn.Void)RESULT).offset = -1; 
-              CUP$parser$result = parser.getSymbolFactory().newSymbol("BasicType",17, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
+              CUP$parser$result = parser.getSymbolFactory().newSymbol("BasicTypeDefinition",17, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 50: // TypeName ::= BasicType 
+          case 50: // TypeName ::= BasicTypeDefinition
             {
               Latte.Absyn.TypeName RESULT =null;
 		Location p_1xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.peek()).xleft;
@@ -1639,7 +1639,7 @@ if (leftLoc != null) {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 52: // Type ::= TypeName _SYMB_11 
+          case 52: // TypeDefinition ::= TypeName _SYMB_11
             {
               Latte.Absyn.Type RESULT =null;
 		Location p_1xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).xleft;
@@ -1659,12 +1659,12 @@ if (leftLoc != null) {
   ((Latte.Absyn.ArrayType)RESULT).col_num = -1;
   ((Latte.Absyn.ArrayType)RESULT).offset = -1;
 } 
-              CUP$parser$result = parser.getSymbolFactory().newSymbol("Type",19, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
+              CUP$parser$result = parser.getSymbolFactory().newSymbol("TypeDefinition",19, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 53: // Type ::= TypeName 
+          case 53: // TypeDefinition ::= TypeName
             {
               Latte.Absyn.Type RESULT =null;
 		Location p_1xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.peek()).xleft;
@@ -1681,7 +1681,7 @@ if (leftLoc != null) {
   ((Latte.Absyn.TypeNameS)RESULT).col_num = -1;
   ((Latte.Absyn.TypeNameS)RESULT).offset = -1;
 } 
-              CUP$parser$result = parser.getSymbolFactory().newSymbol("Type",19, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
+              CUP$parser$result = parser.getSymbolFactory().newSymbol("TypeDefinition",19, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
 
@@ -1695,7 +1695,7 @@ if (leftLoc != null) {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 55: // ListType ::= Type 
+          case 55: // ListType ::= TypeDefinition
             {
               Latte.Absyn.ListType RESULT =null;
 		Location p_1xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.peek()).xleft;
@@ -1707,7 +1707,7 @@ if (leftLoc != null) {
           return CUP$parser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 56: // ListType ::= Type _SYMB_4 ListType 
+          case 56: // ListType ::= TypeDefinition _SYMB_4 ListType
             {
               Latte.Absyn.ListType RESULT =null;
 		Location p_1xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).xleft;
