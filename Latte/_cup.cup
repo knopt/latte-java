@@ -49,13 +49,10 @@ nonterminal Latte.Absyn.ListStmt ListStmt;
 nonterminal Latte.Absyn.Stmt Stmt;
 nonterminal Latte.Absyn.Item Item;
 nonterminal Latte.Absyn.ListItem ListItem;
+nonterminal Latte.Absyn.Lhs Lhs;
 nonterminal Latte.Absyn.BasicType BasicType;
 nonterminal Latte.Absyn.TypeName TypeName;
 nonterminal Latte.Absyn.Type Type;
-nonterminal Latte.Absyn.EmptyBracket EmptyBracket;
-nonterminal Latte.Absyn.ListEmptyBracket ListEmptyBracket;
-nonterminal Latte.Absyn.SizeBracket SizeBracket;
-nonterminal Latte.Absyn.ListSizeBracket ListSizeBracket;
 nonterminal Latte.Absyn.ListType ListType;
 nonterminal Latte.Absyn.Expr Expr7;
 nonterminal Latte.Absyn.Expr Expr6;
@@ -66,6 +63,7 @@ nonterminal Latte.Absyn.Expr Expr2;
 nonterminal Latte.Absyn.Expr Expr1;
 nonterminal Latte.Absyn.Expr Expr;
 nonterminal Latte.Absyn.ListExpr ListExpr;
+nonterminal Latte.Absyn.ObjAcc ObjAcc;
 nonterminal Latte.Absyn.AddOp AddOp;
 nonterminal Latte.Absyn.MulOp MulOp;
 nonterminal Latte.Absyn.RelOp RelOp;
@@ -79,14 +77,14 @@ terminal _SYMB_5;    //   ;
 terminal _SYMB_6;    //   =
 terminal _SYMB_7;    //   ++
 terminal _SYMB_8;    //   --
-terminal _SYMB_9;    //   []
-terminal _SYMB_10;    //   [
-terminal _SYMB_11;    //   ]
-terminal _SYMB_12;    //   .
-terminal _SYMB_13;    //   -
-terminal _SYMB_14;    //   !
-terminal _SYMB_15;    //   &&
-terminal _SYMB_16;    //   ||
+terminal _SYMB_9;    //   [
+terminal _SYMB_10;    //   ]
+terminal _SYMB_11;    //   []
+terminal _SYMB_12;    //   -
+terminal _SYMB_13;    //   !
+terminal _SYMB_14;    //   &&
+terminal _SYMB_15;    //   ||
+terminal _SYMB_16;    //   .
 terminal _SYMB_17;    //   +
 terminal _SYMB_18;    //   *
 terminal _SYMB_19;    //   /
@@ -312,7 +310,7 @@ if (leftLoc != null) {
   ((Latte.Absyn.Decl)RESULT).col_num = -1;
   ((Latte.Absyn.Decl)RESULT).offset = -1;
 } :}
-  | _IDENT_:p_1 _SYMB_6:p_2 Expr:p_3 _SYMB_5:p_4  {: RESULT = new Latte.Absyn.Ass(p_1,p_3);
+  | Lhs:p_1 _SYMB_6:p_2 Expr:p_3 _SYMB_5:p_4  {: RESULT = new Latte.Absyn.Ass(p_1,p_3);
 java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_1xleft,p_3xleft);
 if (leftLoc != null) {
   ((Latte.Absyn.Ass)RESULT).line_num = leftLoc.getLine();
@@ -323,7 +321,7 @@ if (leftLoc != null) {
   ((Latte.Absyn.Ass)RESULT).col_num = -1;
   ((Latte.Absyn.Ass)RESULT).offset = -1;
 } :}
-  | _IDENT_:p_1 _SYMB_7:p_2 _SYMB_5:p_3  {: RESULT = new Latte.Absyn.Incr(p_1);
+  | Lhs:p_1 _SYMB_7:p_2 _SYMB_5:p_3  {: RESULT = new Latte.Absyn.Incr(p_1);
 java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_1xleft);
 if (leftLoc != null) {
   ((Latte.Absyn.Incr)RESULT).line_num = leftLoc.getLine();
@@ -334,7 +332,7 @@ if (leftLoc != null) {
   ((Latte.Absyn.Incr)RESULT).col_num = -1;
   ((Latte.Absyn.Incr)RESULT).offset = -1;
 } :}
-  | _IDENT_:p_1 _SYMB_8:p_2 _SYMB_5:p_3  {: RESULT = new Latte.Absyn.Decr(p_1);
+  | Lhs:p_1 _SYMB_8:p_2 _SYMB_5:p_3  {: RESULT = new Latte.Absyn.Decr(p_1);
 java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_1xleft);
 if (leftLoc != null) {
   ((Latte.Absyn.Decr)RESULT).line_num = leftLoc.getLine();
@@ -431,6 +429,29 @@ if (leftLoc != null) {
 ListItem ::= Item:p_1  {: RESULT = new Latte.Absyn.ListItem(); RESULT.addLast(p_1); :} 
   | Item:p_1 _SYMB_4:p_2 ListItem:p_3  {: RESULT = p_3; p_3.addFirst(p_1); :}
 ;
+Lhs ::= _IDENT_:p_1  {: RESULT = new Latte.Absyn.VariableRawLhs(p_1);
+java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_1xleft);
+if (leftLoc != null) {
+  ((Latte.Absyn.VariableRawLhs)RESULT).line_num = leftLoc.getLine();
+  ((Latte.Absyn.VariableRawLhs)RESULT).col_num = leftLoc.getColumn();
+  ((Latte.Absyn.VariableRawLhs)RESULT).offset = leftLoc.getOffset();
+} else {
+  ((Latte.Absyn.VariableRawLhs)RESULT).line_num = -1;
+  ((Latte.Absyn.VariableRawLhs)RESULT).col_num = -1;
+  ((Latte.Absyn.VariableRawLhs)RESULT).offset = -1;
+} :} 
+  | _IDENT_:p_1 _SYMB_9:p_2 Expr:p_3 _SYMB_10:p_4  {: RESULT = new Latte.Absyn.ArrElemLhs(p_1,p_3);
+java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_1xleft,p_3xleft);
+if (leftLoc != null) {
+  ((Latte.Absyn.ArrElemLhs)RESULT).line_num = leftLoc.getLine();
+  ((Latte.Absyn.ArrElemLhs)RESULT).col_num = leftLoc.getColumn();
+  ((Latte.Absyn.ArrElemLhs)RESULT).offset = leftLoc.getOffset();
+} else {
+  ((Latte.Absyn.ArrElemLhs)RESULT).line_num = -1;
+  ((Latte.Absyn.ArrElemLhs)RESULT).col_num = -1;
+  ((Latte.Absyn.ArrElemLhs)RESULT).offset = -1;
+} :}
+;
 BasicType ::= _SYMB_33:p_1  {: RESULT = new Latte.Absyn.Int();
 ((Latte.Absyn.Int)RESULT).line_num = -1;
 ((Latte.Absyn.Int)RESULT).col_num = -1;
@@ -471,8 +492,8 @@ if (leftLoc != null) {
   ((Latte.Absyn.ClassName)RESULT).offset = -1;
 } :}
 ;
-Type ::= TypeName:p_1 ListEmptyBracket:p_2  {: RESULT = new Latte.Absyn.ArrayType(p_1,p_2);
-java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_1xleft,p_2xleft);
+Type ::= TypeName:p_1 _SYMB_11:p_2  {: RESULT = new Latte.Absyn.ArrayType(p_1);
+java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_1xleft);
 if (leftLoc != null) {
   ((Latte.Absyn.ArrayType)RESULT).line_num = leftLoc.getLine();
   ((Latte.Absyn.ArrayType)RESULT).col_num = leftLoc.getColumn();
@@ -493,29 +514,6 @@ if (leftLoc != null) {
   ((Latte.Absyn.TypeNameS)RESULT).col_num = -1;
   ((Latte.Absyn.TypeNameS)RESULT).offset = -1;
 } :}
-;
-EmptyBracket ::= _SYMB_9:p_1  {: RESULT = new Latte.Absyn.EBracket();
-((Latte.Absyn.EBracket)RESULT).line_num = -1;
-((Latte.Absyn.EBracket)RESULT).col_num = -1;
-((Latte.Absyn.EBracket)RESULT).offset = -1; :} 
-;
-ListEmptyBracket ::= EmptyBracket:p_1  {: RESULT = new Latte.Absyn.ListEmptyBracket(); RESULT.addLast(p_1); :} 
-  | EmptyBracket:p_1 ListEmptyBracket:p_2  {: RESULT = p_2; p_2.addFirst(p_1); :}
-;
-SizeBracket ::= _SYMB_10:p_1 Expr:p_2 _SYMB_11:p_3  {: RESULT = new Latte.Absyn.SBracket(p_2);
-java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_2xleft);
-if (leftLoc != null) {
-  ((Latte.Absyn.SBracket)RESULT).line_num = leftLoc.getLine();
-  ((Latte.Absyn.SBracket)RESULT).col_num = leftLoc.getColumn();
-  ((Latte.Absyn.SBracket)RESULT).offset = leftLoc.getOffset();
-} else {
-  ((Latte.Absyn.SBracket)RESULT).line_num = -1;
-  ((Latte.Absyn.SBracket)RESULT).col_num = -1;
-  ((Latte.Absyn.SBracket)RESULT).offset = -1;
-} :} 
-;
-ListSizeBracket ::= SizeBracket:p_1  {: RESULT = new Latte.Absyn.ListSizeBracket(); RESULT.addLast(p_1); :} 
-  | SizeBracket:p_1 ListSizeBracket:p_2  {: RESULT = p_2; p_2.addFirst(p_1); :}
 ;
 ListType ::=  /* empty */  {: RESULT = new Latte.Absyn.ListType(); :} 
   | Type:p_1  {: RESULT = new Latte.Absyn.ListType(); RESULT.addLast(p_1); :}
@@ -594,8 +592,8 @@ if (leftLoc != null) {
 } :}
   | _SYMB_0:p_1 Expr:p_2 _SYMB_1:p_3  {: RESULT = p_2; :}
 ;
-Expr6 ::= _SYMB_35:p_1 _IDENT_:p_2 ListSizeBracket:p_3  {: RESULT = new Latte.Absyn.EArrConstr(p_2,p_3);
-java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_2xleft,p_3xleft);
+Expr6 ::= _SYMB_35:p_1 _IDENT_:p_2 _SYMB_9:p_3 Expr:p_4 _SYMB_10:p_5  {: RESULT = new Latte.Absyn.EArrConstr(p_2,p_4);
+java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_2xleft,p_4xleft);
 if (leftLoc != null) {
   ((Latte.Absyn.EArrConstr)RESULT).line_num = leftLoc.getLine();
   ((Latte.Absyn.EArrConstr)RESULT).col_num = leftLoc.getColumn();
@@ -605,8 +603,8 @@ if (leftLoc != null) {
   ((Latte.Absyn.EArrConstr)RESULT).col_num = -1;
   ((Latte.Absyn.EArrConstr)RESULT).offset = -1;
 } :} 
-  | Expr:p_1 ListSizeBracket:p_2  {: RESULT = new Latte.Absyn.ENDArrAcc(p_1,p_2);
-java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_1xleft,p_2xleft);
+  | Expr:p_1 _SYMB_9:p_2 Expr:p_3 _SYMB_10:p_4  {: RESULT = new Latte.Absyn.ENDArrAcc(p_1,p_3);
+java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_1xleft,p_3xleft);
 if (leftLoc != null) {
   ((Latte.Absyn.ENDArrAcc)RESULT).line_num = leftLoc.getLine();
   ((Latte.Absyn.ENDArrAcc)RESULT).col_num = leftLoc.getColumn();
@@ -618,29 +616,18 @@ if (leftLoc != null) {
 } :}
   | Expr7:p_1  {: RESULT = p_1; :}
 ;
-Expr5 ::= Expr:p_1 _SYMB_12:p_2 _IDENT_:p_3  {: RESULT = new Latte.Absyn.FieldAcc(p_1,p_3);
-java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_1xleft,p_3xleft);
+Expr5 ::= Expr:p_1 ObjAcc:p_2  {: RESULT = new Latte.Absyn.EObjAcc(p_1,p_2);
+java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_1xleft,p_2xleft);
 if (leftLoc != null) {
-  ((Latte.Absyn.FieldAcc)RESULT).line_num = leftLoc.getLine();
-  ((Latte.Absyn.FieldAcc)RESULT).col_num = leftLoc.getColumn();
-  ((Latte.Absyn.FieldAcc)RESULT).offset = leftLoc.getOffset();
+  ((Latte.Absyn.EObjAcc)RESULT).line_num = leftLoc.getLine();
+  ((Latte.Absyn.EObjAcc)RESULT).col_num = leftLoc.getColumn();
+  ((Latte.Absyn.EObjAcc)RESULT).offset = leftLoc.getOffset();
 } else {
-  ((Latte.Absyn.FieldAcc)RESULT).line_num = -1;
-  ((Latte.Absyn.FieldAcc)RESULT).col_num = -1;
-  ((Latte.Absyn.FieldAcc)RESULT).offset = -1;
+  ((Latte.Absyn.EObjAcc)RESULT).line_num = -1;
+  ((Latte.Absyn.EObjAcc)RESULT).col_num = -1;
+  ((Latte.Absyn.EObjAcc)RESULT).offset = -1;
 } :} 
-  | Expr:p_1 _SYMB_12:p_2 _IDENT_:p_3 _SYMB_0:p_4 ListExpr:p_5 _SYMB_1:p_6  {: RESULT = new Latte.Absyn.MethodCall(p_1,p_3,p_5);
-java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_1xleft,p_3xleft,p_5xleft);
-if (leftLoc != null) {
-  ((Latte.Absyn.MethodCall)RESULT).line_num = leftLoc.getLine();
-  ((Latte.Absyn.MethodCall)RESULT).col_num = leftLoc.getColumn();
-  ((Latte.Absyn.MethodCall)RESULT).offset = leftLoc.getOffset();
-} else {
-  ((Latte.Absyn.MethodCall)RESULT).line_num = -1;
-  ((Latte.Absyn.MethodCall)RESULT).col_num = -1;
-  ((Latte.Absyn.MethodCall)RESULT).offset = -1;
-} :}
-  | _SYMB_13:p_1 Expr6:p_2  {: RESULT = new Latte.Absyn.Neg(p_2);
+  | _SYMB_12:p_1 Expr6:p_2  {: RESULT = new Latte.Absyn.Neg(p_2);
 java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_2xleft);
 if (leftLoc != null) {
   ((Latte.Absyn.Neg)RESULT).line_num = leftLoc.getLine();
@@ -651,7 +638,7 @@ if (leftLoc != null) {
   ((Latte.Absyn.Neg)RESULT).col_num = -1;
   ((Latte.Absyn.Neg)RESULT).offset = -1;
 } :}
-  | _SYMB_14:p_1 Expr6:p_2  {: RESULT = new Latte.Absyn.Not(p_2);
+  | _SYMB_13:p_1 Expr6:p_2  {: RESULT = new Latte.Absyn.Not(p_2);
 java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_2xleft);
 if (leftLoc != null) {
   ((Latte.Absyn.Not)RESULT).line_num = leftLoc.getLine();
@@ -703,7 +690,7 @@ if (leftLoc != null) {
 } :} 
   | Expr3:p_1  {: RESULT = p_1; :}
 ;
-Expr1 ::= Expr2:p_1 _SYMB_15:p_2 Expr1:p_3  {: RESULT = new Latte.Absyn.EAnd(p_1,p_3);
+Expr1 ::= Expr2:p_1 _SYMB_14:p_2 Expr1:p_3  {: RESULT = new Latte.Absyn.EAnd(p_1,p_3);
 java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_1xleft,p_3xleft);
 if (leftLoc != null) {
   ((Latte.Absyn.EAnd)RESULT).line_num = leftLoc.getLine();
@@ -716,7 +703,7 @@ if (leftLoc != null) {
 } :} 
   | Expr2:p_1  {: RESULT = p_1; :}
 ;
-Expr ::= Expr1:p_1 _SYMB_16:p_2 Expr:p_3  {: RESULT = new Latte.Absyn.EOr(p_1,p_3);
+Expr ::= Expr1:p_1 _SYMB_15:p_2 Expr:p_3  {: RESULT = new Latte.Absyn.EOr(p_1,p_3);
 java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_1xleft,p_3xleft);
 if (leftLoc != null) {
   ((Latte.Absyn.EOr)RESULT).line_num = leftLoc.getLine();
@@ -733,11 +720,34 @@ ListExpr ::=  /* empty */  {: RESULT = new Latte.Absyn.ListExpr(); :}
   | Expr:p_1  {: RESULT = new Latte.Absyn.ListExpr(); RESULT.addLast(p_1); :}
   | Expr:p_1 _SYMB_4:p_2 ListExpr:p_3  {: RESULT = p_3; p_3.addFirst(p_1); :}
 ;
+ObjAcc ::= _SYMB_16:p_1 _IDENT_:p_2  {: RESULT = new Latte.Absyn.ObjFieldAcc(p_2);
+java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_2xleft);
+if (leftLoc != null) {
+  ((Latte.Absyn.ObjFieldAcc)RESULT).line_num = leftLoc.getLine();
+  ((Latte.Absyn.ObjFieldAcc)RESULT).col_num = leftLoc.getColumn();
+  ((Latte.Absyn.ObjFieldAcc)RESULT).offset = leftLoc.getOffset();
+} else {
+  ((Latte.Absyn.ObjFieldAcc)RESULT).line_num = -1;
+  ((Latte.Absyn.ObjFieldAcc)RESULT).col_num = -1;
+  ((Latte.Absyn.ObjFieldAcc)RESULT).offset = -1;
+} :} 
+  | _SYMB_16:p_1 _IDENT_:p_2 _SYMB_0:p_3 ListExpr:p_4 _SYMB_1:p_5  {: RESULT = new Latte.Absyn.ObjMethAcc(p_2,p_4);
+java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_2xleft,p_4xleft);
+if (leftLoc != null) {
+  ((Latte.Absyn.ObjMethAcc)RESULT).line_num = leftLoc.getLine();
+  ((Latte.Absyn.ObjMethAcc)RESULT).col_num = leftLoc.getColumn();
+  ((Latte.Absyn.ObjMethAcc)RESULT).offset = leftLoc.getOffset();
+} else {
+  ((Latte.Absyn.ObjMethAcc)RESULT).line_num = -1;
+  ((Latte.Absyn.ObjMethAcc)RESULT).col_num = -1;
+  ((Latte.Absyn.ObjMethAcc)RESULT).offset = -1;
+} :}
+;
 AddOp ::= _SYMB_17:p_1  {: RESULT = new Latte.Absyn.Plus();
 ((Latte.Absyn.Plus)RESULT).line_num = -1;
 ((Latte.Absyn.Plus)RESULT).col_num = -1;
 ((Latte.Absyn.Plus)RESULT).offset = -1; :} 
-  | _SYMB_13:p_1  {: RESULT = new Latte.Absyn.Minus();
+  | _SYMB_12:p_1  {: RESULT = new Latte.Absyn.Minus();
 ((Latte.Absyn.Minus)RESULT).line_num = -1;
 ((Latte.Absyn.Minus)RESULT).col_num = -1;
 ((Latte.Absyn.Minus)RESULT).offset = -1; :}

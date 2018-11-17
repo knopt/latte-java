@@ -4,5 +4,5 @@ import java.util.function.Function;
 
 public abstract class SizeBracket implements java.io.Serializable {
 
-    public abstract  <T> T match(Function<SBracket, T> sBracket);
+    public abstract <T> T match(Function<SBracket, T> sBracket);
 }

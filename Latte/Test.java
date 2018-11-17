@@ -1,6 +1,8 @@
 package Latte;
-
+import Latte.*;
+import Latte.Absyn.*;
 import java.io.*;
+import java_cup.runtime.*;
 
 public class Test
 {
@@ -14,14 +16,14 @@ public class Test
       Reader input;
       if (args.length == 0)input = new InputStreamReader(System.in);
       else input = new FileReader(args[0]);
-      l = new Latte.Yylex(input);
+      l = new Yylex(input);
     }
     catch(IOException e)
     {
       System.err.println("Error: File not found: " + args[0]);
       System.exit(1);
     }
-    p = new Latte.parser(l, l.getSymbolFactory());
+    p = new parser(l, l.getSymbolFactory());
   }
   
   public Latte.Absyn.Program parse() throws Exception

@@ -1,13 +1,11 @@
 package Latte;
-import Latte.*;
-import Latte.Absyn.*;
+
 import java.io.*;
-import java_cup.runtime.*;
 
 public class Test
 {
-  Latte.Yylex l;
-  Latte.parser p;
+  Yylex l;
+  parser p;
   
   public Test(String[] args)
   {
@@ -37,11 +35,11 @@ public class Test
     System.out.println();
     System.out.println("[Abstract Syntax]");
     System.out.println();
-    System.out.println(Latte.PrettyPrinter.show(ast));
+    System.out.println(PrettyPrinter.show(ast));
     System.out.println();
     System.out.println("[Linearized Tree]");
     System.out.println();
-    System.out.println(Latte.PrettyPrinter.print(ast));
+    System.out.println(PrettyPrinter.print(ast));
     return ast;
   }
   

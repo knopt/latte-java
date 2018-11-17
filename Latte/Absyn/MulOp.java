@@ -4,9 +4,9 @@ import java.util.function.Function;
 
 public abstract class MulOp implements java.io.Serializable {
 
-    public abstract  <T> T match(Function<Times, T> times,
-                                 Function<Div, T> div,
-                                 Function<Mod, T> mod);
+    public abstract <T> T match(Function<Times, T> times,
+                                Function<Div, T> div,
+                                Function<Mod, T> mod);
 
 
 }

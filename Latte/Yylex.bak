@@ -5,7 +5,9 @@ import java_cup.runtime.*;
 %%
 %cup
 %unicode
+%line
 
+%char
 %public
 %{
   String pstring = new String();
@@ -13,16 +15,14 @@ import java_cup.runtime.*;
   ComplexSymbolFactory.Location left = new ComplexSymbolFactory.Location(unknown, unknown);
   ComplexSymbolFactory cf = new ComplexSymbolFactory();
   public SymbolFactory getSymbolFactory() { return cf; }
-  int yyline = unknown - 1;
   int yycolumn = unknown - 1;
-  int yychar = unknown;
   public int line_num() { return (yyline+1); }
   public ComplexSymbolFactory.Location left_loc() {
-    return left;
+    return new ComplexSymbolFactory.Location(yyline+1, yycolumn+1, yychar);
   }
   public ComplexSymbolFactory.Location right_loc() {
     ComplexSymbolFactory.Location left = left_loc();
-  return left;
+  return new ComplexSymbolFactory.Location(left.getLine(), left.getColumn()+yylength(), left.getOffset()+yylength());
   }
   public String buff() {return new String(yy_buffer,yy_buffer_index,10).trim();}
 %}
@@ -113,4 +113,4 @@ IDENT = ({LETTER}|{DIGIT}|['_])
 <YYINITIAL>{LETTER}{IDENT}* { return cf.newSymbol("", sym._IDENT_, left_loc(), right_loc(), yytext().intern()); }
 <YYINITIAL>[ \t\r\n\f] { /* ignore white space. */ }
 
-. { throw new Error("Illegal Character <"+yytext()+">"); }
+. { throw new Error("Illegal Character <"+yytext()+"> at "+(yyline+1)); }

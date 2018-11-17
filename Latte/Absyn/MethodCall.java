@@ -38,8 +38,6 @@ public class MethodCall extends Expr {
                        Function<EConstr, T> eConstr,
                        Function<EArrConstr, T> eArrConstr,
                        Function<ENDArrAcc, T> eNDArrAcc,
-                       Function<FieldAcc, T> fieldAcc,
-                       Function<MethodCall, T> methodCall,
                        Function<Neg, T> neg,
                        Function<Not, T> not,
                        Function<EMul, T> eMul,

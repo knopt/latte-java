@@ -43,15 +43,14 @@ public class EArrConstr extends Expr implements Positioned {
                        Function<EConstr, T> eConstr,
                        Function<EArrConstr, T> eArrConstr,
                        Function<ENDArrAcc, T> eNDArrAcc,
-                       Function<FieldAcc, T> fieldAcc,
-                       Function<MethodCall, T> methodCall,
                        Function<Neg, T> neg,
                        Function<Not, T> not,
                        Function<EMul, T> eMul,
                        Function<EAdd, T> eAdd,
                        Function<ERel, T> eRel,
                        Function<EAnd, T> eAnd,
-                       Function<EOr, T> eOr) {
+                       Function<EOr, T> eOr,
+                       Function<EObjAcc, T> eObjAcc) {
         return eArrConstr.apply(this);
     }
 }

@@ -4,6 +4,6 @@ import java.util.function.Function;
 
 public abstract class Program implements java.io.Serializable {
 
-    public abstract  <T> T match(Function<ProgramTD, T> td);
+    public abstract <T> T match(Function<ProgramTD, T> td);
 
 }

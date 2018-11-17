@@ -303,6 +303,21 @@ public class PrettyPrinter
     buf_.delete(0,buf_.length());
     return temp;
   }
+  public static String print(Latte.Absyn.Lhs foo)
+  {
+    pp(foo, 0);
+    trim();
+    String temp = buf_.toString();
+    buf_.delete(0,buf_.length());
+    return temp;
+  }
+  public static String show(Latte.Absyn.Lhs foo)
+  {
+    sh(foo);
+    String temp = buf_.toString();
+    buf_.delete(0,buf_.length());
+    return temp;
+  }
   public static String print(Latte.Absyn.BasicType foo)
   {
     pp(foo, 0);
@@ -348,66 +363,6 @@ public class PrettyPrinter
     buf_.delete(0,buf_.length());
     return temp;
   }
-  public static String print(Latte.Absyn.EmptyBracket foo)
-  {
-    pp(foo, 0);
-    trim();
-    String temp = buf_.toString();
-    buf_.delete(0,buf_.length());
-    return temp;
-  }
-  public static String show(Latte.Absyn.EmptyBracket foo)
-  {
-    sh(foo);
-    String temp = buf_.toString();
-    buf_.delete(0,buf_.length());
-    return temp;
-  }
-  public static String print(Latte.Absyn.ListEmptyBracket foo)
-  {
-    pp(foo, 0);
-    trim();
-    String temp = buf_.toString();
-    buf_.delete(0,buf_.length());
-    return temp;
-  }
-  public static String show(Latte.Absyn.ListEmptyBracket foo)
-  {
-    sh(foo);
-    String temp = buf_.toString();
-    buf_.delete(0,buf_.length());
-    return temp;
-  }
-  public static String print(Latte.Absyn.SizeBracket foo)
-  {
-    pp(foo, 0);
-    trim();
-    String temp = buf_.toString();
-    buf_.delete(0,buf_.length());
-    return temp;
-  }
-  public static String show(Latte.Absyn.SizeBracket foo)
-  {
-    sh(foo);
-    String temp = buf_.toString();
-    buf_.delete(0,buf_.length());
-    return temp;
-  }
-  public static String print(Latte.Absyn.ListSizeBracket foo)
-  {
-    pp(foo, 0);
-    trim();
-    String temp = buf_.toString();
-    buf_.delete(0,buf_.length());
-    return temp;
-  }
-  public static String show(Latte.Absyn.ListSizeBracket foo)
-  {
-    sh(foo);
-    String temp = buf_.toString();
-    buf_.delete(0,buf_.length());
-    return temp;
-  }
   public static String print(Latte.Absyn.ListType foo)
   {
     pp(foo, 0);
@@ -447,6 +402,21 @@ public class PrettyPrinter
     return temp;
   }
   public static String show(Latte.Absyn.ListExpr foo)
+  {
+    sh(foo);
+    String temp = buf_.toString();
+    buf_.delete(0,buf_.length());
+    return temp;
+  }
+  public static String print(Latte.Absyn.ObjAcc foo)
+  {
+    pp(foo, 0);
+    trim();
+    String temp = buf_.toString();
+    buf_.delete(0,buf_.length());
+    return temp;
+  }
+  public static String show(Latte.Absyn.ObjAcc foo)
   {
     sh(foo);
     String temp = buf_.toString();
@@ -754,7 +724,7 @@ public class PrettyPrinter
     {
        Latte.Absyn.Ass _ass = (Latte.Absyn.Ass) foo;
        if (_i_ > 0) render(_L_PAREN);
-       pp(_ass.ident_, 0);
+       pp(_ass.lhs_, 0);
        render("=");
        pp(_ass.expr_, 0);
        render(";");
@@ -764,7 +734,7 @@ public class PrettyPrinter
     {
        Latte.Absyn.Incr _incr = (Latte.Absyn.Incr) foo;
        if (_i_ > 0) render(_L_PAREN);
-       pp(_incr.ident_, 0);
+       pp(_incr.lhs_, 0);
        render("++");
        render(";");
        if (_i_ > 0) render(_R_PAREN);
@@ -773,7 +743,7 @@ public class PrettyPrinter
     {
        Latte.Absyn.Decr _decr = (Latte.Absyn.Decr) foo;
        if (_i_ > 0) render(_L_PAREN);
-       pp(_decr.ident_, 0);
+       pp(_decr.lhs_, 0);
        render("--");
        render(";");
        if (_i_ > 0) render(_R_PAREN);
@@ -872,6 +842,27 @@ public class PrettyPrinter
        }
      }  }
 
+  private static void pp(Latte.Absyn.Lhs foo, int _i_)
+  {
+    if (foo instanceof Latte.Absyn.VariableRawLhs)
+    {
+       Latte.Absyn.VariableRawLhs _variablerawlhs = (Latte.Absyn.VariableRawLhs) foo;
+       if (_i_ > 0) render(_L_PAREN);
+       pp(_variablerawlhs.ident_, 0);
+       if (_i_ > 0) render(_R_PAREN);
+    }
+    else     if (foo instanceof Latte.Absyn.ArrElemLhs)
+    {
+       Latte.Absyn.ArrElemLhs _arrelemlhs = (Latte.Absyn.ArrElemLhs) foo;
+       if (_i_ > 0) render(_L_PAREN);
+       pp(_arrelemlhs.ident_, 0);
+       render("[");
+       pp(_arrelemlhs.expr_, 0);
+       render("]");
+       if (_i_ > 0) render(_R_PAREN);
+    }
+  }
+
   private static void pp(Latte.Absyn.BasicType foo, int _i_)
   {
     if (foo instanceof Latte.Absyn.Int)
@@ -929,7 +920,7 @@ public class PrettyPrinter
        Latte.Absyn.ArrayType _arraytype = (Latte.Absyn.ArrayType) foo;
        if (_i_ > 0) render(_L_PAREN);
        pp(_arraytype.typename_, 0);
-       pp(_arraytype.listemptybracket_, 0);
+       render("[]");
        if (_i_ > 0) render(_R_PAREN);
     }
     else     if (foo instanceof Latte.Absyn.TypeNameS)
@@ -940,54 +931,6 @@ public class PrettyPrinter
        if (_i_ > 0) render(_R_PAREN);
     }
   }
-
-  private static void pp(Latte.Absyn.EmptyBracket foo, int _i_)
-  {
-    if (foo instanceof Latte.Absyn.EBracket)
-    {
-       Latte.Absyn.EBracket _ebracket = (Latte.Absyn.EBracket) foo;
-       if (_i_ > 0) render(_L_PAREN);
-       render("[]");
-       if (_i_ > 0) render(_R_PAREN);
-    }
-  }
-
-  private static void pp(Latte.Absyn.ListEmptyBracket foo, int _i_)
-  {
-     for (java.util.Iterator<EmptyBracket> it = foo.iterator(); it.hasNext();)
-     {
-       pp(it.next(), _i_);
-       if (it.hasNext()) {
-         render("");
-       } else {
-         render("");
-       }
-     }  }
-
-  private static void pp(Latte.Absyn.SizeBracket foo, int _i_)
-  {
-    if (foo instanceof Latte.Absyn.SBracket)
-    {
-       Latte.Absyn.SBracket _sbracket = (Latte.Absyn.SBracket) foo;
-       if (_i_ > 0) render(_L_PAREN);
-       render("[");
-       pp(_sbracket.expr_, 0);
-       render("]");
-       if (_i_ > 0) render(_R_PAREN);
-    }
-  }
-
-  private static void pp(Latte.Absyn.ListSizeBracket foo, int _i_)
-  {
-     for (java.util.Iterator<SizeBracket> it = foo.iterator(); it.hasNext();)
-     {
-       pp(it.next(), _i_);
-       if (it.hasNext()) {
-         render("");
-       } else {
-         render("");
-       }
-     }  }
 
   private static void pp(Latte.Absyn.ListType foo, int _i_)
   {
@@ -1076,36 +1019,27 @@ public class PrettyPrinter
        if (_i_ > 6) render(_L_PAREN);
        render("new");
        pp(_earrconstr.ident_, 0);
-       pp(_earrconstr.listsizebracket_, 0);
+       render("[");
+       pp(_earrconstr.expr_, 0);
+       render("]");
        if (_i_ > 6) render(_R_PAREN);
     }
     else     if (foo instanceof Latte.Absyn.ENDArrAcc)
     {
        Latte.Absyn.ENDArrAcc _endarracc = (Latte.Absyn.ENDArrAcc) foo;
        if (_i_ > 6) render(_L_PAREN);
-       pp(_endarracc.expr_, 0);
-       pp(_endarracc.listsizebracket_, 0);
+       pp(_endarracc.expr_1, 0);
+       render("[");
+       pp(_endarracc.expr_2, 0);
+       render("]");
        if (_i_ > 6) render(_R_PAREN);
     }
-    else     if (foo instanceof Latte.Absyn.FieldAcc)
+    else     if (foo instanceof Latte.Absyn.EObjAcc)
     {
-       Latte.Absyn.FieldAcc _fieldacc = (Latte.Absyn.FieldAcc) foo;
+       Latte.Absyn.EObjAcc _eobjacc = (Latte.Absyn.EObjAcc) foo;
        if (_i_ > 5) render(_L_PAREN);
-       pp(_fieldacc.expr_, 0);
-       render(".");
-       pp(_fieldacc.ident_, 0);
-       if (_i_ > 5) render(_R_PAREN);
-    }
-    else     if (foo instanceof Latte.Absyn.MethodCall)
-    {
-       Latte.Absyn.MethodCall _methodcall = (Latte.Absyn.MethodCall) foo;
-       if (_i_ > 5) render(_L_PAREN);
-       pp(_methodcall.expr_, 0);
-       render(".");
-       pp(_methodcall.ident_, 0);
-       render("(");
-       pp(_methodcall.listexpr_, 0);
-       render(")");
+       pp(_eobjacc.expr_, 0);
+       pp(_eobjacc.objacc_, 0);
        if (_i_ > 5) render(_R_PAREN);
     }
     else     if (foo instanceof Latte.Absyn.Neg)
@@ -1182,6 +1116,29 @@ public class PrettyPrinter
          render("");
        }
      }  }
+
+  private static void pp(Latte.Absyn.ObjAcc foo, int _i_)
+  {
+    if (foo instanceof Latte.Absyn.ObjFieldAcc)
+    {
+       Latte.Absyn.ObjFieldAcc _objfieldacc = (Latte.Absyn.ObjFieldAcc) foo;
+       if (_i_ > 0) render(_L_PAREN);
+       render(".");
+       pp(_objfieldacc.ident_, 0);
+       if (_i_ > 0) render(_R_PAREN);
+    }
+    else     if (foo instanceof Latte.Absyn.ObjMethAcc)
+    {
+       Latte.Absyn.ObjMethAcc _objmethacc = (Latte.Absyn.ObjMethAcc) foo;
+       if (_i_ > 0) render(_L_PAREN);
+       render(".");
+       pp(_objmethacc.ident_, 0);
+       render("(");
+       pp(_objmethacc.listexpr_, 0);
+       render(")");
+       if (_i_ > 0) render(_R_PAREN);
+    }
+  }
 
   private static void pp(Latte.Absyn.AddOp foo, int _i_)
   {
@@ -1279,7 +1236,7 @@ public class PrettyPrinter
     {
        Latte.Absyn.ProgramTD _programtd = (Latte.Absyn.ProgramTD) foo;
        render("(");
-       render("ProgramTD" + " at" + ((ProgramTD) foo).line_num + ":" + ((ProgramTD) foo).col_num + " #" + ((ProgramTD) foo).offset);
+       render("ProgramTD");
        render("[");
        sh(_programtd.listtopdef_);
        render("]");
@@ -1293,7 +1250,7 @@ public class PrettyPrinter
     {
        Latte.Absyn.FnDef _fndef = (Latte.Absyn.FnDef) foo;
        render("(");
-       render("FnDef" +" at" + ((FnDef) foo).line_num + ":" + ((FnDef) foo).col_num);
+       render("FnDef");
        sh(_fndef.type_);
        sh(_fndef.ident_);
        render("[");
@@ -1306,7 +1263,7 @@ public class PrettyPrinter
     {
        Latte.Absyn.ClassDecl _classdecl = (Latte.Absyn.ClassDecl) foo;
        render("(");
-       render("ClassDecl"+" at" + ((ClassDecl) foo).line_num + ":" + ((ClassDecl) foo).col_num);
+       render("ClassDecl");
        sh(_classdecl.classheader_);
        render("[");
        sh(_classdecl.listfielddeclaration_);
@@ -1519,7 +1476,7 @@ public class PrettyPrinter
        Latte.Absyn.Ass _ass = (Latte.Absyn.Ass) foo;
        render("(");
        render("Ass");
-       sh(_ass.ident_);
+       sh(_ass.lhs_);
        sh(_ass.expr_);
        render(")");
     }
@@ -1528,7 +1485,7 @@ public class PrettyPrinter
        Latte.Absyn.Incr _incr = (Latte.Absyn.Incr) foo;
        render("(");
        render("Incr");
-       sh(_incr.ident_);
+       sh(_incr.lhs_);
        render(")");
     }
     if (foo instanceof Latte.Absyn.Decr)
@@ -1536,7 +1493,7 @@ public class PrettyPrinter
        Latte.Absyn.Decr _decr = (Latte.Absyn.Decr) foo;
        render("(");
        render("Decr");
-       sh(_decr.ident_);
+       sh(_decr.lhs_);
        render(")");
     }
     if (foo instanceof Latte.Absyn.Ret)
@@ -1621,12 +1578,33 @@ public class PrettyPrinter
      }
   }
 
+  private static void sh(Latte.Absyn.Lhs foo)
+  {
+    if (foo instanceof Latte.Absyn.VariableRawLhs)
+    {
+       Latte.Absyn.VariableRawLhs _variablerawlhs = (Latte.Absyn.VariableRawLhs) foo;
+       render("(");
+       render("VariableRawLhs");
+       sh(_variablerawlhs.ident_);
+       render(")");
+    }
+    if (foo instanceof Latte.Absyn.ArrElemLhs)
+    {
+       Latte.Absyn.ArrElemLhs _arrelemlhs = (Latte.Absyn.ArrElemLhs) foo;
+       render("(");
+       render("ArrElemLhs");
+       sh(_arrelemlhs.ident_);
+       sh(_arrelemlhs.expr_);
+       render(")");
+    }
+  }
+
   private static void sh(Latte.Absyn.BasicType foo)
   {
     if (foo instanceof Latte.Absyn.Int)
     {
        Latte.Absyn.Int _int = (Latte.Absyn.Int) foo;
-       render("Int" + " at " + ((Int) foo).col_num + ";" + ((Int) foo).line_num);
+       render("Int");
     }
     if (foo instanceof Latte.Absyn.Str)
     {
@@ -1636,7 +1614,7 @@ public class PrettyPrinter
     if (foo instanceof Latte.Absyn.Bool)
     {
        Latte.Absyn.Bool _bool = (Latte.Absyn.Bool) foo;
-       render("Bool" + " at " + ((Bool) foo).col_num + ";" + ((Bool) foo).line_num);
+       render("Bool");
     }
     if (foo instanceof Latte.Absyn.Void)
     {
@@ -1651,7 +1629,7 @@ public class PrettyPrinter
     {
        Latte.Absyn.BuiltIn _builtin = (Latte.Absyn.BuiltIn) foo;
        render("(");
-       render("BuiltIn"+ " at " + ((BuiltIn) foo).col_num + ";" + ((BuiltIn) foo).line_num);
+       render("BuiltIn");
        sh(_builtin.basictype_);
        render(")");
     }
@@ -1659,7 +1637,7 @@ public class PrettyPrinter
     {
        Latte.Absyn.ClassName _classname = (Latte.Absyn.ClassName) foo;
        render("(");
-       render("ClassName" + " at " + ((ClassName) foo).col_num + ";" + ((ClassName) foo).line_num);
+       render("ClassName");
        sh(_classname.ident_);
        render(")");
     }
@@ -1673,60 +1651,16 @@ public class PrettyPrinter
        render("(");
        render("ArrayType");
        sh(_arraytype.typename_);
-       render("[");
-       sh(_arraytype.listemptybracket_);
-       render("]");
        render(")");
     }
     if (foo instanceof Latte.Absyn.TypeNameS)
     {
        Latte.Absyn.TypeNameS _typenames = (Latte.Absyn.TypeNameS) foo;
        render("(");
-       render("TypeNameS" + "at " + ((TypeNameS) foo).col_num + ";" + ((TypeNameS) foo).line_num);
+       render("TypeNameS");
        sh(_typenames.typename_);
        render(")");
     }
-  }
-
-  private static void sh(Latte.Absyn.EmptyBracket foo)
-  {
-    if (foo instanceof Latte.Absyn.EBracket)
-    {
-       Latte.Absyn.EBracket _ebracket = (Latte.Absyn.EBracket) foo;
-       render("EBracket");
-    }
-  }
-
-  private static void sh(Latte.Absyn.ListEmptyBracket foo)
-  {
-     for (java.util.Iterator<EmptyBracket> it = foo.iterator(); it.hasNext();)
-     {
-       sh(it.next());
-       if (it.hasNext())
-         render(",");
-     }
-  }
-
-  private static void sh(Latte.Absyn.SizeBracket foo)
-  {
-    if (foo instanceof Latte.Absyn.SBracket)
-    {
-       Latte.Absyn.SBracket _sbracket = (Latte.Absyn.SBracket) foo;
-       render("(");
-       render("SBracket");
-       sh(_sbracket.expr_);
-       render(")");
-    }
-  }
-
-  private static void sh(Latte.Absyn.ListSizeBracket foo)
-  {
-     for (java.util.Iterator<SizeBracket> it = foo.iterator(); it.hasNext();)
-     {
-       sh(it.next());
-       if (it.hasNext())
-         render(",");
-     }
   }
 
   private static void sh(Latte.Absyn.ListType foo)
@@ -1810,9 +1744,7 @@ public class PrettyPrinter
        render("(");
        render("EArrConstr");
        sh(_earrconstr.ident_);
-       render("[");
-       sh(_earrconstr.listsizebracket_);
-       render("]");
+       sh(_earrconstr.expr_);
        render(")");
     }
     if (foo instanceof Latte.Absyn.ENDArrAcc)
@@ -1820,31 +1752,17 @@ public class PrettyPrinter
        Latte.Absyn.ENDArrAcc _endarracc = (Latte.Absyn.ENDArrAcc) foo;
        render("(");
        render("ENDArrAcc");
-       sh(_endarracc.expr_);
-       render("[");
-       sh(_endarracc.listsizebracket_);
-       render("]");
+       sh(_endarracc.expr_1);
+       sh(_endarracc.expr_2);
        render(")");
     }
-    if (foo instanceof Latte.Absyn.FieldAcc)
+    if (foo instanceof Latte.Absyn.EObjAcc)
     {
-       Latte.Absyn.FieldAcc _fieldacc = (Latte.Absyn.FieldAcc) foo;
+       Latte.Absyn.EObjAcc _eobjacc = (Latte.Absyn.EObjAcc) foo;
        render("(");
-       render("FieldAcc");
-       sh(_fieldacc.expr_);
-       sh(_fieldacc.ident_);
-       render(")");
-    }
-    if (foo instanceof Latte.Absyn.MethodCall)
-    {
-       Latte.Absyn.MethodCall _methodcall = (Latte.Absyn.MethodCall) foo;
-       render("(");
-       render("MethodCall");
-       sh(_methodcall.expr_);
-       sh(_methodcall.ident_);
-       render("[");
-       sh(_methodcall.listexpr_);
-       render("]");
+       render("EObjAcc");
+       sh(_eobjacc.expr_);
+       sh(_eobjacc.objacc_);
        render(")");
     }
     if (foo instanceof Latte.Absyn.Neg)
@@ -1923,12 +1841,35 @@ public class PrettyPrinter
      }
   }
 
+  private static void sh(Latte.Absyn.ObjAcc foo)
+  {
+    if (foo instanceof Latte.Absyn.ObjFieldAcc)
+    {
+       Latte.Absyn.ObjFieldAcc _objfieldacc = (Latte.Absyn.ObjFieldAcc) foo;
+       render("(");
+       render("ObjFieldAcc");
+       sh(_objfieldacc.ident_);
+       render(")");
+    }
+    if (foo instanceof Latte.Absyn.ObjMethAcc)
+    {
+       Latte.Absyn.ObjMethAcc _objmethacc = (Latte.Absyn.ObjMethAcc) foo;
+       render("(");
+       render("ObjMethAcc");
+       sh(_objmethacc.ident_);
+       render("[");
+       sh(_objmethacc.listexpr_);
+       render("]");
+       render(")");
+    }
+  }
+
   private static void sh(Latte.Absyn.AddOp foo)
   {
     if (foo instanceof Latte.Absyn.Plus)
     {
        Latte.Absyn.Plus _plus = (Latte.Absyn.Plus) foo;
-       render("Plus" + "at " + ((Plus) foo).col_num + ";" + ((Plus) foo).line_num);
+       render("Plus");
     }
     if (foo instanceof Latte.Absyn.Minus)
     {

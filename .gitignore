@@ -6,6 +6,7 @@ bnfc
 
 # Compiled class file
 Latte/**/*.class
+Latte/**/*.bak
 
 # Log file
 Latte/**/*.log
