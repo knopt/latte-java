@@ -1,14 +1,16 @@
+export CLASSPATH=".:bnfc/testing/data/java-cup-11b-runtime.jar"
+
 JAVAC=javac
 JAVAC_FLAGS=-sourcepath .
 JAVA=java
 JAVA_FLAGS=
-PARSER=${JAVA} ${JAVA_FLAGS} java_cup.Main
+PARSER=${JAVA} ${JAVA_FLAGS} -cp .:java-cup-11b-runtime.jar -jar java-cup-11b.jar
 PARSER_FLAGS=-locations -expect 200
 LEXER=${JAVA} ${JAVA_FLAGS} JLex.Main
 LEXER_FLAGS=
 all: test
 
-test: absyn Latte/Yylex.class Latte/PrettyPrinter.class Latte/Test.class Latte/ComposVisitor.class Latte/AbstractVisitor.class Latte/FoldVisitor.class Latte/AllVisitor.class Latte/parser.class Latte/sym.class Latte/Test.class
+test: absyn Latte/Yylex.class Latte/PrettyPrinter.class Latte/Test.class Latte/parser.class Latte/sym.class Latte/Test.class
 
 .PHONY: absyn
 

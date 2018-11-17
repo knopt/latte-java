@@ -9,27 +9,22 @@ public class EArrConstr extends Expr implements Positioned {
         return "(" + line_num + ", " + col_num + ")";
     }
 
-
     public final String ident_;
-    public final ListSizeBracket listsizebracket_;
+    public final Expr expr_;
     public int line_num, col_num, offset;
-
-    public EArrConstr(String p1, ListSizeBracket p2) {
-        ident_ = p1;
-        listsizebracket_ = p2;
-    }
+    public EArrConstr(String p1, Expr p2) { ident_ = p1; expr_ = p2; }
 
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o instanceof EArrConstr) {
-            EArrConstr x = (EArrConstr) o;
-            return this.ident_.equals(x.ident_) && this.listsizebracket_.equals(x.listsizebracket_);
+        if (o instanceof Latte.Absyn.EArrConstr) {
+            Latte.Absyn.EArrConstr x = (Latte.Absyn.EArrConstr)o;
+            return this.ident_.equals(x.ident_) && this.expr_.equals(x.expr_);
         }
         return false;
     }
 
     public int hashCode() {
-        return 37 * (this.ident_.hashCode()) + this.listsizebracket_.hashCode();
+        return 37*(this.ident_.hashCode())+this.expr_.hashCode();
     }
 
     public <T> T match(Function<EVar, T> eVar,

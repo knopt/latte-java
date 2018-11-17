@@ -9,28 +9,24 @@ public class ENDArrAcc extends Expr implements Positioned {
         return "(" + line_num + ", " + col_num + ")";
     }
 
-
-    public final Expr expr_;
-    public final ListSizeBracket listsizebracket_;
+    public final Expr expr_1, expr_2;
     public int line_num, col_num, offset;
+    public ENDArrAcc(Expr p1, Expr p2) { expr_1 = p1; expr_2 = p2; }
 
-    public ENDArrAcc(Expr p1, ListSizeBracket p2) {
-        expr_ = p1;
-        listsizebracket_ = p2;
-    }
 
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o instanceof ENDArrAcc) {
-            ENDArrAcc x = (ENDArrAcc) o;
-            return this.expr_.equals(x.expr_) && this.listsizebracket_.equals(x.listsizebracket_);
+        if (o instanceof Latte.Absyn.ENDArrAcc) {
+            Latte.Absyn.ENDArrAcc x = (Latte.Absyn.ENDArrAcc)o;
+            return this.expr_1.equals(x.expr_1) && this.expr_2.equals(x.expr_2);
         }
         return false;
     }
 
     public int hashCode() {
-        return 37 * (this.expr_.hashCode()) + this.listsizebracket_.hashCode();
+        return 37*(this.expr_1.hashCode())+this.expr_2.hashCode();
     }
+
 
     public <T> T match(Function<EVar, T> eVar,
                        Function<ELitInt, T> eLitInt,

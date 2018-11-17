@@ -15,5 +15,14 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="data" level="project" />
     <orderEntry type="module" module-name="calc" />
+    <orderEntry type="module-library" scope="RUNTIME">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/java-cup-11b-runtime.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>

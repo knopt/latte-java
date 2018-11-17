@@ -6,7 +6,7 @@ public class Init extends Item implements Positioned {
 
     @Override
     public String getPosition() {
-        return "(" + line_num + ", " + col_num + ")";
+        return "(" + line_num + ", " + offset + ")";
     }
 
 
