@@ -2,244 +2,177 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c0927591-448d-4989-ae6a-2567b7472fd1" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/AddOp.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/Arg.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/ArgTI.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/ArrayType.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/Ass.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/BStmt.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/BasicType.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/Block.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/BlockS.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/Bool.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/BuiltIn.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/ClassDec.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/ClassDecl.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/ClassHeader.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/ClassName.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/Cond.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/CondElse.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/Decl.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/Decr.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/Div.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/Dmth.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/Dvar.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/EAdd.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/EAnd.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/EApp.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/EArrConstr.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/EBracket.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/EConstr.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/ELitFalse.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/ELitInt.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/ELitTrue.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/EMul.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/ENDArrAcc.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/ENull.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/EOr.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/EQU.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/ERel.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/EString.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/EThis.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/EVar.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/Empty.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/EmptyBracket.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/EmptyMBody.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/Expr.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/FieldAcc.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/FieldDeclaration.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/FnDef.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/GE.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/GTH.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/Incr.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/Init.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/Int.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/InterDec.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/Item.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/LE.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/LTH.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/ListArg.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/ListEmptyBracket.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/ListExpr.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/ListFieldDeclaration.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/ListItem.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/ListModifier.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/ListSizeBracket.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/ListStmt.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/ListTopDef.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/ListType.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/MBody.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/MEmpty.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/MethodBody.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/MethodCall.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/Mfinal.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/Minus.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/Mod.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/Modifier.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/Mprivate.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/Mpublic.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/Mstatic.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/MulOp.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/NE.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/Neg.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/NoInit.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/Not.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/Plus.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/Positioned.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/Positioned.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/Program.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/ProgramTD.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/RelOp.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/Ret.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/SBracket.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/SExp.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/SizeBracket.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/Stmt.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/Str.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/Times.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/TopDef.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/Type.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/TypeName.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/TypeNameS.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/VRet.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/Void.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Latte/Absyn/While.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/examples/bad/1.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/examples/good/1.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/examples/good/classes.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ArgTI.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/ArgTI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ArrayType.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/ArrayType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Ass.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/Ass.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Latte/Absyn/BStmt.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/BStmt.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Latte/Absyn/BlockS.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/BlockS.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Bool.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/Bool.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Latte/Absyn/BuiltIn.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/BuiltIn.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ClassDec.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/ClassDec.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ClassDecl.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/ClassDecl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ClassName.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/ClassName.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Cond.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/Cond.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Latte/Absyn/CondElse.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/CondElse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Decl.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/Decl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Div.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/Div.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Dmth.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/Dmth.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Dvar.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/Dvar.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Latte/Absyn/EAdd.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/EAdd.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Latte/Absyn/EAnd.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/EAnd.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Latte/Absyn/EApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/EApp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Latte/Absyn/EArrConstr.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/EArrConstr.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Latte/Absyn/EBracket.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/EBracket.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Latte/Absyn/EConstr.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/EConstr.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ELitFalse.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/ELitFalse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ELitInt.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/ELitInt.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ELitTrue.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/ELitTrue.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Latte/Absyn/EMul.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/EMul.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ENDArrAcc.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/ENDArrAcc.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ENull.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/ENull.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Latte/Absyn/EOr.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/EOr.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Latte/Absyn/EQU.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/EQU.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ERel.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/ERel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Latte/Absyn/EString.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/EString.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Latte/Absyn/EThis.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/EThis.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Latte/Absyn/EVar.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/EVar.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Empty.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/Empty.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Latte/Absyn/EmptyMBody.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/EmptyMBody.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Latte/Absyn/FieldAcc.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/FieldAcc.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Latte/Absyn/FnDef.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/FnDef.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Latte/Absyn/GE.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/GE.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Latte/Absyn/GTH.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/GTH.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Incr.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/Incr.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Init.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/Init.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Int.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/Int.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Latte/Absyn/InterDec.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/InterDec.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Latte/Absyn/LE.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Absyn/LE.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Latte/PrettyPrinter.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/PrettyPrinter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Latte/Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Test.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Latte/Yylex.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/Yylex.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Latte/parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/Latte/parser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JLex/CAccept.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/JLex/CAcceptAnchor.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/JLex/CAlloc.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/JLex/CBunch.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/JLex/CDTrans.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/JLex/CDfa.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/JLex/CEmit.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/JLex/CError.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/JLex/CInput.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/JLex/CLexGen.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/JLex/CMakeNfa.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/JLex/CMinimize.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/JLex/CNfa.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/JLex/CNfa2Dfa.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/JLex/CNfaPair.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/JLex/CSet.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/JLex/CSimplifyNfa.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/JLex/CSpec.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/JLex/CUtility.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/JLex/Main.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/JLex/SparseBitSet$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/JLex/SparseBitSet$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/JLex/SparseBitSet$3.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/JLex/SparseBitSet$4.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/JLex/SparseBitSet$BinOp.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/JLex/SparseBitSet.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/AddOp.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Arg.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ArgTI.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ArrayType.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Ass.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/BStmt.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/BasicType.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Block.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/BlockS.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Bool.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/BuiltIn.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ClassDec.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ClassDecl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ClassHeader.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ClassName.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Cond.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/CondElse.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Decl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Decr.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Div.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Dmth.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Dvar.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/EAdd.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/EAnd.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/EApp.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/EArrConstr.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/EBracket.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/EConstr.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ELitFalse.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ELitInt.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ELitTrue.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/EMul.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ENDArrAcc.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ENull.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/EOr.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/EQU.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ERel.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/EString.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/EThis.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/EVar.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Empty.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/EmptyBracket.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/EmptyMBody.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Expr.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/FieldAcc.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/FieldDeclaration.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/FnDef.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/GE.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/GTH.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Incr.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Init.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Int.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/InterDec.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Item.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/LE.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/LTH.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ListArg.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ListEmptyBracket.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ListExpr.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ListFieldDeclaration.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ListItem.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ListModifier.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ListSizeBracket.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ListStmt.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ListTopDef.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ListType.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/MBody.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/MEmpty.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/MethodBody.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/MethodCall.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Mfinal.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Minus.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Mod.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Modifier.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Mprivate.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Mpublic.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Mstatic.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/MulOp.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/NE.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Neg.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/NoInit.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Not.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Plus.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Positioned.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Program.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/ProgramTD.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/RelOp.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Ret.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/SBracket.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/SExp.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/SizeBracket.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Stmt.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Str.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Times.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/TopDef.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Type.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/TypeName.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/TypeNameS.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/VRet.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/Void.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Latte/Absyn/While.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bnfc" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/java_cup/CUP$parser$actions.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/java_cup/Main.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/java_cup/Main.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/java_cup/action_part.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/java_cup/action_part.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/java_cup/action_production.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/java_cup/action_production.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/java_cup/assoc.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/java_cup/assoc.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/java_cup/emit.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/java_cup/emit.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/java_cup/internal_error.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/java_cup/internal_error.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/java_cup/lalr_item.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/java_cup/lalr_item.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/java_cup/lalr_item_set.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/java_cup/lalr_item_set.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/java_cup/lalr_state.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/java_cup/lalr_state.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/java_cup/lalr_transition.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/java_cup/lalr_transition.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/java_cup/lexer.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/java_cup/lexer.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/java_cup/lr_item_core.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/java_cup/lr_item_core.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/java_cup/non_terminal.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/java_cup/non_terminal.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/java_cup/nonassoc_action.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/java_cup/nonassoc_action.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/java_cup/parse_action.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/java_cup/parse_action.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/java_cup/parse_action_row.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/java_cup/parse_action_row.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/java_cup/parse_action_table.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/java_cup/parse_action_table.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/java_cup/parse_reduce_row.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/java_cup/parse_reduce_row.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/java_cup/parse_reduce_table.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/java_cup/parse_reduce_table.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/java_cup/parser.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/java_cup/parser.cup" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/java_cup/parser.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/java_cup/production.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/java_cup/production.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/java_cup/production_part.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/java_cup/production_part.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/java_cup/reduce_action.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/java_cup/reduce_action.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/java_cup/runtime/Scanner.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/java_cup/runtime/Scanner.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/java_cup/runtime/Symbol.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/java_cup/runtime/Symbol.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/java_cup/runtime/lr_parser.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/java_cup/runtime/lr_parser.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/java_cup/runtime/virtual_parse_stack.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/java_cup/runtime/virtual_parse_stack.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/java_cup/shift_action.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/java_cup/shift_action.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/java_cup/simple_calc/CUP$parser$actions.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/java_cup/simple_calc/Main.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/java_cup/simple_calc/Main.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/java_cup/simple_calc/parser.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/java_cup/simple_calc/parser.cup" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/java_cup/simple_calc/parser.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/java_cup/simple_calc/scanner.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/java_cup/simple_calc/scanner.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/java_cup/simple_calc/sym.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/java_cup/simple_calc/sym.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/java_cup/sym.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/java_cup/sym.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/java_cup/symbol.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/java_cup/symbol.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/java_cup/symbol_part.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/java_cup/symbol_part.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/java_cup/symbol_set.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/java_cup/symbol_set.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/java_cup/terminal.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/java_cup/terminal.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/java_cup/terminal_set.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/java_cup/terminal_set.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/java_cup/version.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/java_cup/version.java" beforeDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -271,7 +204,7 @@
           <entry key="Makefile" value="6" />
           <entry key="Yylex" value="1" />
           <entry key="bak" value="35" />
-          <entry key="cf" value="1" />
+          <entry key="cf" value="2" />
           <entry key="class" value="19" />
           <entry key="cup" value="6" />
           <entry key="hs" value="8" />
@@ -286,7 +219,7 @@
           <entry key="Cup file" value="1" />
           <entry key="Haskell" value="8" />
           <entry key="JAVA" value="346" />
-          <entry key="PLAIN_TEXT" value="51" />
+          <entry key="PLAIN_TEXT" value="52" />
           <entry key="XML" value="1" />
         </counts>
       </usages-collector>
@@ -341,11 +274,20 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Makefile">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="435">
               <caret line="29" column="12" selection-start-line="29" selection-start-column="6" selection-end-line="29" selection-end-column="12" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Latte.cf">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="586">
+              <caret line="110" column="42" lean-forward="true" selection-start-line="110" selection-start-column="42" selection-end-line="110" selection-end-column="42" />
             </state>
           </provider>
         </entry>
@@ -360,15 +302,6 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/bnfc/source/src/BNFC/Backend/CPP/STL/CFtoBisonSTL.hs">
           <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Latte/Absyn/ListArg.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="30">
-              <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
-            </state>
-          </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
@@ -557,52 +490,6 @@
               <item name="compiler" type="b2602c69:ProjectViewProjectNode" />
               <item name="compiler" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="compiler" type="b2602c69:ProjectViewProjectNode" />
-              <item name="compiler" type="462c0819:PsiDirectoryNode" />
-              <item name="bnfc" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="compiler" type="b2602c69:ProjectViewProjectNode" />
-              <item name="compiler" type="462c0819:PsiDirectoryNode" />
-              <item name="bnfc" type="462c0819:PsiDirectoryNode" />
-              <item name="testing" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="compiler" type="b2602c69:ProjectViewProjectNode" />
-              <item name="compiler" type="462c0819:PsiDirectoryNode" />
-              <item name="bnfc" type="462c0819:PsiDirectoryNode" />
-              <item name="testing" type="462c0819:PsiDirectoryNode" />
-              <item name="data" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="compiler" type="b2602c69:ProjectViewProjectNode" />
-              <item name="compiler" type="462c0819:PsiDirectoryNode" />
-              <item name="bnfc" type="462c0819:PsiDirectoryNode" />
-              <item name="testing" type="462c0819:PsiDirectoryNode" />
-              <item name="data" type="462c0819:PsiDirectoryNode" />
-              <item name="java-cup-11b-runtime.jar" type="ab9368bb:PsiFileNode" />
-            </path>
-            <path>
-              <item name="compiler" type="b2602c69:ProjectViewProjectNode" />
-              <item name="compiler" type="462c0819:PsiDirectoryNode" />
-              <item name="bnfc" type="462c0819:PsiDirectoryNode" />
-              <item name="testing" type="462c0819:PsiDirectoryNode" />
-              <item name="data" type="462c0819:PsiDirectoryNode" />
-              <item name="java-cup-11b-runtime.jar" type="ab9368bb:PsiFileNode" />
-              <item name="runtime" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="compiler" type="b2602c69:ProjectViewProjectNode" />
-              <item name="compiler" type="462c0819:PsiDirectoryNode" />
-              <item name="Latte" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="compiler" type="b2602c69:ProjectViewProjectNode" />
-              <item name="compiler" type="462c0819:PsiDirectoryNode" />
-              <item name="Latte" type="462c0819:PsiDirectoryNode" />
-              <item name="parser.java" type="529ef68f:ClassesTreeStructureProvider$PsiClassOwnerTreeNode" />
-            </path>
           </expand>
           <select />
         </subPane>
@@ -611,7 +498,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="SearchEverywhereHistoryKey" value="parser&#9;PSI&#9;JAVA://Latte.parser&#10;jlex&#9;FILE&#9;jar:///home/tomek/inf/mrjp/compiler/bnfc/testing/data/javatools.jar!/JLex" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1542375673918" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1542453792929" />
     <property name="last_directory_selection" value="$PROJECT_DIR$/Latte" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../compiler-cp" />
     <property name="project.structure.last.edited" value="Modules" />
@@ -645,9 +532,8 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="25" width="1366" height="743" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.31060606" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25454545" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -690,19 +576,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Latte/Absyn/Decl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="31" selection-start-line="4" selection-start-column="31" selection-end-line="4" selection-end-column="31" />
-          <folding>
-            <element signature="e#209#210#0" expanded="true" />
-            <element signature="e#269#270#0" expanded="true" />
-            <element signature="e#761#762#0" expanded="true" />
-            <element signature="e#840#841#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Latte/Absyn/Div.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="165">
@@ -1164,6 +1037,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="435">
           <caret line="29" column="12" selection-start-line="29" selection-start-column="6" selection-end-line="29" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Latte.cf">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="586">
+          <caret line="110" column="42" lean-forward="true" selection-start-line="110" selection-start-column="42" selection-end-line="110" selection-end-column="42" />
         </state>
       </provider>
     </entry>

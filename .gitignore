@@ -1,0 +1,28 @@
+bnfc/
+bnfc/*
+bnfc
+
+# Compiled class file
+Latte/**/*.class
+
+# Log file
+Latte/**/*.log
+
+# BlueJ files
+Latte/**/*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+Latte/**/*.jar
+Latte/**/*.war
+Latte/**/*.nar
+Latte/**/*.ear
+Latte/**/*.zip
+Latte/**/*.tar.gz
+Latte/**/*.rar
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+
