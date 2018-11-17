@@ -2,6 +2,8 @@ bnfc/
 bnfc/*
 bnfc
 
+.idea
+
 # Compiled class file
 Latte/**/*.class
 
