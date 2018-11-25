@@ -52,10 +52,11 @@ public class MethodDeclaration implements  CallableDeclaration {
         return returnType;
     }
 
-    public boolean signatureMatches(MethodDeclaration mthd) {
-        if (mthd == null) {
-            return false;
-        }
+
+    public boolean signatureMatches(CallableDeclaration o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MethodDeclaration mthd = (MethodDeclaration) o;
 
         if (!returnType.equals(mthd.returnType)) {
             return false;
@@ -67,4 +68,5 @@ public class MethodDeclaration implements  CallableDeclaration {
 
         return argumentList.equals(mthd.getArgumentList());
     }
+
 }

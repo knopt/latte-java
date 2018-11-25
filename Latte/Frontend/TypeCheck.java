@@ -76,13 +76,21 @@ public class TypeCheck {
                 TypeCheck::gatherInterfaceDefinitions
         );
 
+        if (typeDef == null) {
+            return true;
+        }
+
         for (FieldDeclaration field : classDecl.listfielddeclaration_) {
             MethodDeclaration funcDecl = field.match(
                     TypeCheck::gatherInterfaceDefinitions,
                     TypeCheck::gatherInterfaceDefinitions
             );
 
-            typeDef.getClassDefinition().addMethod(funcDecl.getName(), funcDecl);
+            if (typeDef.getInterfaceDefinition().methods.containsKey(funcDecl.getName())) {
+                throw new TypeCheckException("Method " + funcDecl.getName() + " already declared", classDecl.line_num, classDecl.col_num);
+            }
+
+            typeDef.getInterfaceDefinition().addMethod(funcDecl.getName(), funcDecl);
         }
 
         return true;
@@ -205,6 +213,15 @@ public class TypeCheck {
 
         );
 
+        Implements impl = classDecl.classheader_.match(
+                classDec -> classDec.implements_,
+                null
+        );
+
+        if (typeDef == null || impl == null) {
+            return true;
+        }
+
         for (FieldDeclaration field : classDecl.listfielddeclaration_) {
             field.match(
                     (var) -> assignFieldDeclaration(typeDef, var),
@@ -213,7 +230,38 @@ public class TypeCheck {
 
         }
 
+        ClassTypeDefinition classTypeDefinition = typeDef.getClassDefinition();
+        InterfaceTypeDefinition interfaceTypeDefinition = impl.match(
+                null,
+                null
+        );
+
+        if (interfaceTypeDefinition == null) {
+            return true;
+        }
+
+        if (!interfaceTypeDefinition.isImplementedBy(classTypeDefinition)) {
+            throw new TypeCheckException("Class " + classTypeDefinition.getName() + " doesn't implement all of interface "
+                + interfaceTypeDefinition.getName() + " methods", classDecl.line_num, classDecl.col_num);
+        }
+
+        classTypeDefinition.addInterface(interfaceTypeDefinition);
+
         return true;
+    }
+
+    public static InterfaceTypeDefinition getInterfaceType(InterImpl interImpl) {
+        if (!env.declaredTypes.containsKey(interImpl.ident_)) {
+            throw new IllegalTypeException(interImpl.ident_, interImpl.line_num, interImpl.col_num);
+        }
+
+        TypeDefinition typeDefinition = env.declaredTypes.get(interImpl.ident_);
+
+        if (!typeDefinition.isInterfaceType()) {
+            throw new TypeCheckException("Type " + interImpl.ident_ + " is not an interface type", interImpl.line_num, interImpl.col_num);
+        }
+
+        return typeDefinition.getInterfaceDefinition();
     }
 
     public static TypeDefinition gatherTypeDefinitions(ClassDec classDecl) {

@@ -8,4 +8,5 @@ public interface TypeDefinition {
     public boolean isInterfaceType();
 
     public ClassTypeDefinition getClassDefinition();
+    public InterfaceTypeDefinition getInterfaceDefinition();
 }

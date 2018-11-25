@@ -53,6 +53,11 @@ public class BasicTypeDefinition implements TypeDefinition, Arrayable {
     }
 
     @Override
+    public InterfaceTypeDefinition getInterfaceDefinition() {
+        return null;
+    }
+
+    @Override
     public TypeDefinition getOwnType() {
         return this;
     }

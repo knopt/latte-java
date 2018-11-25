@@ -1,5 +1,7 @@
 package Latte.Definitions;
 
+import Latte.Exceptions.TypeCheckException;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -31,6 +33,28 @@ public class InterfaceTypeDefinition implements TypeDefinition, Arrayable {
         this.methods.put(name, d);
     }
 
+    public boolean isImplementedBy(TypeDefinition typeDefinition) {
+        if (!typeDefinition.isClassType()) {
+            return false;
+        }
+
+        ClassTypeDefinition classTypeDefinition = typeDefinition.getClassDefinition();
+
+        for (Map.Entry<String, CallableDeclaration> iEntry : methods.entrySet()) {
+            if (!classTypeDefinition.methods.containsKey(iEntry.getKey())) {
+                return false;
+            }
+
+            CallableDeclaration cValue = classTypeDefinition.methods.get(iEntry.getKey());
+
+            if (!iEntry.getValue().signatureMatches(cValue)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
 
     @Override
     public String getName() {
@@ -55,6 +79,16 @@ public class InterfaceTypeDefinition implements TypeDefinition, Arrayable {
     @Override
     public boolean isInterfaceType() {
         return true;
+    }
+
+    @Override
+    public ClassTypeDefinition getClassDefinition() {
+        return null;
+    }
+
+    @Override
+    public InterfaceTypeDefinition getInterfaceDefinition() {
+        return this;
     }
 
     @Override

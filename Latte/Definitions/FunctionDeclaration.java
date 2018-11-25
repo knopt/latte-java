@@ -42,6 +42,23 @@ public class FunctionDeclaration implements  CallableDeclaration {
                 Objects.equals(returnType, that.returnType);
     }
 
+
+    public boolean signatureMatches(CallableDeclaration o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FunctionDeclaration mthd = (FunctionDeclaration) o;
+
+        if (!returnType.equals(mthd.returnType)) {
+            return false;
+        }
+
+        if (!name.equals(mthd.getName())) {
+            return false;
+        }
+
+        return argumentList.equals(mthd.getArgumentList());
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(name, argumentList, methodBody, returnType);

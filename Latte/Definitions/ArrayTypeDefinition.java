@@ -54,4 +54,9 @@ public class ArrayTypeDefinition implements TypeDefinition {
     public ClassTypeDefinition getClassDefinition() {
         return null;
     }
+
+    @Override
+    public InterfaceTypeDefinition getInterfaceDefinition() {
+        return null;
+    }
 }

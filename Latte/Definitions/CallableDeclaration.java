@@ -9,4 +9,5 @@ public interface CallableDeclaration {
     public List<VariableDefinition> getArgumentList();
     public MethodBody getMethodBody();
     public TypeDefinition getReturnType();
+    public boolean signatureMatches(CallableDeclaration c);
 }
