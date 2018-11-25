@@ -15,8 +15,11 @@ separator  Arg "," ;
 
 -- classes -------------------------------------------------
 
-ClassDec.	ClassHeader ::= "class" Ident;
+ClassDec.	ClassHeader ::= "class" Ident Implements;
 InterDec.	ClassHeader ::= "interface" Ident;
+
+InterImpl.  Implements ::= "implements" Ident;
+EImpl.      Implements ::= "" ;
 
 Dvar.			FieldDeclaration ::= Modifier Type [Item] ";";
 Dmth.			FieldDeclaration ::= Modifier Type Ident "(" [Arg] ")" MethodBody ;
