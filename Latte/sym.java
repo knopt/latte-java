@@ -10,8 +10,11 @@ public class sym {
   /* terminals */
   public static final int _SYMB_18 = 20;
   public static final int _SYMB_17 = 19;
+  public static final int _SYMB_48 = 50;
   public static final int _SYMB_16 = 18;
+  public static final int _SYMB_47 = 49;
   public static final int _SYMB_15 = 17;
+  public static final int _SYMB_46 = 48;
   public static final int _SYMB_14 = 16;
   public static final int _SYMB_45 = 47;
   public static final int _SYMB_13 = 15;
@@ -33,9 +36,9 @@ public class sym {
   public static final int _SYMB_2 = 4;
   public static final int _SYMB_1 = 3;
   public static final int _SYMB_0 = 2;
-  public static final int _IDENT_ = 50;
-  public static final int _INTEGER_ = 49;
-  public static final int _STRING_ = 48;
+  public static final int _IDENT_ = 53;
+  public static final int _INTEGER_ = 52;
+  public static final int _STRING_ = 51;
   public static final int _SYMB_39 = 41;
   public static final int _SYMB_38 = 40;
   public static final int _SYMB_37 = 39;
@@ -108,6 +111,9 @@ public class sym {
   "_SYMB_43",
   "_SYMB_44",
   "_SYMB_45",
+  "_SYMB_46",
+  "_SYMB_47",
+  "_SYMB_48",
   "_STRING_",
   "_INTEGER_",
   "_IDENT_"
