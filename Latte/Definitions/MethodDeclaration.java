@@ -1,17 +1,21 @@
 package Latte.Definitions;
 
+import Latte.Absyn.MethodBody;
+
 import java.util.List;
 import java.util.Objects;
 
 public class MethodDeclaration implements  CallableDeclaration {
     public String name;
-    public List<CallableArgument> argumentList;
-    public TypeDefinition thisType;
+    public List<VariableDefinition> argumentList;
+    public TypeDefinition returnType;
+    public MethodBody methodBody;
 
-    public MethodDeclaration(String name, List<CallableArgument> argumentList, TypeDefinition thisType) {
+    public MethodDeclaration(String name, List<VariableDefinition> argumentList, MethodBody methodBody, TypeDefinition returnType) {
         this.name = name;
         this.argumentList = argumentList;
-        this.thisType = thisType;
+        this.returnType = returnType;
+        this.methodBody = methodBody;
     }
 
     @Override
@@ -34,7 +38,33 @@ public class MethodDeclaration implements  CallableDeclaration {
     }
 
     @Override
-    public List<CallableArgument> getArgumentList() {
+    public List<VariableDefinition> getArgumentList() {
         return this.argumentList;
+    }
+
+    @Override
+    public MethodBody getMethodBody() {
+        return methodBody;
+    }
+
+    @Override
+    public TypeDefinition getReturnType() {
+        return returnType;
+    }
+
+    public boolean signatureMatches(MethodDeclaration mthd) {
+        if (mthd == null) {
+            return false;
+        }
+
+        if (!returnType.equals(mthd.returnType)) {
+            return false;
+        }
+
+        if (!name.equals(mthd.getName())) {
+            return false;
+        }
+
+        return argumentList.equals(mthd.getArgumentList());
     }
 }

@@ -8,11 +8,13 @@ public class ClassTypeDefinition implements TypeDefinition, Arrayable {
     public String className;
     public Map<String, ClassFieldDeclaration> fields;
     public Map<String, CallableDeclaration> methods;
+    public InterfaceTypeDefinition implementedInterface;
 
     public ClassTypeDefinition(String className) {
         this.className = className;
         this.fields = new HashMap<>();
         this.methods = new HashMap<>();
+        this.implementedInterface = null;
     }
 
     public void addField(String name, ClassFieldDeclaration d) {
@@ -21,6 +23,10 @@ public class ClassTypeDefinition implements TypeDefinition, Arrayable {
 
     public void addMethod(String name, MethodDeclaration d) {
         this.methods.put(name, d);
+    }
+
+    public void addInterface(InterfaceTypeDefinition implementedInterface) {
+        this.implementedInterface = implementedInterface;
     }
 
 
@@ -62,5 +68,15 @@ public class ClassTypeDefinition implements TypeDefinition, Arrayable {
     @Override
     public boolean isInterfaceType() {
         return false;
+    }
+
+    @Override
+    public ClassTypeDefinition getClassDefinition() {
+        return this;
+    }
+
+    @Override
+    public TypeDefinition getOwnType() {
+        return this;
     }
 }

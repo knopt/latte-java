@@ -2,34 +2,37 @@ package Latte.Definitions;
 
 import java.util.Objects;
 
-public class BasicTypeDefinition implements TypeDefinition, Arrayable {
-    private BasicTypeName typeName;
+public class ArrayTypeDefinition implements TypeDefinition {
+    private TypeDefinition typeDefinition;
 
-    public BasicTypeDefinition(BasicTypeName tn) {
-        this.typeName = tn;
+    public ArrayTypeDefinition(TypeDefinition td) {
+        if (td.isArrayType()) {
+            throw new IllegalArgumentException("Can't create array of arrays");
+        }
+        this.typeDefinition = td;
     }
 
     @Override
     public String getName() {
-        return typeName.toString().toLowerCase();
+        return typeDefinition.getName();
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        BasicTypeDefinition that = (BasicTypeDefinition) o;
-        return typeName == that.typeName;
+        ArrayTypeDefinition that = (ArrayTypeDefinition) o;
+        return typeDefinition.equals(that.typeDefinition);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(typeName);
+        return Objects.hash(typeDefinition);
     }
 
     @Override
     public boolean isBasicType() {
-        return true;
+        return false;
     }
 
     @Override
@@ -39,7 +42,7 @@ public class BasicTypeDefinition implements TypeDefinition, Arrayable {
 
     @Override
     public boolean isArrayType() {
-        return false;
+        return true;
     }
 
     @Override
@@ -50,10 +53,5 @@ public class BasicTypeDefinition implements TypeDefinition, Arrayable {
     @Override
     public ClassTypeDefinition getClassDefinition() {
         return null;
-    }
-
-    @Override
-    public TypeDefinition getOwnType() {
-        return this;
     }
 }

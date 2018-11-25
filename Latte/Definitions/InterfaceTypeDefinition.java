@@ -56,4 +56,9 @@ public class InterfaceTypeDefinition implements TypeDefinition, Arrayable {
     public boolean isInterfaceType() {
         return true;
     }
+
+    @Override
+    public TypeDefinition getOwnType() {
+        return this;
+    }
 }

@@ -6,4 +6,6 @@ public interface TypeDefinition {
     public boolean isClassType();
     public boolean isArrayType();
     public boolean isInterfaceType();
+
+    public ClassTypeDefinition getClassDefinition();
 }

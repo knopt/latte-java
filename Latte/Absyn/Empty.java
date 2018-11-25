@@ -38,7 +38,8 @@ public class Empty extends Stmt implements Positioned {
                        Function<Cond, T> cond,
                        Function<CondElse, T> condElse,
                        Function<While, T> sWhile,
-                       Function<SExp, T> sExp) {
+                       Function<SExp, T> sExp,
+                       Function<ForArr, T> forArr) {
         return empty.apply(this);
     }
 

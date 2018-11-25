@@ -15,6 +15,7 @@ public abstract class Stmt implements java.io.Serializable {
                                 Function<Cond, T> cond,
                                 Function<CondElse, T> condElse,
                                 Function<While, T> sWhile,
-                                Function<SExp, T> sExp);
+                                Function<SExp, T> sExp,
+                                Function<ForArr, T> forArr);
 
 }

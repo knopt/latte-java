@@ -34,7 +34,8 @@ public class SExp extends Stmt {
                        Function<Cond, T> cond,
                        Function<CondElse, T> condElse,
                        Function<While, T> sWhile,
-                       Function<SExp, T> sExp) {
+                       Function<SExp, T> sExp,
+                       Function<ForArr, T> forArr) {
         return sExp.apply(this);
     }
 }
