@@ -208,7 +208,7 @@ public class TypeCheck {
         for (FieldDeclaration field : classDecl.listfielddeclaration_) {
             field.match(
                     (var) -> assignFieldDeclaration(typeDef, var),
-                    (mth) -> assignFieldDeclaration(typeDef, mth)
+                    (mth) -> assignMethodDeclaration(typeDef, mth)
             );
 
         }
