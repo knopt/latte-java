@@ -840,7 +840,7 @@ public class PrettyPrinter
        if (_i_ > 0) render(_L_PAREN);
        render("for");
        render("(");
-       pp(_forarr.basictype_, 0);
+       pp(_forarr.typename_, 0);
        pp(_forarr.ident_, 0);
        render(":");
        pp(_forarr.expr_, 0);
@@ -1608,7 +1608,7 @@ public class PrettyPrinter
        Latte.Absyn.ForArr _forarr = (Latte.Absyn.ForArr) foo;
        render("(");
        render("ForArr");
-       sh(_forarr.basictype_);
+       sh(_forarr.typename_);
        sh(_forarr.ident_);
        sh(_forarr.expr_);
        sh(_forarr.stmt_);

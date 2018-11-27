@@ -411,7 +411,7 @@ if (leftLoc != null) {
   ((Latte.Absyn.While)RESULT).col_num = -1;
   ((Latte.Absyn.While)RESULT).offset = -1;
 } :}
-  | _SYMB_33:p_1 _SYMB_0:p_2 BasicType:p_3 _IDENT_:p_4 _SYMB_9:p_5 Expr:p_6 _SYMB_1:p_7 Stmt:p_8  {: RESULT = new Latte.Absyn.ForArr(p_3,p_4,p_6,p_8);
+  | _SYMB_33:p_1 _SYMB_0:p_2 TypeName:p_3 _IDENT_:p_4 _SYMB_9:p_5 Expr:p_6 _SYMB_1:p_7 Stmt:p_8  {: RESULT = new Latte.Absyn.ForArr(p_3,p_4,p_6,p_8);
 java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_3xleft,p_4xleft,p_6xleft,p_8xleft);
 if (leftLoc != null) {
   ((Latte.Absyn.ForArr)RESULT).line_num = leftLoc.getLine();
