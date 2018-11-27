@@ -17,6 +17,10 @@ public class ArrayTypeDefinition implements TypeDefinition {
         return typeDefinition.getName();
     }
 
+    public TypeDefinition getInnerTypeDefinition() {
+        return typeDefinition;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -57,6 +61,16 @@ public class ArrayTypeDefinition implements TypeDefinition {
 
     @Override
     public InterfaceTypeDefinition getInterfaceDefinition() {
+        return null;
+    }
+
+    @Override
+    public ArrayTypeDefinition getArrayTypeDefinition() {
+        return this;
+    }
+
+    @Override
+    public BasicTypeDefinition getBasicTypeDefinition() {
         return null;
     }
 }

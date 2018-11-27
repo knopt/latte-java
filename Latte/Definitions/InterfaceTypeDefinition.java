@@ -92,6 +92,16 @@ public class InterfaceTypeDefinition implements TypeDefinition, Arrayable {
     }
 
     @Override
+    public ArrayTypeDefinition getArrayTypeDefinition() {
+        return null;
+    }
+
+    @Override
+    public BasicTypeDefinition getBasicTypeDefinition() {
+        return null;
+    }
+
+    @Override
     public TypeDefinition getOwnType() {
         return this;
     }

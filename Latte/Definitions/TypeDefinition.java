@@ -9,4 +9,6 @@ public interface TypeDefinition {
 
     public ClassTypeDefinition getClassDefinition();
     public InterfaceTypeDefinition getInterfaceDefinition();
+    public ArrayTypeDefinition getArrayTypeDefinition();
+    public BasicTypeDefinition getBasicTypeDefinition();
 }

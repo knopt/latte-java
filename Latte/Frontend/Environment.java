@@ -18,18 +18,6 @@ public class Environment {
     public Map<String, FunctionDeclaration> declaredFunctions;
     public Map<String, VariableDefinition> declaredVariables;
 
-    public void declareVariable(String name, String type) {
-        if (!declaredTypes.containsKey(type)) {
-            throw new IllegalArgumentException("Unknown type " + type);
-        }
-
-        if (declaredVariables.containsKey(name)) {
-            throw new IllegalArgumentException("Variable " + name + " already declared");
-        }
-
-        declaredVariables.put(name, new VariableDefinition(name, declaredTypes.get(type)));
-    }
-
     public Environment withBasicTypes() {
 
         for (TypeDefinition type : basicTypes) {

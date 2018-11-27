@@ -9,6 +9,10 @@ public class BasicTypeDefinition implements TypeDefinition, Arrayable {
         this.typeName = tn;
     }
 
+    public boolean isOfType(BasicTypeName typeName) {
+        return this.typeName == typeName;
+    }
+
     @Override
     public String getName() {
         return typeName.toString().toLowerCase();
@@ -55,6 +59,16 @@ public class BasicTypeDefinition implements TypeDefinition, Arrayable {
     @Override
     public InterfaceTypeDefinition getInterfaceDefinition() {
         return null;
+    }
+
+    @Override
+    public ArrayTypeDefinition getArrayTypeDefinition() {
+        return null;
+    }
+
+    @Override
+    public BasicTypeDefinition getBasicTypeDefinition() {
+        return this;
     }
 
     @Override

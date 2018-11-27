@@ -6,9 +6,10 @@ import Latte.Exceptions.IllegalTypeException;
 import Latte.Exceptions.InternalStateException;
 import Latte.Exceptions.TypeCheckException;
 
-import java.lang.instrument.ClassDefinition;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static Latte.Frontend.StatementTypeCheck.typeCheckStatement;
 
 public class TypeCheck {
     public static Environment env = new Environment().withBasicTypes();
@@ -17,12 +18,29 @@ public class TypeCheck {
         program.match(TypeCheck::gatherTypeDeclarations);
         program.match(TypeCheck::gatherInterfaceDefinitions);
         program.match(TypeCheck::gatherTypeDefinitions);
+        program.match(TypeCheck::gatherFunctionsDefinitions);
         program.match(TypeCheck::typeCheckMethodsAndFuntions);
 
         if (!env.declaredFunctions.containsKey("main")) {
             throw new TypeCheckException("Missing main funtion");
         }
     }
+
+    public static Boolean gatherFunctionsDefinitions(ProgramTD program) {
+        for (TopDef def : program.listtopdef_) {
+            FunctionDeclaration functionDeclaration = def.match(
+                    TypeCheck::gatherFunctionsDefinitions,
+                    (ignored) -> null
+            );
+
+            if (functionDeclaration != null) {
+                env.declareFunction(functionDeclaration.getName(), functionDeclaration);
+            }
+        }
+
+        return true;
+    }
+
 
     public static Boolean gatherTypeDeclarations(ProgramTD program) {
         for (TopDef def : program.listtopdef_) {
@@ -143,6 +161,22 @@ public class TypeCheck {
         return new MethodDeclaration(methodName, arguments, dMth.methodbody_, returnType);
     }
 
+
+    public static FunctionDeclaration gatherFunctionsDefinitions(FnDef fnDef) {
+        TypeDefinition returnType = fnDef.type_.match(
+                TypeCheck::getType,
+                TypeCheck::getType
+        );
+
+        String functionName = fnDef.ident_;
+
+        List<VariableDefinition> arguments = fnDef.listarg_.stream().map(
+                (arg) -> arg.match(TypeCheck::getVariable)
+        ).collect(Collectors.toList());
+
+        return new FunctionDeclaration(functionName, arguments, fnDef.block_, returnType);
+    }
+
     public static TypeDefinition getType(ArrayType arrayType) {
         String typeName = arrayType.typename_.match(
                 TypeCheck::getTypeName,
@@ -232,7 +266,7 @@ public class TypeCheck {
 
         ClassTypeDefinition classTypeDefinition = typeDef.getClassDefinition();
         InterfaceTypeDefinition interfaceTypeDefinition = impl.match(
-                null,
+                TypeCheck::getInterfaceType,
                 null
         );
 
@@ -316,15 +350,51 @@ public class TypeCheck {
         throw new TypeCheckException("Static initialization not supported", init.line_num, init.col_num);
     }
 
+    public static Boolean typeCheckMethodsAndFuntions(Program p) {
+        for (TypeDefinition def : env.declaredTypes.values()) {
+            if (!def.isClassType()) {
+                continue;
+            }
 
+            ClassTypeDefinition classTypeDefinition = def.getClassDefinition();
 
-    public static Boolean typeCheckMethodsAndFuntions(ProgramTD program) {
+            for (CallableDeclaration mth : classTypeDefinition.methods.values()) {
+                typeCheckCallable(mth, true);
+            }
+
+        }
+
         return true;
     }
 
-    public static Boolean check(ProgramTD programTD) {
+    public static void typeCheckCallable(CallableDeclaration callableDeclaration, boolean thisAllowed) {
+        callableDeclaration.getMethodBody().match(
+                TypeCheck::typeCheckCallable,
+                (body) -> typeCheckCallable(body, thisAllowed, callableDeclaration)
+        );
+    }
 
+    public static Boolean typeCheckCallable(EmptyMBody emptyMBody) {
+        throw new TypeCheckException("Empty body is not allowed", emptyMBody.line_num, emptyMBody.col_num);
+    }
+
+    public static Boolean typeCheckCallable(MBody mBody, boolean thisAllowed, CallableDeclaration callableDeclaration) {
+        mBody.block_.match((block) -> typeCheckCallablesBlock(block, thisAllowed, callableDeclaration));
 
         return true;
     }
+
+    public static Boolean typeCheckCallablesBlock(BlockS block, boolean thisAllowed, CallableDeclaration callableDeclaration) {
+        for (Stmt stmt : block.liststmt_) {
+            typeCheckStatement(
+                    stmt,
+                    thisAllowed,
+                    new Scope(new Scope(env).withVariables(callableDeclaration.getArgumentList(), block.line_num, block.col_num)),
+                    callableDeclaration
+            );
+        }
+
+        return true;
+    }
+
 }

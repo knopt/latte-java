@@ -1,5 +1,7 @@
 package Latte.Definitions;
 
+import Latte.Absyn.Block;
+import Latte.Absyn.MBody;
 import Latte.Absyn.MethodBody;
 
 import java.util.List;
@@ -64,10 +66,10 @@ public class FunctionDeclaration implements  CallableDeclaration {
         return Objects.hash(name, argumentList, methodBody, returnType);
     }
 
-    public FunctionDeclaration(String name, List<VariableDefinition> argumentList, MethodBody methodBody, TypeDefinition returnType) {
+    public FunctionDeclaration(String name, List<VariableDefinition> argumentList, Block block, TypeDefinition returnType) {
         this.name = name;
         this.argumentList = argumentList;
-        this.methodBody = methodBody;
+        this.methodBody = new MBody(block);
         this.returnType = returnType;
     }
 }
