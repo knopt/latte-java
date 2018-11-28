@@ -101,7 +101,7 @@ public class TypeCheck {
         for (FieldDeclaration field : classDecl.listfielddeclaration_) {
             MethodDeclaration funcDecl = field.match(
                     TypeCheck::gatherInterfaceDefinitions,
-                    TypeCheck::gatherInterfaceDefinitions
+                    (dmth) -> gatherInterfaceDefinitions(dmth, typeDef)
             );
 
             if (typeDef.getInterfaceDefinition().methods.containsKey(funcDecl.getName())) {
@@ -127,7 +127,7 @@ public class TypeCheck {
         throw new TypeCheckException("Interface can't have any fields", dVar.line_num, dVar.col_num);
     }
 
-    public static MethodDeclaration gatherInterfaceDefinitions(Dmth dMth) {
+    public static MethodDeclaration gatherInterfaceDefinitions(Dmth dMth, TypeDefinition callerType) {
         if (!dMth.methodbody_.match(
                 TypeCheck::isMethodBodyEmpty,
                 TypeCheck::isMethodBodyEmpty
@@ -135,7 +135,7 @@ public class TypeCheck {
             throw new TypeCheckException("Interface body has to be empty", dMth.line_num, dMth.col_num);
         }
 
-        return getMethodDefinitionFromDMth(dMth);
+        return getMethodDefinitionFromDMth(dMth, callerType);
     }
 
     public static Boolean isMethodBodyEmpty(EmptyMBody ignored) {
@@ -146,7 +146,7 @@ public class TypeCheck {
         return false;
     }
 
-    public static MethodDeclaration getMethodDefinitionFromDMth(Dmth dMth) {
+    public static MethodDeclaration getMethodDefinitionFromDMth(Dmth dMth, TypeDefinition callerType) {
         TypeDefinition returnType = dMth.type_.match(
                 TypeCheck::getType,
                 TypeCheck::getType
@@ -158,7 +158,7 @@ public class TypeCheck {
                 (arg) -> arg.match(TypeCheck::getVariable)
         ).collect(Collectors.toList());
 
-        return new MethodDeclaration(methodName, arguments, dMth.methodbody_, returnType);
+        return new MethodDeclaration(methodName, arguments, dMth.methodbody_, returnType, callerType);
     }
 
 
@@ -335,7 +335,7 @@ public class TypeCheck {
     public static Boolean assignMethodDeclaration(TypeDefinition typeDefinition, Dmth mth) {
         ClassTypeDefinition classDefinition = typeDefinition.getClassDefinition();
 
-        MethodDeclaration mthDeclaration = getMethodDefinitionFromDMth(mth);
+        MethodDeclaration mthDeclaration = getMethodDefinitionFromDMth(mth, classDefinition);
 
         if (classDefinition.methods.containsKey(mth.ident_)) {
             throw new TypeCheckException("Method " + mth.ident_ + " already declared", mth.line_num, mth.col_num);

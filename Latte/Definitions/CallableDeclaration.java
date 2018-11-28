@@ -10,4 +10,5 @@ public interface CallableDeclaration {
     public MethodBody getMethodBody();
     public TypeDefinition getReturnType();
     public boolean signatureMatches(CallableDeclaration c);
+    public TypeDefinition getCallerType();
 }

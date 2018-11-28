@@ -62,6 +62,11 @@ public class FunctionDeclaration implements  CallableDeclaration {
     }
 
     @Override
+    public TypeDefinition getCallerType() {
+        return null;
+    }
+
+    @Override
     public int hashCode() {
         return Objects.hash(name, argumentList, methodBody, returnType);
     }

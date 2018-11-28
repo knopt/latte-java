@@ -82,6 +82,11 @@ public class InterfaceTypeDefinition implements TypeDefinition, Arrayable {
     }
 
     @Override
+    public boolean isNullType() {
+        return false;
+    }
+
+    @Override
     public ClassTypeDefinition getClassDefinition() {
         return null;
     }

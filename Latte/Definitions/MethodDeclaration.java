@@ -10,12 +10,14 @@ public class MethodDeclaration implements  CallableDeclaration {
     public List<VariableDefinition> argumentList;
     public TypeDefinition returnType;
     public MethodBody methodBody;
+    public TypeDefinition callerType;
 
-    public MethodDeclaration(String name, List<VariableDefinition> argumentList, MethodBody methodBody, TypeDefinition returnType) {
+    public MethodDeclaration(String name, List<VariableDefinition> argumentList, MethodBody methodBody, TypeDefinition returnType, TypeDefinition callerType) {
         this.name = name;
         this.argumentList = argumentList;
         this.returnType = returnType;
         this.methodBody = methodBody;
+        this.callerType = callerType;
     }
 
     @Override
@@ -29,12 +31,15 @@ public class MethodDeclaration implements  CallableDeclaration {
         if (o == null || getClass() != o.getClass()) return false;
         MethodDeclaration that = (MethodDeclaration) o;
         return Objects.equals(name, that.name) &&
-                Objects.equals(argumentList, that.argumentList);
+                Objects.equals(argumentList, that.argumentList) &&
+                Objects.equals(returnType, that.returnType) &&
+                Objects.equals(methodBody, that.methodBody) &&
+                Objects.equals(callerType, that.callerType);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, argumentList);
+        return Objects.hash(name, argumentList, returnType, methodBody, callerType);
     }
 
     @Override
@@ -67,6 +72,11 @@ public class MethodDeclaration implements  CallableDeclaration {
         }
 
         return argumentList.equals(mthd.getArgumentList());
+    }
+
+    @Override
+    public TypeDefinition getCallerType() {
+        return callerType;
     }
 
 }

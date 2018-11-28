@@ -55,6 +55,11 @@ public class ArrayTypeDefinition implements TypeDefinition {
     }
 
     @Override
+    public boolean isNullType() {
+        return false;
+    }
+
+    @Override
     public ClassTypeDefinition getClassDefinition() {
         return null;
     }
