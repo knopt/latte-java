@@ -1,5 +1,7 @@
 package Latte.Definitions;
 
+import Latte.Exceptions.TypeCheckException;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -27,6 +29,23 @@ public class ClassTypeDefinition implements TypeDefinition, Arrayable {
 
     public void addInterface(InterfaceTypeDefinition implementedInterface) {
         this.implementedInterface = implementedInterface;
+    }
+
+    public ClassFieldDeclaration getFieldDeclaration(String name, int lineNumber, int colNumber) {
+        if (!this.fields.containsKey(name)) {
+            throw new TypeCheckException("Class " + className + " doesn't have a field called " + name, lineNumber, colNumber);
+        }
+
+        return this.fields.get(name);
+    }
+
+
+    public CallableDeclaration getCallableDeclaration(String name, int lineNumber, int colNumber) {
+        if (!this.methods.containsKey(name)) {
+            throw new TypeCheckException("Class " + className + " doesn't have a method called " + name, lineNumber, colNumber);
+        }
+
+        return this.methods.get(name);
     }
 
 

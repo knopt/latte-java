@@ -1,15 +1,24 @@
 package Latte.Definitions;
 
+import Latte.Exceptions.TypeCheckException;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class ArrayTypeDefinition implements TypeDefinition {
     private TypeDefinition typeDefinition;
+    public Map<String, ClassFieldDeclaration> fields;
 
     public ArrayTypeDefinition(TypeDefinition td) {
         if (td.isArrayType()) {
             throw new IllegalArgumentException("Can't create array of arrays");
         }
         this.typeDefinition = td;
+
+        ClassFieldDeclaration lengthField = new ClassFieldDeclaration("length", new BasicTypeDefinition(BasicTypeName.INT));
+        this.fields = new HashMap<>();
+        this.fields.put(lengthField.fieldName, lengthField);
     }
 
     @Override
@@ -19,6 +28,14 @@ public class ArrayTypeDefinition implements TypeDefinition {
 
     public TypeDefinition getInnerTypeDefinition() {
         return typeDefinition;
+    }
+
+    public ClassFieldDeclaration getFieldDeclaration(String name, int lineNumber, int colNumber) {
+        if (!this.fields.containsKey(name)) {
+            throw new TypeCheckException("Arrays don't have a field called " + name, lineNumber, colNumber);
+        }
+
+        return this.fields.get(name);
     }
 
     @Override

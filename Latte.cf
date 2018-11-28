@@ -114,7 +114,7 @@ EApp.      Expr7 ::= Ident "(" [Expr] ")" ;
 EString.   Expr7 ::= String ;
 EConstr.   Expr7 ::= "new" Ident ;
 
-EArrConstr. Expr6 ::= "new" Ident "[" Expr "]" ;
+EArrConstr. Expr6 ::= "new" TypeName "[" Expr "]" ;
 ENDArrAcc.  Expr6 ::= Expr "[" Expr "]" ;
 
 EObjAcc.  Expr5 ::= Expr ObjAcc ;

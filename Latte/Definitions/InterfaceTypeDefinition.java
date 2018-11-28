@@ -33,6 +33,14 @@ public class InterfaceTypeDefinition implements TypeDefinition, Arrayable {
         this.methods.put(name, d);
     }
 
+    public CallableDeclaration getCallableDeclaration(String name, int lineNumber, int colNumber) {
+        if (!this.methods.containsKey(name)) {
+            throw new TypeCheckException("Class " + className + " doesn't have a method called " + name, lineNumber, colNumber);
+        }
+
+        return this.methods.get(name);
+    }
+
     public boolean isImplementedBy(TypeDefinition typeDefinition) {
         if (!typeDefinition.isClassType()) {
             return false;

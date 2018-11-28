@@ -623,7 +623,7 @@ if (leftLoc != null) {
 } :}
   | _SYMB_0:p_1 Expr:p_2 _SYMB_1:p_3  {: RESULT = p_2; :}
 ;
-Expr6 ::= _SYMB_38:p_1 _IDENT_:p_2 _SYMB_10:p_3 Expr:p_4 _SYMB_11:p_5  {: RESULT = new Latte.Absyn.EArrConstr(p_2,p_4);
+Expr6 ::= _SYMB_38:p_1 TypeName:p_2 _SYMB_10:p_3 Expr:p_4 _SYMB_11:p_5  {: RESULT = new Latte.Absyn.EArrConstr(p_2,p_4);
 java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_2xleft,p_4xleft);
 if (leftLoc != null) {
   ((Latte.Absyn.EArrConstr)RESULT).line_num = leftLoc.getLine();

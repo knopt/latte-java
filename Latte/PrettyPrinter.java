@@ -1066,7 +1066,7 @@ public class PrettyPrinter
        Latte.Absyn.EArrConstr _earrconstr = (Latte.Absyn.EArrConstr) foo;
        if (_i_ > 6) render(_L_PAREN);
        render("new");
-       pp(_earrconstr.ident_, 0);
+       pp(_earrconstr.typename_, 0);
        render("[");
        pp(_earrconstr.expr_, 0);
        render("]");
@@ -1820,7 +1820,7 @@ public class PrettyPrinter
        Latte.Absyn.EArrConstr _earrconstr = (Latte.Absyn.EArrConstr) foo;
        render("(");
        render("EArrConstr");
-       sh(_earrconstr.ident_);
+       sh(_earrconstr.typename_);
        sh(_earrconstr.expr_);
        render(")");
     }
