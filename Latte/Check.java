@@ -1,21 +1,18 @@
 package Latte;
 
-import Latte.Absyn.Program;
-import Latte.Exceptions.TypeCheckException;
+import Latte.Absyn.*;
+import java.io.*;
 
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import Latte.Exceptions.TypeCheckException;
 
 import static Latte.Frontend.TypeCheck.check;
 
-public class Test
+public class Check
 {
   Yylex l;
   parser p;
-
-  public Test(String[] args)
+  
+  public Check(String[] args)
   {
     try
     {
@@ -31,13 +28,13 @@ public class Test
     }
     p = new parser(l, l.getSymbolFactory());
   }
-
-  public Program parse() throws Exception
+  
+  public Latte.Absyn.Program parse() throws Exception
   {
     /* The default parser is the first-defined entry point. */
     /* Other options are: */
     /* not available. */
-    Program ast = p.pProgram();
+    Latte.Absyn.Program ast = p.pProgram();
 //    System.out.println();
 //    System.out.println("Parse Succesful!");
 //    System.out.println();
@@ -53,7 +50,7 @@ public class Test
   
   public static void main(String args[])
   {
-    Test t = new Test(args);
+    Check t = new Check(args);
     Program program;
     try
     {

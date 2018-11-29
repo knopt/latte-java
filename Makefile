@@ -11,11 +11,14 @@ LEXER=${JAVA} ${JAVA_FLAGS} JLex.Main
 LEXER_FLAGS=
 all: test
 
-test: absyn Latte/Yylex.class Latte/PrettyPrinter.class Latte/Test.class Latte/parser.class Latte/sym.class Latte/Test.class
+test: absyn own Latte/Yylex.class Latte/PrettyPrinter.class Latte/Test.class Latte/parser.class Latte/sym.class Latte/Test.class
 
 .PHONY: absyn
 
 %.class: %.java
+	${JAVAC} ${JAVAC_FLAGS} $^
+
+own:  Latte/Exceptions/*.java Latte/Definitions/*.java Latte/Frontend/*.java Latte/Check.java
 	${JAVAC} ${JAVAC_FLAGS} $^
 
 absyn: Latte/Absyn/Program.java Latte/Absyn/ProgramTD.java Latte/Absyn/TopDef.java Latte/Absyn/FnDef.java Latte/Absyn/ClassDecl.java Latte/Absyn/ListTopDef.java Latte/Absyn/Arg.java Latte/Absyn/ArgTI.java Latte/Absyn/ListArg.java Latte/Absyn/ClassHeader.java Latte/Absyn/ClassDec.java Latte/Absyn/InterDec.java Latte/Absyn/Implements.java Latte/Absyn/InterImpl.java Latte/Absyn/EImpl.java Latte/Absyn/FieldDeclaration.java Latte/Absyn/Dvar.java Latte/Absyn/Dmth.java Latte/Absyn/ListFieldDeclaration.java Latte/Absyn/MethodBody.java Latte/Absyn/EmptyMBody.java Latte/Absyn/MBody.java Latte/Absyn/Modifier.java Latte/Absyn/Mfinal.java Latte/Absyn/Mpublic.java Latte/Absyn/Mprivate.java Latte/Absyn/Mstatic.java Latte/Absyn/MEmpty.java Latte/Absyn/ListModifier.java Latte/Absyn/Block.java Latte/Absyn/BlockS.java Latte/Absyn/ListStmt.java Latte/Absyn/Stmt.java Latte/Absyn/Empty.java Latte/Absyn/BStmt.java Latte/Absyn/Decl.java Latte/Absyn/Ass.java Latte/Absyn/Incr.java Latte/Absyn/Decr.java Latte/Absyn/Ret.java Latte/Absyn/VRet.java Latte/Absyn/Cond.java Latte/Absyn/CondElse.java Latte/Absyn/While.java Latte/Absyn/ForArr.java Latte/Absyn/SExp.java Latte/Absyn/Item.java Latte/Absyn/NoInit.java Latte/Absyn/Init.java Latte/Absyn/ListItem.java Latte/Absyn/Lhs.java Latte/Absyn/VariableRawLhs.java Latte/Absyn/ArrElemLhs.java Latte/Absyn/BasicType.java Latte/Absyn/Int.java Latte/Absyn/Str.java Latte/Absyn/Bool.java Latte/Absyn/Void.java Latte/Absyn/TypeName.java Latte/Absyn/BuiltIn.java Latte/Absyn/ClassName.java Latte/Absyn/Type.java Latte/Absyn/ArrayType.java Latte/Absyn/TypeNameS.java Latte/Absyn/ListType.java Latte/Absyn/Expr.java Latte/Absyn/EVar.java Latte/Absyn/ELitInt.java Latte/Absyn/ELitTrue.java Latte/Absyn/ELitFalse.java Latte/Absyn/EThis.java Latte/Absyn/ENull.java Latte/Absyn/EApp.java Latte/Absyn/EString.java Latte/Absyn/EConstr.java Latte/Absyn/EArrConstr.java Latte/Absyn/ENDArrAcc.java Latte/Absyn/EObjAcc.java Latte/Absyn/Neg.java Latte/Absyn/Not.java Latte/Absyn/EMul.java Latte/Absyn/EAdd.java Latte/Absyn/ERel.java Latte/Absyn/EAnd.java Latte/Absyn/EOr.java Latte/Absyn/ListExpr.java Latte/Absyn/ObjAcc.java Latte/Absyn/ObjFieldAcc.java Latte/Absyn/ObjMethAcc.java Latte/Absyn/AddOp.java Latte/Absyn/Plus.java Latte/Absyn/Minus.java Latte/Absyn/MulOp.java Latte/Absyn/Times.java Latte/Absyn/Div.java Latte/Absyn/Mod.java Latte/Absyn/RelOp.java Latte/Absyn/LTH.java Latte/Absyn/LE.java Latte/Absyn/GTH.java Latte/Absyn/GE.java Latte/Absyn/EQU.java Latte/Absyn/NE.java
@@ -37,7 +40,7 @@ Latte/parser.class: Latte/parser.java Latte/sym.java
 Latte/PrettyPrinter.class: Latte/PrettyPrinter.java
 
 clean:
-	rm -f Latte/Absyn/*.class Latte/*.class
+	rm -f Latte/Absyn/*.class Latte/*.class Latte/Exceptions/*.class Latte/Definitions/*.class Latte/Frontend/*.class Latta/Check.class
 
 distclean: vclean
 

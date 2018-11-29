@@ -7,14 +7,15 @@ import Latte.Exceptions.InternalStateException;
 import Latte.Exceptions.TypeCheckException;
 
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static Latte.Frontend.StatementTypeCheck.typeCheckStatement;
 
 public class TypeCheck {
-    public static Environment env = new Environment().withBasicTypes();
+    public static Environment env = new Environment().withBasicTypes().withBasicFunctions();
 
-    public static void check(Program program) {
+    public static Environment check(Program program) {
         program.match(TypeCheck::gatherTypeDeclarations);
         program.match(TypeCheck::gatherInterfaceDefinitions);
         program.match(TypeCheck::gatherTypeDefinitions);
@@ -24,6 +25,8 @@ public class TypeCheck {
         if (!env.declaredFunctions.containsKey("main")) {
             throw new TypeCheckException("Missing main funtion");
         }
+
+        return env;
     }
 
     public static Boolean gatherFunctionsDefinitions(ProgramTD program) {
@@ -158,6 +161,10 @@ public class TypeCheck {
                 (arg) -> arg.match(TypeCheck::getVariable)
         ).collect(Collectors.toList());
 
+        if (arguments.stream().anyMatch((var) -> new BasicTypeDefinition(BasicTypeName.VOID).equals(var.getType()))) {
+            throw new TypeCheckException("Function argument can't be of type void", dMth.line_num, dMth.col_num);
+        }
+
         return new MethodDeclaration(methodName, arguments, dMth.methodbody_, returnType, callerType);
     }
 
@@ -173,6 +180,10 @@ public class TypeCheck {
         List<VariableDefinition> arguments = fnDef.listarg_.stream().map(
                 (arg) -> arg.match(TypeCheck::getVariable)
         ).collect(Collectors.toList());
+
+        if (arguments.stream().anyMatch((var) -> new BasicTypeDefinition(BasicTypeName.VOID).equals(var.getType()))) {
+            throw new TypeCheckException("Function argument can't be of type void", fnDef.line_num, fnDef.col_num);
+        }
 
         return new FunctionDeclaration(functionName, arguments, fnDef.block_, returnType);
     }
@@ -350,7 +361,8 @@ public class TypeCheck {
         throw new TypeCheckException("Static initialization not supported", init.line_num, init.col_num);
     }
 
-    public static Boolean typeCheckMethodsAndFuntions(Program p) {
+    public static Boolean typeCheckMethodsAndFuntions(ProgramTD p) {
+        System.err.println("TypeCheckMethodsAndFunctions");
         for (TypeDefinition def : env.declaredTypes.values()) {
             if (!def.isClassType()) {
                 continue;
@@ -364,10 +376,15 @@ public class TypeCheck {
 
         }
 
+        for (FunctionDeclaration fun : env.declaredFunctions.values()) {
+            typeCheckCallable(fun, false);
+        }
+
         return true;
     }
 
     public static void typeCheckCallable(CallableDeclaration callableDeclaration, boolean thisAllowed) {
+        System.out.println("Checking function: " + callableDeclaration.getName());
         callableDeclaration.getMethodBody().match(
                 TypeCheck::typeCheckCallable,
                 (body) -> typeCheckCallable(body, thisAllowed, callableDeclaration)

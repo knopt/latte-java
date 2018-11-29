@@ -1,17 +1,17 @@
-Int f() {  
-  Int x = 0;
-  Int y = 10;
+int f() {  
+  int x = 0;
+  int y = 10;
 
   return x;
 }
 
 int main() {
 
-  Int z = f();
+  int z = f();
 
-  Bool a = 5 < 3;
+  bool a = 5 < 3;
 
-  Int j;
+  int j;
 
   j = 1 + 2;
 

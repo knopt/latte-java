@@ -3,6 +3,7 @@ package Latte.Frontend;
 import Latte.Definitions.*;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,14 +15,39 @@ public class Environment {
             new BasicTypeDefinition(BasicTypeName.VOID)
     );
 
+    public static List<FunctionDeclaration> basicFunctions = Arrays.asList(
+            new FunctionDeclaration(
+                    "printInt",
+                    Arrays.asList(new VariableDefinition("x", new BasicTypeDefinition(BasicTypeName.INT))),
+                    null,
+                    new BasicTypeDefinition(BasicTypeName.VOID)),
+            new FunctionDeclaration(
+                    "printString",
+                    Arrays.asList(new VariableDefinition("x", new BasicTypeDefinition(BasicTypeName.STRING))),
+                    null,
+                    new BasicTypeDefinition(BasicTypeName.VOID))
+    );
+
     public Map<String, TypeDefinition> declaredTypes;
     public Map<String, FunctionDeclaration> declaredFunctions;
-    public Map<String, VariableDefinition> declaredVariables;
+
+    public Environment() {
+        this.declaredTypes = new HashMap<>();
+        this.declaredFunctions = new HashMap<>();
+    }
 
     public Environment withBasicTypes() {
 
         for (TypeDefinition type : basicTypes) {
             declareType(type.getName(), type);
+        }
+
+        return this;
+    }
+
+    public Environment withBasicFunctions() {
+        for (FunctionDeclaration func : basicFunctions) {
+            declareFunction(func.getName(), func);
         }
 
         return this;

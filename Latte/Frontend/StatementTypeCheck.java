@@ -85,6 +85,11 @@ public class StatementTypeCheck {
 
     public static Boolean typeCheckAss(Ass ass, boolean thisAllowed, Scope scope, CallableDeclaration callableDeclaration) {
         TypeDefinition lhs = getLhsType(ass.lhs_, thisAllowed, scope, callableDeclaration);
+
+        if (new BasicTypeDefinition(BasicTypeName.VOID).equals(lhs)) {
+            throw new TypeCheckException("Void type is not assignable", ass.line_num, ass.col_num);
+        }
+
         TypeDefinition exprType = typeCheckExpr(ass.expr_, thisAllowed, scope, callableDeclaration);
 
         validateTypes(lhs, exprType, ass.line_num, ass.col_num);

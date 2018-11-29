@@ -34,6 +34,13 @@ public class FunctionDeclaration implements  CallableDeclaration {
     }
 
     @Override
+    public String toString() {
+        return "FunctionDeclaration{" +
+                "name='" + name + '\'' +
+                '}';
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

@@ -15,4 +15,9 @@ public class TypeCheckException extends RuntimeException {
         this.lineNumber = -1;
         this.columnNumber = -1;
     }
+
+    @Override
+    public String getMessage() {
+        return "[" + lineNumber + ", " + columnNumber + "] " + super.getMessage();
+    }
 }
