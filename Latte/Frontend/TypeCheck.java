@@ -7,9 +7,9 @@ import Latte.Exceptions.InternalStateException;
 import Latte.Exceptions.TypeCheckException;
 
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static Latte.Frontend.StatementTypeCheck.checkCallableReturns;
 import static Latte.Frontend.StatementTypeCheck.typeCheckStatement;
 
 public class TypeCheck {
@@ -362,7 +362,6 @@ public class TypeCheck {
     }
 
     public static Boolean typeCheckMethodsAndFuntions(ProgramTD p) {
-        System.err.println("TypeCheckMethodsAndFunctions");
         for (TypeDefinition def : env.declaredTypes.values()) {
             if (!def.isClassType()) {
                 continue;
@@ -377,14 +376,15 @@ public class TypeCheck {
         }
 
         for (FunctionDeclaration fun : env.declaredFunctions.values()) {
-            typeCheckCallable(fun, false);
+            if (!Environment.basicFunctions.contains(fun)) {
+                typeCheckCallable(fun, false);
+            }
         }
 
         return true;
     }
 
     public static void typeCheckCallable(CallableDeclaration callableDeclaration, boolean thisAllowed) {
-        System.out.println("Checking function: " + callableDeclaration.getName());
         callableDeclaration.getMethodBody().match(
                 TypeCheck::typeCheckCallable,
                 (body) -> typeCheckCallable(body, thisAllowed, callableDeclaration)
@@ -396,22 +396,24 @@ public class TypeCheck {
     }
 
     public static Boolean typeCheckCallable(MBody mBody, boolean thisAllowed, CallableDeclaration callableDeclaration) {
+        mBody.block_.match((block) -> checkCallableReturns(block, callableDeclaration));
         mBody.block_.match((block) -> typeCheckCallablesBlock(block, thisAllowed, callableDeclaration));
 
         return true;
     }
 
     public static Boolean typeCheckCallablesBlock(BlockS block, boolean thisAllowed, CallableDeclaration callableDeclaration) {
+        Scope scope = new Scope(env).withVariables(callableDeclaration.getArgumentList(), block.line_num, block.col_num);
+
         for (Stmt stmt : block.liststmt_) {
             typeCheckStatement(
                     stmt,
                     thisAllowed,
-                    new Scope(new Scope(env).withVariables(callableDeclaration.getArgumentList(), block.line_num, block.col_num)),
+                    scope,
                     callableDeclaration
             );
         }
 
         return true;
     }
-
 }

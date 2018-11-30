@@ -16,6 +16,13 @@ public class InterfaceTypeDefinition implements TypeDefinition, Arrayable {
     }
 
     @Override
+    public String toString() {
+        return "InterfaceTypeDefinition{" +
+                "className='" + className + '\'' +
+                '}';
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

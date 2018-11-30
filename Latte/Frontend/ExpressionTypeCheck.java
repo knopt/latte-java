@@ -5,6 +5,9 @@ import Latte.Definitions.*;
 import Latte.Exceptions.IllegalTypeException;
 import Latte.Exceptions.TypeCheckException;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static Latte.Frontend.StatementTypeCheck.validateTypes;
 
 public class ExpressionTypeCheck {
@@ -18,7 +21,7 @@ public class ExpressionTypeCheck {
                 (elitFalse) -> typeCheckELitFalse(),
                 (eThis) -> typeCheckThis(eThis, thisAllowed, callableDeclaration),
                 ExpressionTypeCheck::typeCheckNull,
-                ExpressionTypeCheck::typeCheckEApp,
+                (eApp) -> typeCheckEApp(eApp, thisAllowed, scope, callableDeclaration),
                 ExpressionTypeCheck::typeCheckString,
                 (constr) -> typeCheckConstr(constr, scope),
                 (arrConstr) -> typeCheckArrConstr(arrConstr, thisAllowed, scope, callableDeclaration),
@@ -62,8 +65,12 @@ public class ExpressionTypeCheck {
         return new NullTypeDefinition();
     }
 
-    public static TypeDefinition typeCheckEApp(EApp eApp) {
-        throw new TypeCheckException("Function application not supported yet", eApp.line_num, eApp.col_num);
+    public static TypeDefinition typeCheckEApp(EApp eApp, boolean thisAllowed, Scope scope, CallableDeclaration callableDeclaration) {
+        FunctionDeclaration func = scope.globalEnvironment.getFunction(eApp.ident_, eApp.line_num, eApp.line_num);
+
+        validateCallablesArgumentsMatch(func, eApp.listexpr_, thisAllowed, scope, callableDeclaration, eApp.line_num, eApp.col_num);
+
+        return func.returnType;
     }
 
     public static TypeDefinition typeCheckString(EString str) {
@@ -147,11 +154,17 @@ public class ExpressionTypeCheck {
         TypeDefinition exprType1 = typeCheckExpr(add.expr_1, thisAllowed, scope, callableDeclaration);
         TypeDefinition exprType2 = typeCheckExpr(add.expr_2, thisAllowed, scope, callableDeclaration);
 
-        validateTypes(new BasicTypeDefinition(BasicTypeName.INT), exprType1, add.line_num, add.col_num);
-        validateTypes(new BasicTypeDefinition(BasicTypeName.INT), exprType2, add.line_num, add.col_num);
+        // check they're equal
+        validateTypes(exprType1, exprType2, add.line_num, add.col_num);
+        // check they can be added
+        validateTypes(
+                Arrays.asList(
+                    new BasicTypeDefinition(BasicTypeName.INT),
+                    new BasicTypeDefinition(BasicTypeName.STRING)
+                ),
+                exprType1, add.line_num, add.col_num);
 
-
-        return new BasicTypeDefinition(BasicTypeName.INT);
+        return exprType1;
     }
 
 
@@ -159,9 +172,22 @@ public class ExpressionTypeCheck {
         TypeDefinition exprType1 = typeCheckExpr(rel.expr_1, thisAllowed, scope, callableDeclaration);
         TypeDefinition exprType2 = typeCheckExpr(rel.expr_2, thisAllowed, scope, callableDeclaration);
 
-        validateTypes(new BasicTypeDefinition(BasicTypeName.BOOLEAN), exprType1, rel.line_num, rel.col_num);
-        validateTypes(new BasicTypeDefinition(BasicTypeName.INT), exprType2, rel.line_num, rel.col_num);
+        validateTypes(exprType1, exprType2, rel.line_num, rel.col_num);
 
+        List<BasicTypeDefinition> eqTypes = Arrays.asList(
+                new BasicTypeDefinition(BasicTypeName.STRING),
+                new BasicTypeDefinition(BasicTypeName.INT),
+                new BasicTypeDefinition(BasicTypeName.BOOLEAN)
+        );
+
+        rel.relop_.match(
+                (ignored) -> validateTypes(new BasicTypeDefinition(BasicTypeName.INT), exprType1, rel.line_num, rel.col_num),
+                (ignored) -> validateTypes(new BasicTypeDefinition(BasicTypeName.INT), exprType1, rel.line_num, rel.col_num),
+                (ignored) -> validateTypes(new BasicTypeDefinition(BasicTypeName.INT), exprType1, rel.line_num, rel.col_num),
+                (ignored) -> validateTypes(new BasicTypeDefinition(BasicTypeName.INT), exprType1, rel.line_num, rel.col_num),
+                (ignored) -> validateTypes(eqTypes, exprType1, rel.line_num, rel.col_num),
+                (ignored) -> validateTypes(eqTypes, exprType1, rel.line_num, rel.col_num)
+        );
 
         return new BasicTypeDefinition(BasicTypeName.BOOLEAN);
     }
@@ -171,7 +197,7 @@ public class ExpressionTypeCheck {
         TypeDefinition exprType2 = typeCheckExpr(and.expr_2, thisAllowed, scope, callableDeclaration);
 
         validateTypes(new BasicTypeDefinition(BasicTypeName.BOOLEAN), exprType1, and.line_num, and.col_num);
-        validateTypes(new BasicTypeDefinition(BasicTypeName.INT), exprType2, and.line_num, and.col_num);
+        validateTypes(new BasicTypeDefinition(BasicTypeName.BOOLEAN), exprType2, and.line_num, and.col_num);
 
 
         return new BasicTypeDefinition(BasicTypeName.BOOLEAN);
@@ -182,7 +208,7 @@ public class ExpressionTypeCheck {
         TypeDefinition exprType2 = typeCheckExpr(eOr.expr_2, thisAllowed, scope, callableDeclaration);
 
         validateTypes(new BasicTypeDefinition(BasicTypeName.BOOLEAN), exprType1, eOr.line_num, eOr.col_num);
-        validateTypes(new BasicTypeDefinition(BasicTypeName.INT), exprType2, eOr.line_num, eOr.col_num);
+        validateTypes(new BasicTypeDefinition(BasicTypeName.BOOLEAN), exprType2, eOr.line_num, eOr.col_num);
 
 
         return new BasicTypeDefinition(BasicTypeName.BOOLEAN);
@@ -222,18 +248,22 @@ public class ExpressionTypeCheck {
             callable = objTypeDefinition.getInterfaceDefinition().getCallableDeclaration(mthAcc.ident_, mthAcc.line_num, mthAcc.line_num);
         }
 
-        if (callable.getArgumentList().size() != mthAcc.listexpr_.size()) {
-            throw new TypeCheckException("Number of method " + callable.getName() + " arguments doesn't match. Expected " +  callable.getArgumentList().size() + ", got " + mthAcc.listexpr_.size());
+        validateCallablesArgumentsMatch(callable, mthAcc.listexpr_, thisAllowed, scope, callableDeclaration, mthAcc.line_num, mthAcc.col_num);
+
+        return callable.getReturnType();
+    }
+
+    private static void validateCallablesArgumentsMatch(CallableDeclaration callable, ListExpr listExpr, boolean thisAllowed, Scope scope, CallableDeclaration callableDeclaration, int lineNumber, int colNumber) {
+        if (callable.getArgumentList().size() != listExpr.size()) {
+            throw new TypeCheckException("Number of method " + callable.getName() + " arguments doesn't match. Expected " +  callable.getArgumentList().size() + ", got " + listExpr.size());
         }
 
         for (int i = 0; i < callable.getArgumentList().size(); i++) {
-            TypeDefinition exprType = typeCheckExpr(mthAcc.listexpr_.get(i), thisAllowed, scope, callableDeclaration);
+            TypeDefinition exprType = typeCheckExpr(listExpr.get(i), thisAllowed, scope, callableDeclaration);
             TypeDefinition definiedType = callable.getArgumentList().get(i).type;
 
-            validateTypes(definiedType, exprType, mthAcc.line_num, mthAcc.col_num);
+            validateTypes(definiedType, exprType, lineNumber, colNumber);
         }
-
-        return callable.getReturnType();
     }
 
 

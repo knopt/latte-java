@@ -1,11 +1,9 @@
 package Latte.Frontend;
 
 import Latte.Definitions.*;
+import Latte.Exceptions.TypeCheckException;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Environment {
     public static List<TypeDefinition> basicTypes = Arrays.asList(
@@ -25,7 +23,18 @@ public class Environment {
                     "printString",
                     Arrays.asList(new VariableDefinition("x", new BasicTypeDefinition(BasicTypeName.STRING))),
                     null,
-                    new BasicTypeDefinition(BasicTypeName.VOID))
+                    new BasicTypeDefinition(BasicTypeName.VOID)),
+            new FunctionDeclaration(
+                    "readInt",
+                    Collections.emptyList(),
+                    null,
+                    new BasicTypeDefinition(BasicTypeName.INT)),
+            new FunctionDeclaration(
+                    "readString",
+                    Collections.emptyList(),
+                    null,
+                    new BasicTypeDefinition(BasicTypeName.STRING)
+                    )
     );
 
     public Map<String, TypeDefinition> declaredTypes;
@@ -68,5 +77,13 @@ public class Environment {
         }
 
         declaredFunctions.put(name, dec);
+    }
+
+    public FunctionDeclaration getFunction(String name, int lineNumber, int colNumber) {
+        if (!declaredFunctions.containsKey(name)) {
+            throw new TypeCheckException("Function " + name + " not declared", lineNumber, colNumber);
+        }
+
+        return declaredFunctions.get(name);
     }
 }

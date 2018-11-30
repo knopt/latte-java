@@ -12,6 +12,13 @@ public class ClassTypeDefinition implements TypeDefinition, Arrayable {
     public Map<String, CallableDeclaration> methods;
     public InterfaceTypeDefinition implementedInterface;
 
+    @Override
+    public String toString() {
+        return "ClassTypeDefinition{" +
+                "className='" + className + '\'' +
+                '}';
+    }
+
     public ClassTypeDefinition(String className) {
         this.className = className;
         this.fields = new HashMap<>();

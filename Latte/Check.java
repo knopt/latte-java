@@ -11,7 +11,7 @@ public class Check
 {
   Yylex l;
   parser p;
-  
+
   public Check(String[] args)
   {
     try

@@ -1,15 +1,20 @@
 package Latte.Exceptions;
 
+import Latte.Definitions.BasicTypeDefinition;
 import Latte.Definitions.TypeDefinition;
 
-public class TypeMismatchException extends RuntimeException {
+import java.util.List;
+
+public class TypeMismatchException extends TypeCheckException {
     public int lineNumber;
     public int columnNumber;
 
     public TypeMismatchException(TypeDefinition left, TypeDefinition right, int lineNumber, int columnNumber) {
-        super("Type mismatch. Expected " + left + ", got " + right);
-        this.lineNumber = lineNumber;
-        this.columnNumber = columnNumber;
+        super("Type mismatch. Expected " + left + ", got " + right, lineNumber, columnNumber);
+    }
+
+    public TypeMismatchException(List<BasicTypeDefinition> lefts, TypeDefinition right, int lineNumber, int columnNumber) {
+        super("Type mismatch. Expected one of" + lefts.toString() + ", got " + right, lineNumber, columnNumber);
     }
 
     public TypeMismatchException(String msg) {

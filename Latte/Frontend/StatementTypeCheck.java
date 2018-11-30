@@ -7,6 +7,8 @@ import Latte.Exceptions.InternalStateException;
 import Latte.Exceptions.TypeCheckException;
 import Latte.Exceptions.TypeMismatchException;
 
+import java.util.List;
+
 import static Latte.Frontend.ExpressionTypeCheck.typeCheckExpr;
 
 
@@ -215,22 +217,99 @@ public class StatementTypeCheck {
         return true;
     }
 
-
-
-    public static TypeDefinition validateTypes(TypeDefinition type1, TypeDefinition type2, int lineNum, int colNum) {
+    public static Boolean typesMatch(TypeDefinition type1, TypeDefinition type2) {
         if (type1.equals(type2)) {
-            return type1;
+            return true;
         }
 
         if ((type1.isInterfaceType() || type1.isClassType()) && type2.isNullType()) {
-            return type1;
+            return true;
         }
 
         if (type1.isInterfaceType() && type2.isClassType() &&
                 type1.getInterfaceDefinition().isImplementedBy(type2)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public static TypeDefinition validateTypes(TypeDefinition type1, TypeDefinition type2, int lineNum, int colNum) {
+        if (typesMatch(type1, type2)) {
             return type1;
         }
 
         throw new TypeMismatchException(type1, type2, lineNum, colNum);
+    }
+
+    public static TypeDefinition validateTypes(List<BasicTypeDefinition> types, TypeDefinition type1, int lineNum, int colNum) {
+        if (types.stream().anyMatch((type) -> typesMatch(type1, type))) {
+            return type1;
+        }
+
+        throw new TypeMismatchException(types, type1, lineNum, colNum);
+    }
+
+    private static Boolean stmtReturns(Stmt stmt) {
+        return stmt.match(
+                (x) -> false, StatementTypeCheck::stmtReturns,  (x) -> false, (x) -> false, (x) -> false, (x) -> false,
+                (x) -> true, (x) -> true,
+                StatementTypeCheck::stmtReturns, StatementTypeCheck::stmtReturns, StatementTypeCheck::stmtReturns,
+                (x) -> false, (x) -> false
+        );
+    }
+
+    private static Boolean stmtReturns(BStmt bStmt) {
+        return bStmt.block_.match((block) -> block.liststmt_.stream().anyMatch(StatementTypeCheck::stmtReturns));
+    }
+
+    private static Boolean stmtReturns(Cond cond) {
+        Boolean exprTrue = exprTriviallyTrue(cond.expr_);
+
+        return exprTrue && stmtReturns(cond.stmt_);
+    }
+
+    private static Boolean stmtReturns(While sWhile) {
+        return exprTriviallyTrue(sWhile.expr_) && stmtReturns(sWhile.stmt_);
+    }
+
+    private static Boolean stmtReturns(CondElse cond) {
+        Boolean exprTrue = exprTriviallyTrue(cond.expr_);
+        Boolean exprFalse = exprTriviallyFalse(cond.expr_);
+        Boolean ifReturns = stmtReturns(cond.stmt_1);
+        Boolean elseReturns = stmtReturns(cond.stmt_2);
+
+        return exprTrue && ifReturns ||
+                exprFalse && elseReturns ||
+                ifReturns && elseReturns;
+    }
+
+    private static Boolean exprTriviallyTrue(Expr expr) {
+        return expr.match(
+                (x) -> false, (x) -> false, (x) -> true, (x) -> false, (x) -> false, (x) -> false, (x) -> false,
+                (x) -> false, (x) -> false, (x) -> false, (x) -> false, (x) -> false, (x) -> false, (x) -> false,
+                (x) -> false, (x) -> false, (x) -> false, (x) -> false, (x) -> false
+        );
+    }
+
+    private static Boolean exprTriviallyFalse(Expr expr) {
+        return expr.match(
+                (x) -> false, (x) -> false, (x) -> false, (x) -> true, (x) -> false, (x) -> false, (x) -> false,
+                (x) -> false, (x) -> false, (x) -> false, (x) -> false, (x) -> false, (x) -> false, (x) -> false,
+                (x) -> false, (x) -> false, (x) -> false, (x) -> false, (x) -> false
+        );
+    }
+
+    public static Boolean checkCallableReturns(BlockS block, CallableDeclaration callableDeclaration) {
+        if (new BasicTypeDefinition(BasicTypeName.VOID).equals(callableDeclaration.getReturnType())) {
+            return true;
+        }
+
+        if (block.liststmt_.stream().anyMatch(StatementTypeCheck::stmtReturns)) {
+            return true;
+        }
+
+        throw new TypeCheckException("Missing return statement", block.line_num, block.col_num);
+
     }
 }

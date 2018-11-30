@@ -5,6 +5,13 @@ import java.util.Objects;
 public class BasicTypeDefinition implements TypeDefinition, Arrayable {
     private BasicTypeName typeName;
 
+    @Override
+    public String toString() {
+        return "BasicTypeDefinition{" +
+                "typeName=" + typeName +
+                '}';
+    }
+
     public BasicTypeDefinition(BasicTypeName tn) {
         this.typeName = tn;
     }

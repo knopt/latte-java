@@ -16,6 +16,14 @@ public class VariableDefinition {
     }
 
     @Override
+    public String toString() {
+        return "VariableDefinition{" +
+                "variableName='" + variableName + '\'' +
+                ", type=" + type +
+                '}';
+    }
+
+    @Override
     public int hashCode() {
         return Objects.hash(variableName, type);
     }

@@ -95,4 +95,11 @@ public class ArrayTypeDefinition implements TypeDefinition {
     public BasicTypeDefinition getBasicTypeDefinition() {
         return null;
     }
+
+    @Override
+    public String toString() {
+        return "ArrayTypeDefinition{" +
+                "typeDefinition=" + typeDefinition +
+                '}';
+    }
 }

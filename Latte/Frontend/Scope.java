@@ -42,9 +42,8 @@ public class Scope {
     }
 
     public VariableDefinition getVariable(String name, int lineNumber, int colNumber) {
-        System.out.println("get variable!");
         if (!declaredVariables.containsKey(name)) {
-            throw new TypeCheckException("Variable " + name + " not declared");
+            throw new TypeCheckException("Variable " + name + " not declared", lineNumber, colNumber);
         }
 
         return declaredVariables.get(name);
