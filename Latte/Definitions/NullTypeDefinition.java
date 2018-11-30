@@ -1,5 +1,7 @@
 package Latte.Definitions;
 
+import java.util.Objects;
+
 public class NullTypeDefinition implements TypeDefinition {
 
     @Override
@@ -50,5 +52,11 @@ public class NullTypeDefinition implements TypeDefinition {
     @Override
     public BasicTypeDefinition getBasicTypeDefinition() {
         return null;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        return o != null && getClass() == o.getClass();
     }
 }

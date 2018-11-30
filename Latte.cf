@@ -108,7 +108,7 @@ EVar.      Expr9 ::= Ident ;
 ELitInt.   Expr9 ::= Integer ;
 ELitTrue.  Expr9 ::= "true" ;
 ELitFalse. Expr9 ::= "false" ;
-EThis.     Expr9 ::= "this" ;
+EThis.     Expr9 ::= "self" ;
 ENull.     Expr9 ::= "null" ;
 EApp.      Expr9 ::= Ident "(" [Expr] ")" ;
 EString.   Expr9 ::= String ;
@@ -119,7 +119,7 @@ ENDArrAcc.  Expr8 ::= Expr9 "[" Expr "]" ;
 
 EObjAcc.  Expr7 ::= Expr8 ObjAcc ;
 
-ECast.     Expr6 ::= "(" TypeName ")" Expr6 ;
+ECast.     Expr6 ::= "(" TypeName ")" Expr7 ;
 
 Neg.       Expr5 ::= "-" Expr6 ;
 Not.       Expr5 ::= "!" Expr6 ;
@@ -131,7 +131,7 @@ ERel.      Expr2 ::= Expr2 RelOp Expr3 ;
 EAnd.      Expr1 ::= Expr2 "&&" Expr1 ;
 EOr.       Expr ::= Expr1 "||" Expr ;
 
-coercions  Expr 8 ;
+coercions  Expr 9 ;
 
 separator  Expr "," ;
 

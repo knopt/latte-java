@@ -188,26 +188,20 @@ public class ExpressionTypeCheck {
         return exprType1;
     }
 
-
     public static TypeDefinition typeCheckRel(ERel rel, Scope scope, CallableDeclaration callableDeclaration) {
         TypeDefinition exprType1 = typeCheckExpr(rel.expr_1, scope, callableDeclaration);
         TypeDefinition exprType2 = typeCheckExpr(rel.expr_2, scope, callableDeclaration);
 
         validateTypes(exprType1, exprType2, rel.line_num, rel.col_num);
 
-        List<BasicTypeDefinition> eqTypes = Arrays.asList(
-                new BasicTypeDefinition(BasicTypeName.STRING),
-                new BasicTypeDefinition(BasicTypeName.INT),
-                new BasicTypeDefinition(BasicTypeName.BOOLEAN)
-        );
 
         rel.relop_.match(
                 (ignored) -> validateTypes(new BasicTypeDefinition(BasicTypeName.INT), exprType1, rel.line_num, rel.col_num),
                 (ignored) -> validateTypes(new BasicTypeDefinition(BasicTypeName.INT), exprType1, rel.line_num, rel.col_num),
                 (ignored) -> validateTypes(new BasicTypeDefinition(BasicTypeName.INT), exprType1, rel.line_num, rel.col_num),
                 (ignored) -> validateTypes(new BasicTypeDefinition(BasicTypeName.INT), exprType1, rel.line_num, rel.col_num),
-                (ignored) -> validateTypes(eqTypes, exprType1, rel.line_num, rel.col_num),
-                (ignored) -> validateTypes(eqTypes, exprType1, rel.line_num, rel.col_num)
+                (ignored) -> null,
+                (ignored) -> null
         );
 
         return new BasicTypeDefinition(BasicTypeName.BOOLEAN);

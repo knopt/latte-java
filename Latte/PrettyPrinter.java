@@ -1097,7 +1097,7 @@ public class PrettyPrinter
        render("(");
        pp(_ecast.typename_, 0);
        render(")");
-       pp(_ecast.expr_, 6);
+       pp(_ecast.expr_, 7);
        if (_i_ > 6) render(_R_PAREN);
     }
     else     if (foo instanceof Latte.Absyn.Neg)
