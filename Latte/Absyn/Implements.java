@@ -4,7 +4,7 @@ import java.util.function.Function;
 
 public abstract class Implements implements java.io.Serializable {
 
-  public abstract <T> T match(Function<InterImpl, T> interImpl,
-                              Function<EImpl, T> emptyImpl);
+    public abstract <T> T match(Function<InterImpl, T> interImpl,
+                                Function<EImpl, T> emptyImpl);
 
 }

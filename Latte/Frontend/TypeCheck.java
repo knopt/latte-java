@@ -204,18 +204,22 @@ public class TypeCheck {
         return new ArrayTypeDefinition(arrayedType);
     }
 
-    public static TypeDefinition getType(TypeNameS typeNameS) {
-        String typeName = typeNameS.typename_.match(
+    public static TypeDefinition getType(TypeName typeNameE, int lineNum, int colNum) {
+        String typeName = typeNameE.match(
                 TypeCheck::getTypeName,
                 TypeCheck::getTypeName
         );
 
 
         if (!env.declaredTypes.containsKey(typeName)) {
-            throw new IllegalTypeException(typeName, typeNameS.line_num, typeNameS.col_num);
+            throw new IllegalTypeException(typeName, lineNum, colNum);
         }
 
         return env.declaredTypes.get(typeName);
+    }
+
+    public static TypeDefinition getType(TypeNameS typeNameS) {
+        return getType(typeNameS.typename_, typeNameS.line_num, typeNameS.col_num);
     }
 
     public static String getTypeName(BuiltIn builtIn) {

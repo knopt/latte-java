@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static Latte.Frontend.StatementTypeCheck.validateTypes;
+import static Latte.Frontend.TypeCheck.getType;
 
 public class ExpressionTypeCheck {
 
@@ -33,7 +34,8 @@ public class ExpressionTypeCheck {
                 (rel) -> typeCheckRel(rel, scope, callableDeclaration),
                 (and) -> typeCheckAnd(and, scope, callableDeclaration),
                 (eOr) -> typeCheckOr(eOr, scope, callableDeclaration),
-                (objAcc) -> typeCheckObjAcc(objAcc, scope, callableDeclaration)
+                (objAcc) -> typeCheckObjAcc(objAcc, scope, callableDeclaration),
+                (cast) -> typeCheckCast(cast, scope, callableDeclaration)
         );
     }
 
@@ -270,6 +272,23 @@ public class ExpressionTypeCheck {
         validateCallablesArgumentsMatch(callable, mthAcc.listexpr_, scope, callableDeclaration, mthAcc.line_num, mthAcc.col_num);
 
         return callable.getReturnType();
+    }
+
+    public static TypeDefinition typeCheckCast(ECast cast, Scope scope, CallableDeclaration callableDeclaration) {
+        TypeDefinition castedType = typeCheckExpr(cast.expr_, scope, callableDeclaration);
+
+        TypeDefinition castedToType = getType(cast.typename_, cast.line_num, cast.col_num);
+
+        if (castedToType.isClassType()) {
+            validateTypes(new NullTypeDefinition(), castedType, cast.line_num, cast.col_num);
+            return castedToType;
+        }
+
+        if (new BasicTypeDefinition(BasicTypeName.VOID).equals(castedToType.isBasicType())) {
+            return castedToType;
+        }
+
+        throw new TypeCheckException(castedType + " cannot be casted to " + castedToType, cast.line_num, cast.col_num);
     }
 
     private static void validateCallablesArgumentsMatch(CallableDeclaration callable, ListExpr listExpr, Scope scope, CallableDeclaration callableDeclaration, int lineNumber, int colNumber) {

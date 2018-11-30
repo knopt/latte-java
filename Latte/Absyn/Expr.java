@@ -22,6 +22,7 @@ public abstract class Expr implements java.io.Serializable {
                                 Function<ERel, T> eRel,
                                 Function<EAnd, T> eAnd,
                                 Function<EOr, T> eOr,
-                                Function<EObjAcc, T> eObjAcc);
+                                Function<EObjAcc, T> eObjAcc,
+                                Function<ECast, T> eCast);
 
 }

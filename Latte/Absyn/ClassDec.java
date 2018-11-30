@@ -14,7 +14,11 @@ public class ClassDec extends ClassHeader implements Positioned {
     public final String ident_;
     public final Implements implements_;
     public int line_num, col_num, offset;
-    public ClassDec(String p1, Implements p2) { ident_ = p1; implements_ = p2; }
+
+    public ClassDec(String p1, Implements p2) {
+        ident_ = p1;
+        implements_ = p2;
+    }
 
     @Override
     public boolean equals(Object o) {

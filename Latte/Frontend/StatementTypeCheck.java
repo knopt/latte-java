@@ -289,7 +289,7 @@ public class StatementTypeCheck {
         return expr.match(
                 (x) -> false, (x) -> false, (x) -> true, (x) -> false, (x) -> false, (x) -> false, (x) -> false,
                 (x) -> false, (x) -> false, (x) -> false, (x) -> false, (x) -> false, (x) -> false, (x) -> false,
-                (x) -> false, (x) -> false, (x) -> false, (x) -> false, (x) -> false
+                (x) -> false, (x) -> false, (x) -> false, (x) -> false, (x) -> false, (x) -> false
         );
     }
 
@@ -297,7 +297,7 @@ public class StatementTypeCheck {
         return expr.match(
                 (x) -> false, (x) -> false, (x) -> false, (x) -> true, (x) -> false, (x) -> false, (x) -> false,
                 (x) -> false, (x) -> false, (x) -> false, (x) -> false, (x) -> false, (x) -> false, (x) -> false,
-                (x) -> false, (x) -> false, (x) -> false, (x) -> false, (x) -> false
+                (x) -> false, (x) -> false, (x) -> false, (x) -> false, (x) -> false, (x) -> false
         );
     }
 

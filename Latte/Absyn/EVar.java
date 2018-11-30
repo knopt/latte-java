@@ -48,7 +48,8 @@ public class EVar extends Expr implements Positioned {
                        Function<ERel, T> eRel,
                        Function<EAnd, T> eAnd,
                        Function<EOr, T> eOr,
-                       Function<EObjAcc, T> eObjAcc) {
+                       Function<EObjAcc, T> eObjAcc,
+                       Function<ECast, T> eCast) {
         return eVar.apply(this);
     }
 }
