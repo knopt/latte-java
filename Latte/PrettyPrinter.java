@@ -1026,7 +1026,7 @@ public class PrettyPrinter
     {
        Latte.Absyn.EThis _ethis = (Latte.Absyn.EThis) foo;
        if (_i_ > 9) render(_L_PAREN);
-       render("this");
+       render("self");
        if (_i_ > 9) render(_R_PAREN);
     }
     else     if (foo instanceof Latte.Absyn.ENull)

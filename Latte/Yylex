@@ -84,9 +84,9 @@ IDENT = ({LETTER}|{DIGIT}|['_])
 <YYINITIAL>private { return cf.newSymbol("", sym._SYMB_40, left_loc(), right_loc()); }
 <YYINITIAL>public { return cf.newSymbol("", sym._SYMB_41, left_loc(), right_loc()); }
 <YYINITIAL>return { return cf.newSymbol("", sym._SYMB_42, left_loc(), right_loc()); }
-<YYINITIAL>static { return cf.newSymbol("", sym._SYMB_43, left_loc(), right_loc()); }
-<YYINITIAL>string { return cf.newSymbol("", sym._SYMB_44, left_loc(), right_loc()); }
-<YYINITIAL>this { return cf.newSymbol("", sym._SYMB_45, left_loc(), right_loc()); }
+<YYINITIAL>self { return cf.newSymbol("", sym._SYMB_43, left_loc(), right_loc()); }
+<YYINITIAL>static { return cf.newSymbol("", sym._SYMB_44, left_loc(), right_loc()); }
+<YYINITIAL>string { return cf.newSymbol("", sym._SYMB_45, left_loc(), right_loc()); }
 <YYINITIAL>true { return cf.newSymbol("", sym._SYMB_46, left_loc(), right_loc()); }
 <YYINITIAL>void { return cf.newSymbol("", sym._SYMB_47, left_loc(), right_loc()); }
 <YYINITIAL>while { return cf.newSymbol("", sym._SYMB_48, left_loc(), right_loc()); }

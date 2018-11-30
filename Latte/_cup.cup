@@ -114,9 +114,9 @@ terminal _SYMB_39;    //   null
 terminal _SYMB_40;    //   private
 terminal _SYMB_41;    //   public
 terminal _SYMB_42;    //   return
-terminal _SYMB_43;    //   static
-terminal _SYMB_44;    //   string
-terminal _SYMB_45;    //   this
+terminal _SYMB_43;    //   self
+terminal _SYMB_44;    //   static
+terminal _SYMB_45;    //   string
 terminal _SYMB_46;    //   true
 terminal _SYMB_47;    //   void
 terminal _SYMB_48;    //   while
@@ -279,7 +279,7 @@ Modifier ::= _SYMB_32:p_1  {: RESULT = new Latte.Absyn.Mfinal();
 ((Latte.Absyn.Mprivate)RESULT).line_num = -1;
 ((Latte.Absyn.Mprivate)RESULT).col_num = -1;
 ((Latte.Absyn.Mprivate)RESULT).offset = -1; :}
-  | _SYMB_43:p_1  {: RESULT = new Latte.Absyn.Mstatic();
+  | _SYMB_44:p_1  {: RESULT = new Latte.Absyn.Mstatic();
 ((Latte.Absyn.Mstatic)RESULT).line_num = -1;
 ((Latte.Absyn.Mstatic)RESULT).col_num = -1;
 ((Latte.Absyn.Mstatic)RESULT).offset = -1; :}
@@ -489,7 +489,7 @@ BasicType ::= _SYMB_36:p_1  {: RESULT = new Latte.Absyn.Int();
 ((Latte.Absyn.Int)RESULT).line_num = -1;
 ((Latte.Absyn.Int)RESULT).col_num = -1;
 ((Latte.Absyn.Int)RESULT).offset = -1; :} 
-  | _SYMB_44:p_1  {: RESULT = new Latte.Absyn.Str();
+  | _SYMB_45:p_1  {: RESULT = new Latte.Absyn.Str();
 ((Latte.Absyn.Str)RESULT).line_num = -1;
 ((Latte.Absyn.Str)RESULT).col_num = -1;
 ((Latte.Absyn.Str)RESULT).offset = -1; :}
@@ -582,7 +582,7 @@ if (leftLoc != null) {
 ((Latte.Absyn.ELitFalse)RESULT).line_num = -1;
 ((Latte.Absyn.ELitFalse)RESULT).col_num = -1;
 ((Latte.Absyn.ELitFalse)RESULT).offset = -1; :}
-  | _SYMB_45:p_1  {: RESULT = new Latte.Absyn.EThis();
+  | _SYMB_43:p_1  {: RESULT = new Latte.Absyn.EThis();
 ((Latte.Absyn.EThis)RESULT).line_num = -1;
 ((Latte.Absyn.EThis)RESULT).col_num = -1;
 ((Latte.Absyn.EThis)RESULT).offset = -1; :}
