@@ -9,25 +9,26 @@ import Latte.Exceptions.TypeMismatchException;
 
 import java.util.List;
 
+import static Latte.Frontend.ExpressionTypeCheck.getVariableType;
 import static Latte.Frontend.ExpressionTypeCheck.typeCheckExpr;
 
 
 public class StatementTypeCheck {
-    public static void typeCheckStatement(Stmt stmt, boolean thisAllowed, Scope scope, CallableDeclaration callableDeclaration) {
+    public static void typeCheckStatement(Stmt stmt, Scope scope, CallableDeclaration callableDeclaration) {
         stmt.match(
                 StatementTypeCheck::typeCheckEmpty,
-                (bStmt) -> typeCheckBStmt(bStmt, thisAllowed, scope, callableDeclaration),
-                (decl) -> typeCheckDecl(decl, thisAllowed, scope, callableDeclaration),
-                (ass) -> typeCheckAss(ass, thisAllowed, scope, callableDeclaration),
-                (incr) -> typeCheckIncr(incr, thisAllowed, scope, callableDeclaration),
-                (decr) -> typeCheckDecr(decr, thisAllowed, scope, callableDeclaration),
-                (ret) -> typeCheckRet(ret, thisAllowed, scope, callableDeclaration),
+                (bStmt) -> typeCheckBStmt(bStmt, scope, callableDeclaration),
+                (decl) -> typeCheckDecl(decl, scope, callableDeclaration),
+                (ass) -> typeCheckAss(ass, scope, callableDeclaration),
+                (incr) -> typeCheckIncr(incr, scope, callableDeclaration),
+                (decr) -> typeCheckDecr(decr, scope, callableDeclaration),
+                (ret) -> typeCheckRet(ret, scope, callableDeclaration),
                 (vret) -> typeCheckVRet(vret, callableDeclaration),
-                (cond) -> typeCheckCond(cond, thisAllowed, scope, callableDeclaration),
-                (condElse) -> typeCheckCondElse(condElse, thisAllowed, scope, callableDeclaration),
-                (sWhile) -> typeCheckWhile(sWhile, thisAllowed, scope, callableDeclaration),
-                (expr) -> typeCheckExpression(expr, thisAllowed, scope, callableDeclaration),
-                (forArr) -> typeCheckForArray(forArr, thisAllowed, scope, callableDeclaration)
+                (cond) -> typeCheckCond(cond, scope, callableDeclaration),
+                (condElse) -> typeCheckCondElse(condElse, scope, callableDeclaration),
+                (sWhile) -> typeCheckWhile(sWhile, scope, callableDeclaration),
+                (expr) -> typeCheckExpression(expr, scope, callableDeclaration),
+                (forArr) -> typeCheckForArray(forArr, scope, callableDeclaration)
         );
     }
 
@@ -35,25 +36,25 @@ public class StatementTypeCheck {
         return true;
     }
 
-    public static Boolean typeCheckBStmt(BStmt bStmt, boolean thisAllowed, Scope oldScope, CallableDeclaration callableDeclaration) {
+    public static Boolean typeCheckBStmt(BStmt bStmt, Scope oldScope, CallableDeclaration callableDeclaration) {
         Scope scope = new Scope(oldScope);
 
         bStmt.block_.match(
-                (block) -> typeCheckBlockS(block, thisAllowed, scope, callableDeclaration)
+                (block) -> typeCheckBlockS(block, scope, callableDeclaration)
         );
 
         return true;
     }
 
-    public static Boolean typeCheckBlockS(BlockS blockS, boolean thisAllowed, Scope scope, CallableDeclaration callableDeclaration) {
+    public static Boolean typeCheckBlockS(BlockS blockS, Scope scope, CallableDeclaration callableDeclaration) {
         for (Stmt stmt : blockS.liststmt_) {
-            typeCheckStatement(stmt, thisAllowed, scope, callableDeclaration);
+            typeCheckStatement(stmt, scope, callableDeclaration);
         }
 
         return true;
     }
 
-    public static Boolean typeCheckDecl(Decl decl, boolean thisAllowed, Scope scope, CallableDeclaration callableDeclaration) {
+    public static Boolean typeCheckDecl(Decl decl, Scope scope, CallableDeclaration callableDeclaration) {
         TypeDefinition type = decl.type_.match(
                 TypeCheck::getType,
                 TypeCheck::getType
@@ -62,15 +63,15 @@ public class StatementTypeCheck {
         for (Item item : decl.listitem_) {
             item.match(
                     (noInit) -> typeCheckNoInit(noInit, type, scope),
-                    (init) -> typeCheckInit(init, type, thisAllowed, scope, callableDeclaration)
+                    (init) -> typeCheckInit(init, type, scope, callableDeclaration)
             );
         }
 
         return true;
     }
 
-    public static Boolean typeCheckInit(Init init, TypeDefinition itemType, boolean thisAllowed, Scope scope, CallableDeclaration callableDeclaration) {
-        TypeDefinition valueType = typeCheckExpr(init.expr_, thisAllowed, scope, callableDeclaration);
+    public static Boolean typeCheckInit(Init init, TypeDefinition itemType, Scope scope, CallableDeclaration callableDeclaration) {
+        TypeDefinition valueType = typeCheckExpr(init.expr_, scope, callableDeclaration);
 
         validateTypes(itemType, valueType, init.line_num, init.col_num);
 
@@ -85,59 +86,59 @@ public class StatementTypeCheck {
         return true;
     }
 
-    public static Boolean typeCheckAss(Ass ass, boolean thisAllowed, Scope scope, CallableDeclaration callableDeclaration) {
-        TypeDefinition lhs = getLhsType(ass.lhs_, thisAllowed, scope, callableDeclaration);
+    public static Boolean typeCheckAss(Ass ass, Scope scope, CallableDeclaration callableDeclaration) {
+        TypeDefinition lhs = getLhsType(ass.lhs_, scope, callableDeclaration);
 
         if (new BasicTypeDefinition(BasicTypeName.VOID).equals(lhs)) {
             throw new TypeCheckException("Void type is not assignable", ass.line_num, ass.col_num);
         }
 
-        TypeDefinition exprType = typeCheckExpr(ass.expr_, thisAllowed, scope, callableDeclaration);
+        TypeDefinition exprType = typeCheckExpr(ass.expr_, scope, callableDeclaration);
 
         validateTypes(lhs, exprType, ass.line_num, ass.col_num);
 
         return true;
     }
 
-    public static TypeDefinition getLhsType(Lhs lhs, boolean thisAllowed, Scope scope, CallableDeclaration callableDeclaration) {
+    public static TypeDefinition getLhsType(Lhs lhs, Scope scope, CallableDeclaration callableDeclaration) {
         return lhs.match(
-                (rLhs) -> scope.getVariable(rLhs.ident_, rLhs.line_num, rLhs.col_num).getType(),
-                (aLhs) -> getALhsType(aLhs, thisAllowed, scope, callableDeclaration)
+                (rLhs) -> getVariableType(rLhs.ident_, scope, callableDeclaration, rLhs.line_num, rLhs.col_num),
+                (aLhs) -> getALhsType(aLhs, scope, callableDeclaration)
         );
     }
 
-    public static TypeDefinition getALhsType(ArrElemLhs elem, boolean thisAllowed, Scope scope, CallableDeclaration callableDeclaration) {
+    public static TypeDefinition getALhsType(ArrElemLhs elem, Scope scope, CallableDeclaration callableDeclaration) {
         TypeDefinition typeDefinition = scope.getVariable(elem.ident_, elem.line_num, elem.col_num).getType();
 
         if (!typeDefinition.isArrayType()) {
             throw new InternalStateException("Expected array type in lhs. Should have been caught earlier");
         }
 
-        TypeDefinition indexExprType = typeCheckExpr(elem.expr_, thisAllowed, scope, callableDeclaration);
+        TypeDefinition indexExprType = typeCheckExpr(elem.expr_, scope, callableDeclaration);
 
         validateTypes(new BasicTypeDefinition(BasicTypeName.INT), indexExprType, elem.line_num, elem.col_num);
 
         return typeDefinition.getArrayTypeDefinition().getInnerTypeDefinition();
     }
 
-    public static Boolean typeCheckIncr(Incr incr, boolean thisAllowed, Scope scope, CallableDeclaration callableDeclaration) {
-        TypeDefinition lhsType = getLhsType(incr.lhs_, thisAllowed, scope, callableDeclaration);
+    public static Boolean typeCheckIncr(Incr incr, Scope scope, CallableDeclaration callableDeclaration) {
+        TypeDefinition lhsType = getLhsType(incr.lhs_, scope, callableDeclaration);
 
         validateTypes(new BasicTypeDefinition(BasicTypeName.INT), lhsType, incr.line_num, incr.col_num);
 
         return true;
     }
 
-    public static Boolean typeCheckDecr(Decr decr, boolean thisAllowed, Scope scope, CallableDeclaration callableDeclaration) {
-        TypeDefinition lhsType = getLhsType(decr.lhs_, thisAllowed, scope, callableDeclaration);
+    public static Boolean typeCheckDecr(Decr decr, Scope scope, CallableDeclaration callableDeclaration) {
+        TypeDefinition lhsType = getLhsType(decr.lhs_, scope, callableDeclaration);
 
         validateTypes(new BasicTypeDefinition(BasicTypeName.INT), lhsType, decr.line_num, decr.col_num);
 
         return true;
     }
 
-    public static Boolean typeCheckRet(Ret ret, boolean thisAllowed, Scope scope, CallableDeclaration callableDeclaration) {
-        TypeDefinition retType = typeCheckExpr(ret.expr_, thisAllowed, scope, callableDeclaration);
+    public static Boolean typeCheckRet(Ret ret, Scope scope, CallableDeclaration callableDeclaration) {
+        TypeDefinition retType = typeCheckExpr(ret.expr_, scope, callableDeclaration);
 
         validateTypes(retType, callableDeclaration.getReturnType(), ret.line_num, ret.col_num);
 
@@ -150,45 +151,45 @@ public class StatementTypeCheck {
         return true;
     }
 
-    public static Boolean typeCheckCond(Cond cond, boolean thisAllowed, Scope scope, CallableDeclaration callableDeclaration) {
-        TypeDefinition condType = typeCheckExpr(cond.expr_, thisAllowed, scope, callableDeclaration);
+    public static Boolean typeCheckCond(Cond cond, Scope scope, CallableDeclaration callableDeclaration) {
+        TypeDefinition condType = typeCheckExpr(cond.expr_, scope, callableDeclaration);
 
         validateTypes(new BasicTypeDefinition(BasicTypeName.BOOLEAN), condType, cond.line_num, cond.col_num);
 
-        typeCheckStatement(cond.stmt_, thisAllowed, scope, callableDeclaration);
+        typeCheckStatement(cond.stmt_, scope, callableDeclaration);
 
         return true;
     }
 
-    public static Boolean typeCheckCondElse(CondElse condElse, boolean thisAllowed, Scope scope, CallableDeclaration callableDeclaration) {
-        TypeDefinition condType = typeCheckExpr(condElse.expr_, thisAllowed, scope, callableDeclaration);
+    public static Boolean typeCheckCondElse(CondElse condElse, Scope scope, CallableDeclaration callableDeclaration) {
+        TypeDefinition condType = typeCheckExpr(condElse.expr_, scope, callableDeclaration);
 
         validateTypes(new BasicTypeDefinition(BasicTypeName.BOOLEAN), condType, condElse.line_num, condElse.col_num);
 
-        typeCheckStatement(condElse.stmt_1, thisAllowed, scope, callableDeclaration);
-        typeCheckStatement(condElse.stmt_2, thisAllowed, scope, callableDeclaration);
+        typeCheckStatement(condElse.stmt_1, scope, callableDeclaration);
+        typeCheckStatement(condElse.stmt_2, scope, callableDeclaration);
 
         return true;
     }
 
-    public static Boolean typeCheckWhile(While sWhile, boolean thisAllowed, Scope scope, CallableDeclaration callableDeclaration) {
-        TypeDefinition condType = typeCheckExpr(sWhile.expr_, thisAllowed, scope, callableDeclaration);
+    public static Boolean typeCheckWhile(While sWhile, Scope scope, CallableDeclaration callableDeclaration) {
+        TypeDefinition condType = typeCheckExpr(sWhile.expr_, scope, callableDeclaration);
 
         validateTypes(new BasicTypeDefinition(BasicTypeName.BOOLEAN), condType, sWhile.line_num, sWhile.col_num);
 
-        typeCheckStatement(sWhile.stmt_, thisAllowed, scope, callableDeclaration);
+        typeCheckStatement(sWhile.stmt_, scope, callableDeclaration);
 
         return true;
     }
 
-    public static Boolean typeCheckExpression(SExp expr, boolean thisAllowed, Scope scope, CallableDeclaration callableDeclaration) {
-        typeCheckExpr(expr.expr_, thisAllowed, scope, callableDeclaration);
+    public static Boolean typeCheckExpression(SExp expr, Scope scope, CallableDeclaration callableDeclaration) {
+        typeCheckExpr(expr.expr_, scope, callableDeclaration);
 
         return true;
     }
 
-    public static Boolean typeCheckForArray(ForArr forArr, boolean thisAllowed, Scope scope, CallableDeclaration callableDeclaration) {
-        TypeDefinition exprType = typeCheckExpr(forArr.expr_, thisAllowed, scope, callableDeclaration);
+    public static Boolean typeCheckForArray(ForArr forArr, Scope scope, CallableDeclaration callableDeclaration) {
+        TypeDefinition exprType = typeCheckExpr(forArr.expr_, scope, callableDeclaration);
 
         if (!exprType.isArrayType()) {
             throw new TypeCheckException("Expected array type, got " + exprType, forArr.line_num, forArr.col_num);
@@ -212,7 +213,7 @@ public class StatementTypeCheck {
         Scope withElemScope = new Scope(scope);
         withElemScope.declareVariable(forArr.ident_, elemType, forArr.line_num, forArr.col_num);
 
-        typeCheckStatement(forArr.stmt_, thisAllowed, withElemScope, callableDeclaration);
+        typeCheckStatement(forArr.stmt_, withElemScope, callableDeclaration);
 
         return true;
     }

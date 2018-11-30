@@ -79,4 +79,9 @@ public class MethodDeclaration implements  CallableDeclaration {
         return callerType;
     }
 
+    @Override
+    public Boolean isMethod() {
+        return true;
+    }
+
 }

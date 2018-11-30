@@ -74,6 +74,11 @@ public class FunctionDeclaration implements  CallableDeclaration {
     }
 
     @Override
+    public Boolean isMethod() {
+        return false;
+    }
+
+    @Override
     public int hashCode() {
         return Objects.hash(name, argumentList, methodBody, returnType);
     }

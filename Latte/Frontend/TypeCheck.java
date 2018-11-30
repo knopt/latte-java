@@ -93,7 +93,7 @@ public class TypeCheck {
 
     public static Boolean gatherInterfaceDefinitions(ClassDecl classDecl) {
         TypeDefinition typeDef = classDecl.classheader_.match(
-                null,
+                (ignored) -> null,
                 TypeCheck::gatherInterfaceDefinitions
         );
 
@@ -278,7 +278,7 @@ public class TypeCheck {
         ClassTypeDefinition classTypeDefinition = typeDef.getClassDefinition();
         InterfaceTypeDefinition interfaceTypeDefinition = impl.match(
                 TypeCheck::getInterfaceType,
-                null
+                (ignored) -> null
         );
 
         if (interfaceTypeDefinition == null) {
@@ -370,24 +370,24 @@ public class TypeCheck {
             ClassTypeDefinition classTypeDefinition = def.getClassDefinition();
 
             for (CallableDeclaration mth : classTypeDefinition.methods.values()) {
-                typeCheckCallable(mth, true);
+                typeCheckCallable(mth);
             }
 
         }
 
         for (FunctionDeclaration fun : env.declaredFunctions.values()) {
             if (!Environment.basicFunctions.contains(fun)) {
-                typeCheckCallable(fun, false);
+                typeCheckCallable(fun);
             }
         }
 
         return true;
     }
 
-    public static void typeCheckCallable(CallableDeclaration callableDeclaration, boolean thisAllowed) {
+    public static void typeCheckCallable(CallableDeclaration callableDeclaration) {
         callableDeclaration.getMethodBody().match(
                 TypeCheck::typeCheckCallable,
-                (body) -> typeCheckCallable(body, thisAllowed, callableDeclaration)
+                (body) -> typeCheckCallable(body, callableDeclaration)
         );
     }
 
@@ -395,20 +395,19 @@ public class TypeCheck {
         throw new TypeCheckException("Empty body is not allowed", emptyMBody.line_num, emptyMBody.col_num);
     }
 
-    public static Boolean typeCheckCallable(MBody mBody, boolean thisAllowed, CallableDeclaration callableDeclaration) {
+    public static Boolean typeCheckCallable(MBody mBody, CallableDeclaration callableDeclaration) {
         mBody.block_.match((block) -> checkCallableReturns(block, callableDeclaration));
-        mBody.block_.match((block) -> typeCheckCallablesBlock(block, thisAllowed, callableDeclaration));
+        mBody.block_.match((block) -> typeCheckCallablesBlock(block, callableDeclaration));
 
         return true;
     }
 
-    public static Boolean typeCheckCallablesBlock(BlockS block, boolean thisAllowed, CallableDeclaration callableDeclaration) {
+    public static Boolean typeCheckCallablesBlock(BlockS block, CallableDeclaration callableDeclaration) {
         Scope scope = new Scope(env).withVariables(callableDeclaration.getArgumentList(), block.line_num, block.col_num);
 
         for (Stmt stmt : block.liststmt_) {
             typeCheckStatement(
                     stmt,
-                    thisAllowed,
                     scope,
                     callableDeclaration
             );
