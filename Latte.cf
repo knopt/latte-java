@@ -104,20 +104,22 @@ separator  Type "," ;
 
 -- Expressions ---------------------------------------------
 
-EVar.      Expr8 ::= Ident ;
-ELitInt.   Expr8 ::= Integer ;
-ELitTrue.  Expr8 ::= "true" ;
-ELitFalse. Expr8 ::= "false" ;
-EThis.     Expr8 ::= "this" ;
-ENull.     Expr8 ::= "null" ;
-EApp.      Expr8 ::= Ident "(" [Expr] ")" ;
-EString.   Expr8 ::= String ;
-EConstr.   Expr8 ::= "new" Ident ;
+EVar.      Expr9 ::= Ident ;
+ELitInt.   Expr9 ::= Integer ;
+ELitTrue.  Expr9 ::= "true" ;
+ELitFalse. Expr9 ::= "false" ;
+EThis.     Expr9 ::= "this" ;
+ENull.     Expr9 ::= "null" ;
+EApp.      Expr9 ::= Ident "(" [Expr] ")" ;
+EString.   Expr9 ::= String ;
+EConstr.   Expr9 ::= "new" Ident ;
 
-EArrConstr. Expr7 ::= "new" TypeName "[" Expr "]" ;
-ENDArrAcc.  Expr7 ::= Expr8 "[" Expr "]" ;
+EArrConstr. Expr8 ::= "new" TypeName "[" Expr "]" ;
+ENDArrAcc.  Expr8 ::= Expr9 "[" Expr "]" ;
 
-EObjAcc.  Expr6 ::= Expr7 ObjAcc ;
+EObjAcc.  Expr7 ::= Expr8 ObjAcc ;
+
+ECast.     Expr6 ::= "(" TypeName ")" Expr6 ;
 
 Neg.       Expr5 ::= "-" Expr6 ;
 Not.       Expr5 ::= "!" Expr6 ;
