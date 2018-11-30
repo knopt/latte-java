@@ -104,20 +104,20 @@ separator  Type "," ;
 
 -- Expressions ---------------------------------------------
 
-EVar.      Expr7 ::= Ident ;
-ELitInt.   Expr7 ::= Integer ;
-ELitTrue.  Expr7 ::= "true" ;
-ELitFalse. Expr7 ::= "false" ;
-EThis.     Expr7 ::= "this" ;
-ENull.     Expr7 ::= "null" ;
-EApp.      Expr7 ::= Ident "(" [Expr] ")" ;
-EString.   Expr7 ::= String ;
-EConstr.   Expr7 ::= "new" Ident ;
+EVar.      Expr8 ::= Ident ;
+ELitInt.   Expr8 ::= Integer ;
+ELitTrue.  Expr8 ::= "true" ;
+ELitFalse. Expr8 ::= "false" ;
+EThis.     Expr8 ::= "this" ;
+ENull.     Expr8 ::= "null" ;
+EApp.      Expr8 ::= Ident "(" [Expr] ")" ;
+EString.   Expr8 ::= String ;
+EConstr.   Expr8 ::= "new" Ident ;
 
-EArrConstr. Expr6 ::= "new" TypeName "[" Expr "]" ;
-ENDArrAcc.  Expr6 ::= Expr "[" Expr "]" ;
+EArrConstr. Expr7 ::= "new" TypeName "[" Expr "]" ;
+ENDArrAcc.  Expr7 ::= Expr8 "[" Expr "]" ;
 
-EObjAcc.  Expr5 ::= Expr ObjAcc ;
+EObjAcc.  Expr6 ::= Expr7 ObjAcc ;
 
 Neg.       Expr5 ::= "-" Expr6 ;
 Not.       Expr5 ::= "!" Expr6 ;
@@ -129,7 +129,7 @@ ERel.      Expr2 ::= Expr2 RelOp Expr3 ;
 EAnd.      Expr1 ::= Expr2 "&&" Expr1 ;
 EOr.       Expr ::= Expr1 "||" Expr ;
 
-coercions  Expr 7 ;
+coercions  Expr 8 ;
 
 separator  Expr "," ;
 
