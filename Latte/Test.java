@@ -1,20 +1,14 @@
 package Latte;
-
-import Latte.Absyn.Program;
-import Latte.Exceptions.TypeCheckException;
-
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
-
-import static Latte.Frontend.TypeCheck.check;
+import Latte.*;
+import Latte.Absyn.*;
+import java.io.*;
+import java_cup.runtime.*;
 
 public class Test
 {
   Yylex l;
   parser p;
-
+  
   public Test(String[] args)
   {
     try
@@ -31,52 +25,38 @@ public class Test
     }
     p = new parser(l, l.getSymbolFactory());
   }
-
-  public Program parse() throws Exception
+  
+  public Latte.Absyn.Program parse() throws Exception
   {
     /* The default parser is the first-defined entry point. */
     /* Other options are: */
     /* not available. */
-    Program ast = p.pProgram();
-//    System.out.println();
-//    System.out.println("Parse Succesful!");
-//    System.out.println();
-//    System.out.println("[Abstract Syntax]");
-//    System.out.println();
-//    System.out.println(PrettyPrinter.show(ast));
-//    System.out.println();
-//    System.out.println("[Linearized Tree]");
-//    System.out.println();
-//    System.out.println(PrettyPrinter.print(ast));
+    Latte.Absyn.Program ast = p.pProgram();
+    System.out.println();
+    System.out.println("Parse Succesful!");
+    System.out.println();
+    System.out.println("[Abstract Syntax]");
+    System.out.println();
+    System.out.println(PrettyPrinter.show(ast));
+    System.out.println();
+    System.out.println("[Linearized Tree]");
+    System.out.println();
+    System.out.println(PrettyPrinter.print(ast));
     return ast;
   }
   
-  public static void main(String args[])
+  public static void main(String args[]) throws Exception
   {
     Test t = new Test(args);
-    Program program;
     try
     {
-      program = t.parse();
+      t.parse();
     }
     catch(Throwable e)
     {
-//      System.err.println("At line " + String.valueOf(t.l.line_num()) + ", near \"" + t.l.buff() + "\" :");
-//      System.err.println("     " + e.getMessage());
-//      System.exit(1);
-        System.err.println("[ERROR] Syntax error at " + t.l.line_num());
-      return;
-    }
-
-    try {
-        check(program);
-        System.out.println("OK");
-    } catch (TypeCheckException e) {
-        System.err.println("[ERROR] " + e.getMessage());
-        return;
-    } catch (Exception e) {
-        e.printStackTrace();
-        return;
+      System.err.println("At line " + String.valueOf(t.l.line_num()) + ", near \"" + t.l.buff() + "\" :");
+      System.err.println("     " + e.getMessage());
+      System.exit(1);
     }
   }
 }

@@ -997,98 +997,98 @@ public class PrettyPrinter
     if (foo instanceof Latte.Absyn.EVar)
     {
        Latte.Absyn.EVar _evar = (Latte.Absyn.EVar) foo;
-       if (_i_ > 7) render(_L_PAREN);
+       if (_i_ > 8) render(_L_PAREN);
        pp(_evar.ident_, 0);
-       if (_i_ > 7) render(_R_PAREN);
+       if (_i_ > 8) render(_R_PAREN);
     }
     else     if (foo instanceof Latte.Absyn.ELitInt)
     {
        Latte.Absyn.ELitInt _elitint = (Latte.Absyn.ELitInt) foo;
-       if (_i_ > 7) render(_L_PAREN);
+       if (_i_ > 8) render(_L_PAREN);
        pp(_elitint.integer_, 0);
-       if (_i_ > 7) render(_R_PAREN);
+       if (_i_ > 8) render(_R_PAREN);
     }
     else     if (foo instanceof Latte.Absyn.ELitTrue)
     {
        Latte.Absyn.ELitTrue _elittrue = (Latte.Absyn.ELitTrue) foo;
-       if (_i_ > 7) render(_L_PAREN);
+       if (_i_ > 8) render(_L_PAREN);
        render("true");
-       if (_i_ > 7) render(_R_PAREN);
+       if (_i_ > 8) render(_R_PAREN);
     }
     else     if (foo instanceof Latte.Absyn.ELitFalse)
     {
        Latte.Absyn.ELitFalse _elitfalse = (Latte.Absyn.ELitFalse) foo;
-       if (_i_ > 7) render(_L_PAREN);
+       if (_i_ > 8) render(_L_PAREN);
        render("false");
-       if (_i_ > 7) render(_R_PAREN);
+       if (_i_ > 8) render(_R_PAREN);
     }
     else     if (foo instanceof Latte.Absyn.EThis)
     {
        Latte.Absyn.EThis _ethis = (Latte.Absyn.EThis) foo;
-       if (_i_ > 7) render(_L_PAREN);
+       if (_i_ > 8) render(_L_PAREN);
        render("this");
-       if (_i_ > 7) render(_R_PAREN);
+       if (_i_ > 8) render(_R_PAREN);
     }
     else     if (foo instanceof Latte.Absyn.ENull)
     {
        Latte.Absyn.ENull _enull = (Latte.Absyn.ENull) foo;
-       if (_i_ > 7) render(_L_PAREN);
+       if (_i_ > 8) render(_L_PAREN);
        render("null");
-       if (_i_ > 7) render(_R_PAREN);
+       if (_i_ > 8) render(_R_PAREN);
     }
     else     if (foo instanceof Latte.Absyn.EApp)
     {
        Latte.Absyn.EApp _eapp = (Latte.Absyn.EApp) foo;
-       if (_i_ > 7) render(_L_PAREN);
+       if (_i_ > 8) render(_L_PAREN);
        pp(_eapp.ident_, 0);
        render("(");
        pp(_eapp.listexpr_, 0);
        render(")");
-       if (_i_ > 7) render(_R_PAREN);
+       if (_i_ > 8) render(_R_PAREN);
     }
     else     if (foo instanceof Latte.Absyn.EString)
     {
        Latte.Absyn.EString _estring = (Latte.Absyn.EString) foo;
-       if (_i_ > 7) render(_L_PAREN);
+       if (_i_ > 8) render(_L_PAREN);
        printQuoted(_estring.string_);
-       if (_i_ > 7) render(_R_PAREN);
+       if (_i_ > 8) render(_R_PAREN);
     }
     else     if (foo instanceof Latte.Absyn.EConstr)
     {
        Latte.Absyn.EConstr _econstr = (Latte.Absyn.EConstr) foo;
-       if (_i_ > 7) render(_L_PAREN);
+       if (_i_ > 8) render(_L_PAREN);
        render("new");
        pp(_econstr.ident_, 0);
-       if (_i_ > 7) render(_R_PAREN);
+       if (_i_ > 8) render(_R_PAREN);
     }
     else     if (foo instanceof Latte.Absyn.EArrConstr)
     {
        Latte.Absyn.EArrConstr _earrconstr = (Latte.Absyn.EArrConstr) foo;
-       if (_i_ > 6) render(_L_PAREN);
+       if (_i_ > 7) render(_L_PAREN);
        render("new");
        pp(_earrconstr.typename_, 0);
        render("[");
        pp(_earrconstr.expr_, 0);
        render("]");
-       if (_i_ > 6) render(_R_PAREN);
+       if (_i_ > 7) render(_R_PAREN);
     }
     else     if (foo instanceof Latte.Absyn.ENDArrAcc)
     {
        Latte.Absyn.ENDArrAcc _endarracc = (Latte.Absyn.ENDArrAcc) foo;
-       if (_i_ > 6) render(_L_PAREN);
-       pp(_endarracc.expr_1, 0);
+       if (_i_ > 7) render(_L_PAREN);
+       pp(_endarracc.expr_1, 8);
        render("[");
        pp(_endarracc.expr_2, 0);
        render("]");
-       if (_i_ > 6) render(_R_PAREN);
+       if (_i_ > 7) render(_R_PAREN);
     }
     else     if (foo instanceof Latte.Absyn.EObjAcc)
     {
        Latte.Absyn.EObjAcc _eobjacc = (Latte.Absyn.EObjAcc) foo;
-       if (_i_ > 5) render(_L_PAREN);
-       pp(_eobjacc.expr_, 0);
+       if (_i_ > 6) render(_L_PAREN);
+       pp(_eobjacc.expr_, 7);
        pp(_eobjacc.objacc_, 0);
-       if (_i_ > 5) render(_R_PAREN);
+       if (_i_ > 6) render(_R_PAREN);
     }
     else     if (foo instanceof Latte.Absyn.Neg)
     {
