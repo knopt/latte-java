@@ -4,6 +4,6 @@ public class Return implements AssemblyInstruction {
 
     @Override
     public String yield() {
-        return "ret";
+        return ConstantUtils.TAB + "ret";
     }
 }

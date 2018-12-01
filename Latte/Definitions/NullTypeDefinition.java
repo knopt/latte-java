@@ -1,7 +1,5 @@
 package Latte.Definitions;
 
-import java.util.Objects;
-
 public class NullTypeDefinition implements TypeDefinition {
 
     @Override

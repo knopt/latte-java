@@ -5,7 +5,7 @@ import Latte.Absyn.MethodBody;
 import java.util.List;
 import java.util.Objects;
 
-public class MethodDeclaration implements  CallableDeclaration {
+public class MethodDeclaration implements CallableDeclaration {
     public String name;
     public List<VariableDefinition> argumentList;
     public TypeDefinition returnType;

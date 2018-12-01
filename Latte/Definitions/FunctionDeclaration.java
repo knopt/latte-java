@@ -7,11 +7,11 @@ import Latte.Absyn.MethodBody;
 import java.util.List;
 import java.util.Objects;
 
-public class FunctionDeclaration implements  CallableDeclaration {
+public class FunctionDeclaration implements CallableDeclaration {
     public String name;
-    public List<VariableDefinition> argumentList;
-    public MethodBody methodBody;
-    public TypeDefinition returnType;
+    private List<VariableDefinition> argumentList;
+    private MethodBody methodBody;
+    private TypeDefinition returnType;
 
     @Override
     public String getName() {

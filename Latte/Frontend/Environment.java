@@ -1,6 +1,9 @@
 package Latte.Frontend;
 
-import Latte.Definitions.*;
+import Latte.Definitions.BasicTypeDefinition;
+import Latte.Definitions.FunctionDeclaration;
+import Latte.Definitions.TypeDefinition;
+import Latte.Definitions.VariableDefinition;
 import Latte.Exceptions.TypeCheckException;
 
 import java.util.*;
@@ -34,7 +37,7 @@ public class Environment {
                     Collections.emptyList(),
                     null,
                     BasicTypeDefinition.STRING
-                    )
+            )
     );
 
     public Map<String, TypeDefinition> declaredTypes;

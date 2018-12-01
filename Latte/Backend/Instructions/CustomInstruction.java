@@ -1,6 +1,6 @@
 package Latte.Backend.Instructions;
 
-public class CustomInstruction implements  AssemblyInstruction {
+public class CustomInstruction implements AssemblyInstruction {
     public String instruction;
 
     public CustomInstruction(String instruction) {

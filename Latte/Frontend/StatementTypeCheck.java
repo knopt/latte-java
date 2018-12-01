@@ -1,13 +1,16 @@
 package Latte.Frontend;
 
 import Latte.Absyn.*;
-import Latte.Definitions.*;
+import Latte.Definitions.ArrayTypeDefinition;
+import Latte.Definitions.BasicTypeDefinition;
+import Latte.Definitions.CallableDeclaration;
+import Latte.Definitions.TypeDefinition;
 import Latte.Exceptions.IllegalTypeException;
 import Latte.Exceptions.InternalStateException;
 import Latte.Exceptions.TypeCheckException;
 
-import static Latte.Frontend.TypeUtils.getVariableType;
 import static Latte.Frontend.ExpressionTypeCheck.typeCheckExpr;
+import static Latte.Frontend.TypeUtils.getVariableType;
 
 
 public class StatementTypeCheck {
@@ -234,7 +237,7 @@ public class StatementTypeCheck {
 
     private static Boolean stmtReturns(Stmt stmt) {
         return stmt.match(
-                (x) -> false, StatementTypeCheck::stmtReturns,  (x) -> false, (x) -> false, (x) -> false, (x) -> false,
+                (x) -> false, StatementTypeCheck::stmtReturns, (x) -> false, (x) -> false, (x) -> false, (x) -> false,
                 (x) -> true, (x) -> true,
                 StatementTypeCheck::stmtReturns, StatementTypeCheck::stmtReturns, StatementTypeCheck::stmtReturns,
                 (x) -> false, (x) -> false

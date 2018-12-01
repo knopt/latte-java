@@ -26,6 +26,10 @@ public class TypeCheck {
             throw new TypeCheckException("Missing main funtion");
         }
 
+        if (!BasicTypeDefinition.INT.equals(env.declaredFunctions.get("main").getReturnType())) {
+            throw new TypeCheckException("Main function has to return int");
+        }
+
         return env;
     }
 
@@ -244,7 +248,7 @@ public class TypeCheck {
 
         if (!interfaceTypeDefinition.isImplementedBy(classTypeDefinition)) {
             throw new TypeCheckException("Class " + classTypeDefinition.getName() + " doesn't implement all of interface "
-                + interfaceTypeDefinition.getName() + " methods", classDecl.line_num, classDecl.col_num);
+                    + interfaceTypeDefinition.getName() + " methods", classDecl.line_num, classDecl.col_num);
         }
 
         classTypeDefinition.addInterface(interfaceTypeDefinition);

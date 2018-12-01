@@ -7,8 +7,8 @@ import Latte.Exceptions.TypeCheckException;
 
 import java.util.Arrays;
 
-import static Latte.Frontend.TypeUtils.validateTypes;
 import static Latte.Frontend.TypeUtils.getType;
+import static Latte.Frontend.TypeUtils.validateTypes;
 
 public class ExpressionTypeCheck {
 
@@ -81,7 +81,7 @@ public class ExpressionTypeCheck {
         if (callableDeclaration.isMethod()) {
             CallableDeclaration callable;
             if (callableDeclaration.getCallerType().isClassType()) {
-                callable =  callableDeclaration.getCallerType().getClassDefinition().getCallableDeclaration(eApp.ident_, eApp.line_num, eApp.col_num);
+                callable = callableDeclaration.getCallerType().getClassDefinition().getCallableDeclaration(eApp.ident_, eApp.line_num, eApp.col_num);
             } else {
                 callable = callableDeclaration.getCallerType().getInterfaceDefinition().getCallableDeclaration(eApp.ident_, eApp.line_num, eApp.col_num);
             }
@@ -181,8 +181,8 @@ public class ExpressionTypeCheck {
         // check they can be added
         validateTypes(
                 Arrays.asList(
-                    BasicTypeDefinition.INT,
-                    BasicTypeDefinition.STRING
+                        BasicTypeDefinition.INT,
+                        BasicTypeDefinition.STRING
                 ),
                 exprType1, add.line_num, add.col_num);
 
@@ -288,7 +288,7 @@ public class ExpressionTypeCheck {
 
     private static void validateCallablesArgumentsMatch(CallableDeclaration callable, ListExpr listExpr, Scope scope, CallableDeclaration callableDeclaration, int lineNumber, int colNumber) {
         if (callable.getArgumentList().size() != listExpr.size()) {
-            throw new TypeCheckException("Number of method " + callable.getName() + " arguments doesn't match. Expected " +  callable.getArgumentList().size() + ", got " + listExpr.size());
+            throw new TypeCheckException("Number of method " + callable.getName() + " arguments doesn't match. Expected " + callable.getArgumentList().size() + ", got " + listExpr.size());
         }
 
         for (int i = 0; i < callable.getArgumentList().size(); i++) {
