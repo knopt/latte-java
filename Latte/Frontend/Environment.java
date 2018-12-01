@@ -7,33 +7,33 @@ import java.util.*;
 
 public class Environment {
     public static List<TypeDefinition> basicTypes = Arrays.asList(
-            new BasicTypeDefinition(BasicTypeName.INT),
-            new BasicTypeDefinition(BasicTypeName.BOOLEAN),
-            new BasicTypeDefinition(BasicTypeName.STRING),
-            new BasicTypeDefinition(BasicTypeName.VOID)
+            BasicTypeDefinition.INT,
+            BasicTypeDefinition.BOOLEAN,
+            BasicTypeDefinition.STRING,
+            BasicTypeDefinition.VOID
     );
 
     public static List<FunctionDeclaration> basicFunctions = Arrays.asList(
             new FunctionDeclaration(
                     "printInt",
-                    Arrays.asList(new VariableDefinition("x", new BasicTypeDefinition(BasicTypeName.INT))),
+                    Arrays.asList(new VariableDefinition("x", BasicTypeDefinition.INT)),
                     null,
-                    new BasicTypeDefinition(BasicTypeName.VOID)),
+                    BasicTypeDefinition.VOID),
             new FunctionDeclaration(
                     "printString",
-                    Arrays.asList(new VariableDefinition("x", new BasicTypeDefinition(BasicTypeName.STRING))),
+                    Arrays.asList(new VariableDefinition("x", BasicTypeDefinition.STRING)),
                     null,
-                    new BasicTypeDefinition(BasicTypeName.VOID)),
+                    BasicTypeDefinition.VOID),
             new FunctionDeclaration(
                     "readInt",
                     Collections.emptyList(),
                     null,
-                    new BasicTypeDefinition(BasicTypeName.INT)),
+                    BasicTypeDefinition.INT),
             new FunctionDeclaration(
                     "readString",
                     Collections.emptyList(),
                     null,
-                    new BasicTypeDefinition(BasicTypeName.STRING)
+                    BasicTypeDefinition.STRING
                     )
     );
 

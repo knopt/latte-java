@@ -151,8 +151,8 @@ public class TypeCheck {
 
     public static MethodDeclaration getMethodDefinitionFromDMth(Dmth dMth, TypeDefinition callerType) {
         TypeDefinition returnType = dMth.type_.match(
-                TypeCheck::getType,
-                TypeCheck::getType
+                TypeUtils::getType,
+                TypeUtils::getType
         );
 
         String methodName = dMth.ident_;
@@ -161,7 +161,7 @@ public class TypeCheck {
                 (arg) -> arg.match(TypeCheck::getVariable)
         ).collect(Collectors.toList());
 
-        if (arguments.stream().anyMatch((var) -> new BasicTypeDefinition(BasicTypeName.VOID).equals(var.getType()))) {
+        if (arguments.stream().anyMatch((var) -> BasicTypeDefinition.VOID.equals(var.getType()))) {
             throw new TypeCheckException("Function argument can't be of type void", dMth.line_num, dMth.col_num);
         }
 
@@ -171,8 +171,8 @@ public class TypeCheck {
 
     public static FunctionDeclaration gatherFunctionsDefinitions(FnDef fnDef) {
         TypeDefinition returnType = fnDef.type_.match(
-                TypeCheck::getType,
-                TypeCheck::getType
+                TypeUtils::getType,
+                TypeUtils::getType
         );
 
         String functionName = fnDef.ident_;
@@ -181,64 +181,17 @@ public class TypeCheck {
                 (arg) -> arg.match(TypeCheck::getVariable)
         ).collect(Collectors.toList());
 
-        if (arguments.stream().anyMatch((var) -> new BasicTypeDefinition(BasicTypeName.VOID).equals(var.getType()))) {
+        if (arguments.stream().anyMatch((var) -> BasicTypeDefinition.VOID.equals(var.getType()))) {
             throw new TypeCheckException("Function argument can't be of type void", fnDef.line_num, fnDef.col_num);
         }
 
         return new FunctionDeclaration(functionName, arguments, fnDef.block_, returnType);
     }
 
-    public static TypeDefinition getType(ArrayType arrayType) {
-        String typeName = arrayType.typename_.match(
-                TypeCheck::getTypeName,
-                TypeCheck::getTypeName
-        );
-
-
-        if (!env.declaredTypes.containsKey(typeName)) {
-            throw new IllegalTypeException(typeName, arrayType.line_num, arrayType.col_num);
-        }
-
-        TypeDefinition arrayedType = env.declaredTypes.get(typeName);
-
-        return new ArrayTypeDefinition(arrayedType);
-    }
-
-    public static TypeDefinition getType(TypeName typeNameE, int lineNum, int colNum) {
-        String typeName = typeNameE.match(
-                TypeCheck::getTypeName,
-                TypeCheck::getTypeName
-        );
-
-
-        if (!env.declaredTypes.containsKey(typeName)) {
-            throw new IllegalTypeException(typeName, lineNum, colNum);
-        }
-
-        return env.declaredTypes.get(typeName);
-    }
-
-    public static TypeDefinition getType(TypeNameS typeNameS) {
-        return getType(typeNameS.typename_, typeNameS.line_num, typeNameS.col_num);
-    }
-
-    public static String getTypeName(BuiltIn builtIn) {
-        return builtIn.basictype_.match(
-                (ignored) -> BasicTypeName.INT.toString().toLowerCase(),
-                (ignored) -> BasicTypeName.STRING.toString().toLowerCase(),
-                (ignored) -> BasicTypeName.BOOLEAN.toString().toLowerCase(),
-                (ignored) -> BasicTypeName.VOID.toString().toLowerCase()
-        );
-    }
-
-    public static String getTypeName(ClassName className) {
-        return className.ident_;
-    }
-
     public static VariableDefinition getVariable(ArgTI arg) {
         TypeDefinition argumentType = arg.type_.match(
-                TypeCheck::getType,
-                TypeCheck::getType
+                TypeUtils::getType,
+                TypeUtils::getType
         );
 
         return new VariableDefinition(arg.ident_, argumentType);
@@ -325,8 +278,8 @@ public class TypeCheck {
         ClassTypeDefinition classDefinition = typeDefinition.getClassDefinition();
 
         TypeDefinition fieldType = var.type_.match(
-                TypeCheck::getType,
-                TypeCheck::getType
+                TypeUtils::getType,
+                TypeUtils::getType
         );
 
         for (Item i : var.listitem_) {

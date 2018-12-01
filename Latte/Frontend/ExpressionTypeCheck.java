@@ -6,10 +6,9 @@ import Latte.Exceptions.IllegalTypeException;
 import Latte.Exceptions.TypeCheckException;
 
 import java.util.Arrays;
-import java.util.List;
 
-import static Latte.Frontend.StatementTypeCheck.validateTypes;
-import static Latte.Frontend.TypeCheck.getType;
+import static Latte.Frontend.TypeUtils.validateTypes;
+import static Latte.Frontend.TypeUtils.getType;
 
 public class ExpressionTypeCheck {
 
@@ -39,39 +38,20 @@ public class ExpressionTypeCheck {
         );
     }
 
-    public static TypeDefinition getVariableType(String varName, Scope scope, CallableDeclaration callableDeclaration, int lineNum, int colNum) {
-        TypeCheckException e;
-
-        try {
-            return scope.getVariable(varName, lineNum, colNum).getType();
-        } catch (TypeCheckException exception) {
-            e = exception;
-        }
-
-        if (callableDeclaration.isMethod() && callableDeclaration.getCallerType().isClassType()) {
-            ClassTypeDefinition classTypeDefinition = callableDeclaration.getCallerType().getClassDefinition();
-            if (classTypeDefinition.fields.containsKey(varName)) {
-                return classTypeDefinition.fields.get(varName).getType();
-            }
-        }
-
-        throw e;
-    }
-
     public static TypeDefinition typeCheckEVar(EVar var, Scope scope, CallableDeclaration callableDeclaration) {
-        return getVariableType(var.ident_, scope, callableDeclaration, var.line_num, var.col_num);
+        return TypeUtils.getVariableType(var.ident_, scope, callableDeclaration, var.line_num, var.col_num);
     }
 
     public static TypeDefinition typeCheckELitInt() {
-        return new BasicTypeDefinition(BasicTypeName.INT);
+        return BasicTypeDefinition.INT;
     }
 
     public static TypeDefinition typeCheckELitTrue() {
-        return new BasicTypeDefinition(BasicTypeName.BOOLEAN);
+        return BasicTypeDefinition.BOOLEAN;
     }
 
     public static TypeDefinition typeCheckELitFalse() {
-        return new BasicTypeDefinition(BasicTypeName.BOOLEAN);
+        return BasicTypeDefinition.BOOLEAN;
     }
 
     public static TypeDefinition typeCheckThis(EThis eThis, CallableDeclaration callableDeclaration) {
@@ -116,7 +96,7 @@ public class ExpressionTypeCheck {
     }
 
     public static TypeDefinition typeCheckString(EString str) {
-        return new BasicTypeDefinition(BasicTypeName.STRING);
+        return BasicTypeDefinition.STRING;
     }
 
     public static TypeDefinition typeCheckConstr(EConstr constr, Scope scope) {
@@ -133,8 +113,8 @@ public class ExpressionTypeCheck {
 
     public static TypeDefinition typeCheckArrConstr(EArrConstr arrConstr, Scope scope, CallableDeclaration callableDeclaration) {
         String elemTypeName = arrConstr.typename_.match(
-                TypeCheck::getTypeName,
-                TypeCheck::getTypeName
+                TypeUtils::getTypeName,
+                TypeUtils::getTypeName
         );
 
         if (!scope.globalEnvironment.declaredTypes.containsKey(elemTypeName)) {
@@ -146,7 +126,7 @@ public class ExpressionTypeCheck {
 
         TypeDefinition indexType = typeCheckExpr(arrConstr.expr_, scope, callableDeclaration);
 
-        validateTypes(new BasicTypeDefinition(BasicTypeName.INT), indexType, arrConstr.line_num, arrConstr.line_num);
+        validateTypes(BasicTypeDefinition.INT, indexType, arrConstr.line_num, arrConstr.line_num);
 
         return arrayType;
     }
@@ -160,7 +140,7 @@ public class ExpressionTypeCheck {
 
         TypeDefinition indexType = typeCheckExpr(arrAcc.expr_2, scope, callableDeclaration);
 
-        validateTypes(new BasicTypeDefinition(BasicTypeName.INT), indexType, arrAcc.line_num, arrAcc.line_num);
+        validateTypes(BasicTypeDefinition.INT, indexType, arrAcc.line_num, arrAcc.line_num);
 
         return arrayType.getArrayTypeDefinition().getInnerTypeDefinition();
     }
@@ -168,28 +148,28 @@ public class ExpressionTypeCheck {
     public static TypeDefinition typeCheckNeg(Neg neg, Scope scope, CallableDeclaration callableDeclaration) {
         TypeDefinition exprType = typeCheckExpr(neg.expr_, scope, callableDeclaration);
 
-        validateTypes(new BasicTypeDefinition(BasicTypeName.INT), exprType, neg.line_num, neg.col_num);
+        validateTypes(BasicTypeDefinition.INT, exprType, neg.line_num, neg.col_num);
 
-        return new BasicTypeDefinition(BasicTypeName.INT);
+        return BasicTypeDefinition.INT;
     }
 
     public static TypeDefinition typeCheckNot(Not not, Scope scope, CallableDeclaration callableDeclaration) {
         TypeDefinition exprType = typeCheckExpr(not.expr_, scope, callableDeclaration);
 
-        validateTypes(new BasicTypeDefinition(BasicTypeName.BOOLEAN), exprType, not.line_num, not.col_num);
+        validateTypes(BasicTypeDefinition.BOOLEAN, exprType, not.line_num, not.col_num);
 
-        return new BasicTypeDefinition(BasicTypeName.BOOLEAN);
+        return BasicTypeDefinition.BOOLEAN;
     }
 
     public static TypeDefinition typeCheckMul(EMul mul, Scope scope, CallableDeclaration callableDeclaration) {
         TypeDefinition exprType1 = typeCheckExpr(mul.expr_1, scope, callableDeclaration);
         TypeDefinition exprType2 = typeCheckExpr(mul.expr_2, scope, callableDeclaration);
 
-        validateTypes(new BasicTypeDefinition(BasicTypeName.INT), exprType1, mul.line_num, mul.col_num);
-        validateTypes(new BasicTypeDefinition(BasicTypeName.INT), exprType2, mul.line_num, mul.col_num);
+        validateTypes(BasicTypeDefinition.INT, exprType1, mul.line_num, mul.col_num);
+        validateTypes(BasicTypeDefinition.INT, exprType2, mul.line_num, mul.col_num);
 
 
-        return new BasicTypeDefinition(BasicTypeName.INT);
+        return BasicTypeDefinition.INT;
     }
 
     public static TypeDefinition typeCheckAdd(EAdd add, Scope scope, CallableDeclaration callableDeclaration) {
@@ -201,8 +181,8 @@ public class ExpressionTypeCheck {
         // check they can be added
         validateTypes(
                 Arrays.asList(
-                    new BasicTypeDefinition(BasicTypeName.INT),
-                    new BasicTypeDefinition(BasicTypeName.STRING)
+                    BasicTypeDefinition.INT,
+                    BasicTypeDefinition.STRING
                 ),
                 exprType1, add.line_num, add.col_num);
 
@@ -217,37 +197,37 @@ public class ExpressionTypeCheck {
 
 
         rel.relop_.match(
-                (ignored) -> validateTypes(new BasicTypeDefinition(BasicTypeName.INT), exprType1, rel.line_num, rel.col_num),
-                (ignored) -> validateTypes(new BasicTypeDefinition(BasicTypeName.INT), exprType1, rel.line_num, rel.col_num),
-                (ignored) -> validateTypes(new BasicTypeDefinition(BasicTypeName.INT), exprType1, rel.line_num, rel.col_num),
-                (ignored) -> validateTypes(new BasicTypeDefinition(BasicTypeName.INT), exprType1, rel.line_num, rel.col_num),
+                (ignored) -> validateTypes(BasicTypeDefinition.INT, exprType1, rel.line_num, rel.col_num),
+                (ignored) -> validateTypes(BasicTypeDefinition.INT, exprType1, rel.line_num, rel.col_num),
+                (ignored) -> validateTypes(BasicTypeDefinition.INT, exprType1, rel.line_num, rel.col_num),
+                (ignored) -> validateTypes(BasicTypeDefinition.INT, exprType1, rel.line_num, rel.col_num),
                 (ignored) -> null,
                 (ignored) -> null
         );
 
-        return new BasicTypeDefinition(BasicTypeName.BOOLEAN);
+        return BasicTypeDefinition.BOOLEAN;
     }
 
     public static TypeDefinition typeCheckAnd(EAnd and, Scope scope, CallableDeclaration callableDeclaration) {
         TypeDefinition exprType1 = typeCheckExpr(and.expr_1, scope, callableDeclaration);
         TypeDefinition exprType2 = typeCheckExpr(and.expr_2, scope, callableDeclaration);
 
-        validateTypes(new BasicTypeDefinition(BasicTypeName.BOOLEAN), exprType1, and.line_num, and.col_num);
-        validateTypes(new BasicTypeDefinition(BasicTypeName.BOOLEAN), exprType2, and.line_num, and.col_num);
+        validateTypes(BasicTypeDefinition.BOOLEAN, exprType1, and.line_num, and.col_num);
+        validateTypes(BasicTypeDefinition.BOOLEAN, exprType2, and.line_num, and.col_num);
 
 
-        return new BasicTypeDefinition(BasicTypeName.BOOLEAN);
+        return BasicTypeDefinition.BOOLEAN;
     }
 
     public static TypeDefinition typeCheckOr(EOr eOr, Scope scope, CallableDeclaration callableDeclaration) {
         TypeDefinition exprType1 = typeCheckExpr(eOr.expr_1, scope, callableDeclaration);
         TypeDefinition exprType2 = typeCheckExpr(eOr.expr_2, scope, callableDeclaration);
 
-        validateTypes(new BasicTypeDefinition(BasicTypeName.BOOLEAN), exprType1, eOr.line_num, eOr.col_num);
-        validateTypes(new BasicTypeDefinition(BasicTypeName.BOOLEAN), exprType2, eOr.line_num, eOr.col_num);
+        validateTypes(BasicTypeDefinition.BOOLEAN, exprType1, eOr.line_num, eOr.col_num);
+        validateTypes(BasicTypeDefinition.BOOLEAN, exprType2, eOr.line_num, eOr.col_num);
 
 
-        return new BasicTypeDefinition(BasicTypeName.BOOLEAN);
+        return BasicTypeDefinition.BOOLEAN;
     }
 
     public static TypeDefinition typeCheckObjAcc(EObjAcc objAcc, Scope scope, CallableDeclaration callableDeclaration) {
@@ -299,7 +279,7 @@ public class ExpressionTypeCheck {
             return castedToType;
         }
 
-        if (new BasicTypeDefinition(BasicTypeName.VOID).equals(castedToType.isBasicType())) {
+        if (BasicTypeDefinition.VOID.equals(castedToType.isBasicType())) {
             return castedToType;
         }
 
@@ -320,6 +300,19 @@ public class ExpressionTypeCheck {
     }
 
 
+    static Boolean exprTriviallyTrue(Expr expr) {
+        return expr.match(
+                (x) -> false, (x) -> false, (x) -> true, (x) -> false, (x) -> false, (x) -> false, (x) -> false,
+                (x) -> false, (x) -> false, (x) -> false, (x) -> false, (x) -> false, (x) -> false, (x) -> false,
+                (x) -> false, (x) -> false, (x) -> false, (x) -> false, (x) -> false, (x) -> false
+        );
+    }
 
-
+    static Boolean exprTriviallyFalse(Expr expr) {
+        return expr.match(
+                (x) -> false, (x) -> false, (x) -> false, (x) -> true, (x) -> false, (x) -> false, (x) -> false,
+                (x) -> false, (x) -> false, (x) -> false, (x) -> false, (x) -> false, (x) -> false, (x) -> false,
+                (x) -> false, (x) -> false, (x) -> false, (x) -> false, (x) -> false, (x) -> false
+        );
+    }
 }

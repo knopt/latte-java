@@ -5,11 +5,8 @@ import Latte.Definitions.*;
 import Latte.Exceptions.IllegalTypeException;
 import Latte.Exceptions.InternalStateException;
 import Latte.Exceptions.TypeCheckException;
-import Latte.Exceptions.TypeMismatchException;
 
-import java.util.List;
-
-import static Latte.Frontend.ExpressionTypeCheck.getVariableType;
+import static Latte.Frontend.TypeUtils.getVariableType;
 import static Latte.Frontend.ExpressionTypeCheck.typeCheckExpr;
 
 
@@ -56,8 +53,8 @@ public class StatementTypeCheck {
 
     public static Boolean typeCheckDecl(Decl decl, Scope scope, CallableDeclaration callableDeclaration) {
         TypeDefinition type = decl.type_.match(
-                TypeCheck::getType,
-                TypeCheck::getType
+                TypeUtils::getType,
+                TypeUtils::getType
         );
 
         for (Item item : decl.listitem_) {
@@ -73,7 +70,7 @@ public class StatementTypeCheck {
     public static Boolean typeCheckInit(Init init, TypeDefinition itemType, Scope scope, CallableDeclaration callableDeclaration) {
         TypeDefinition valueType = typeCheckExpr(init.expr_, scope, callableDeclaration);
 
-        validateTypes(itemType, valueType, init.line_num, init.col_num);
+        TypeUtils.validateTypes(itemType, valueType, init.line_num, init.col_num);
 
         scope.declareVariable(init.ident_, itemType, init.line_num, init.col_num);
 
@@ -89,13 +86,13 @@ public class StatementTypeCheck {
     public static Boolean typeCheckAss(Ass ass, Scope scope, CallableDeclaration callableDeclaration) {
         TypeDefinition lhs = getLhsType(ass.lhs_, scope, callableDeclaration);
 
-        if (new BasicTypeDefinition(BasicTypeName.VOID).equals(lhs)) {
+        if (BasicTypeDefinition.VOID.equals(lhs)) {
             throw new TypeCheckException("Void type is not assignable", ass.line_num, ass.col_num);
         }
 
         TypeDefinition exprType = typeCheckExpr(ass.expr_, scope, callableDeclaration);
 
-        validateTypes(lhs, exprType, ass.line_num, ass.col_num);
+        TypeUtils.validateTypes(lhs, exprType, ass.line_num, ass.col_num);
 
         return true;
     }
@@ -116,7 +113,7 @@ public class StatementTypeCheck {
 
         TypeDefinition indexExprType = typeCheckExpr(elem.expr_, scope, callableDeclaration);
 
-        validateTypes(new BasicTypeDefinition(BasicTypeName.INT), indexExprType, elem.line_num, elem.col_num);
+        TypeUtils.validateTypes(BasicTypeDefinition.INT, indexExprType, elem.line_num, elem.col_num);
 
         return typeDefinition.getArrayTypeDefinition().getInnerTypeDefinition();
     }
@@ -124,7 +121,7 @@ public class StatementTypeCheck {
     public static Boolean typeCheckIncr(Incr incr, Scope scope, CallableDeclaration callableDeclaration) {
         TypeDefinition lhsType = getLhsType(incr.lhs_, scope, callableDeclaration);
 
-        validateTypes(new BasicTypeDefinition(BasicTypeName.INT), lhsType, incr.line_num, incr.col_num);
+        TypeUtils.validateTypes(BasicTypeDefinition.INT, lhsType, incr.line_num, incr.col_num);
 
         return true;
     }
@@ -132,7 +129,7 @@ public class StatementTypeCheck {
     public static Boolean typeCheckDecr(Decr decr, Scope scope, CallableDeclaration callableDeclaration) {
         TypeDefinition lhsType = getLhsType(decr.lhs_, scope, callableDeclaration);
 
-        validateTypes(new BasicTypeDefinition(BasicTypeName.INT), lhsType, decr.line_num, decr.col_num);
+        TypeUtils.validateTypes(BasicTypeDefinition.INT, lhsType, decr.line_num, decr.col_num);
 
         return true;
     }
@@ -140,13 +137,13 @@ public class StatementTypeCheck {
     public static Boolean typeCheckRet(Ret ret, Scope scope, CallableDeclaration callableDeclaration) {
         TypeDefinition retType = typeCheckExpr(ret.expr_, scope, callableDeclaration);
 
-        validateTypes(retType, callableDeclaration.getReturnType(), ret.line_num, ret.col_num);
+        TypeUtils.validateTypes(retType, callableDeclaration.getReturnType(), ret.line_num, ret.col_num);
 
         return true;
     }
 
     public static Boolean typeCheckVRet(VRet vret, CallableDeclaration callableDeclaration) {
-        validateTypes(new BasicTypeDefinition(BasicTypeName.VOID), callableDeclaration.getReturnType(), vret.line_num, vret.col_num);
+        TypeUtils.validateTypes(BasicTypeDefinition.VOID, callableDeclaration.getReturnType(), vret.line_num, vret.col_num);
 
         return true;
     }
@@ -154,7 +151,7 @@ public class StatementTypeCheck {
     public static Boolean typeCheckCond(Cond cond, Scope scope, CallableDeclaration callableDeclaration) {
         TypeDefinition condType = typeCheckExpr(cond.expr_, scope, callableDeclaration);
 
-        validateTypes(new BasicTypeDefinition(BasicTypeName.BOOLEAN), condType, cond.line_num, cond.col_num);
+        TypeUtils.validateTypes(BasicTypeDefinition.BOOLEAN, condType, cond.line_num, cond.col_num);
 
         typeCheckStatement(cond.stmt_, scope, callableDeclaration);
 
@@ -164,7 +161,7 @@ public class StatementTypeCheck {
     public static Boolean typeCheckCondElse(CondElse condElse, Scope scope, CallableDeclaration callableDeclaration) {
         TypeDefinition condType = typeCheckExpr(condElse.expr_, scope, callableDeclaration);
 
-        validateTypes(new BasicTypeDefinition(BasicTypeName.BOOLEAN), condType, condElse.line_num, condElse.col_num);
+        TypeUtils.validateTypes(BasicTypeDefinition.BOOLEAN, condType, condElse.line_num, condElse.col_num);
 
         typeCheckStatement(condElse.stmt_1, scope, callableDeclaration);
         typeCheckStatement(condElse.stmt_2, scope, callableDeclaration);
@@ -175,7 +172,7 @@ public class StatementTypeCheck {
     public static Boolean typeCheckWhile(While sWhile, Scope scope, CallableDeclaration callableDeclaration) {
         TypeDefinition condType = typeCheckExpr(sWhile.expr_, scope, callableDeclaration);
 
-        validateTypes(new BasicTypeDefinition(BasicTypeName.BOOLEAN), condType, sWhile.line_num, sWhile.col_num);
+        TypeUtils.validateTypes(BasicTypeDefinition.BOOLEAN, condType, sWhile.line_num, sWhile.col_num);
 
         typeCheckStatement(sWhile.stmt_, scope, callableDeclaration);
 
@@ -198,8 +195,8 @@ public class StatementTypeCheck {
         ArrayTypeDefinition arrayType = exprType.getArrayTypeDefinition();
 
         String elemTypeName = forArr.typename_.match(
-                TypeCheck::getTypeName,
-                TypeCheck::getTypeName
+                TypeUtils::getTypeName,
+                TypeUtils::getTypeName
         );
 
         if (!scope.globalEnvironment.declaredTypes.containsKey(elemTypeName)) {
@@ -208,7 +205,7 @@ public class StatementTypeCheck {
 
         TypeDefinition elemType = scope.globalEnvironment.declaredTypes.get(elemTypeName);
 
-        validateTypes(elemType, arrayType.getInnerTypeDefinition(), forArr.line_num, forArr.col_num);
+        TypeUtils.validateTypes(elemType, arrayType.getInnerTypeDefinition(), forArr.line_num, forArr.col_num);
 
         Scope withElemScope = new Scope(scope);
         withElemScope.declareVariable(forArr.ident_, elemType, forArr.line_num, forArr.col_num);
@@ -235,22 +232,6 @@ public class StatementTypeCheck {
         return false;
     }
 
-    public static TypeDefinition validateTypes(TypeDefinition type1, TypeDefinition type2, int lineNum, int colNum) {
-        if (typesMatch(type1, type2)) {
-            return type1;
-        }
-
-        throw new TypeMismatchException(type1, type2, lineNum, colNum);
-    }
-
-    public static TypeDefinition validateTypes(List<BasicTypeDefinition> types, TypeDefinition type1, int lineNum, int colNum) {
-        if (types.stream().anyMatch((type) -> typesMatch(type1, type))) {
-            return type1;
-        }
-
-        throw new TypeMismatchException(types, type1, lineNum, colNum);
-    }
-
     private static Boolean stmtReturns(Stmt stmt) {
         return stmt.match(
                 (x) -> false, StatementTypeCheck::stmtReturns,  (x) -> false, (x) -> false, (x) -> false, (x) -> false,
@@ -265,18 +246,18 @@ public class StatementTypeCheck {
     }
 
     private static Boolean stmtReturns(Cond cond) {
-        Boolean exprTrue = exprTriviallyTrue(cond.expr_);
+        Boolean exprTrue = ExpressionTypeCheck.exprTriviallyTrue(cond.expr_);
 
         return exprTrue && stmtReturns(cond.stmt_);
     }
 
     private static Boolean stmtReturns(While sWhile) {
-        return exprTriviallyTrue(sWhile.expr_) && stmtReturns(sWhile.stmt_);
+        return ExpressionTypeCheck.exprTriviallyTrue(sWhile.expr_) && stmtReturns(sWhile.stmt_);
     }
 
     private static Boolean stmtReturns(CondElse cond) {
-        Boolean exprTrue = exprTriviallyTrue(cond.expr_);
-        Boolean exprFalse = exprTriviallyFalse(cond.expr_);
+        Boolean exprTrue = ExpressionTypeCheck.exprTriviallyTrue(cond.expr_);
+        Boolean exprFalse = ExpressionTypeCheck.exprTriviallyFalse(cond.expr_);
         Boolean ifReturns = stmtReturns(cond.stmt_1);
         Boolean elseReturns = stmtReturns(cond.stmt_2);
 
@@ -285,24 +266,8 @@ public class StatementTypeCheck {
                 ifReturns && elseReturns;
     }
 
-    private static Boolean exprTriviallyTrue(Expr expr) {
-        return expr.match(
-                (x) -> false, (x) -> false, (x) -> true, (x) -> false, (x) -> false, (x) -> false, (x) -> false,
-                (x) -> false, (x) -> false, (x) -> false, (x) -> false, (x) -> false, (x) -> false, (x) -> false,
-                (x) -> false, (x) -> false, (x) -> false, (x) -> false, (x) -> false, (x) -> false
-        );
-    }
-
-    private static Boolean exprTriviallyFalse(Expr expr) {
-        return expr.match(
-                (x) -> false, (x) -> false, (x) -> false, (x) -> true, (x) -> false, (x) -> false, (x) -> false,
-                (x) -> false, (x) -> false, (x) -> false, (x) -> false, (x) -> false, (x) -> false, (x) -> false,
-                (x) -> false, (x) -> false, (x) -> false, (x) -> false, (x) -> false, (x) -> false
-        );
-    }
-
     public static Boolean checkCallableReturns(BlockS block, CallableDeclaration callableDeclaration) {
-        if (new BasicTypeDefinition(BasicTypeName.VOID).equals(callableDeclaration.getReturnType())) {
+        if (BasicTypeDefinition.VOID.equals(callableDeclaration.getReturnType())) {
             return true;
         }
 

@@ -16,7 +16,7 @@ public class ArrayTypeDefinition implements TypeDefinition {
         }
         this.typeDefinition = td;
 
-        ClassFieldDeclaration lengthField = new ClassFieldDeclaration("length", new BasicTypeDefinition(BasicTypeName.INT));
+        ClassFieldDeclaration lengthField = new ClassFieldDeclaration("length", BasicTypeDefinition.INT);
         this.fields = new HashMap<>();
         this.fields.put(lengthField.fieldName, lengthField);
     }

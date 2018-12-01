@@ -3,6 +3,11 @@ package Latte.Definitions;
 import java.util.Objects;
 
 public class BasicTypeDefinition implements TypeDefinition, Arrayable {
+    public static BasicTypeDefinition INT = new BasicTypeDefinition(BasicTypeName.INT);
+    public static BasicTypeDefinition STRING = new BasicTypeDefinition(BasicTypeName.STRING);
+    public static BasicTypeDefinition VOID = new BasicTypeDefinition(BasicTypeName.VOID);
+    public static BasicTypeDefinition BOOLEAN = new BasicTypeDefinition(BasicTypeName.BOOLEAN);
+
     private BasicTypeName typeName;
 
     @Override
