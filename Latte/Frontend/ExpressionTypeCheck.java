@@ -87,11 +87,32 @@ public class ExpressionTypeCheck {
     }
 
     public static TypeDefinition typeCheckEApp(EApp eApp, Scope scope, CallableDeclaration callableDeclaration) {
-        FunctionDeclaration func = scope.globalEnvironment.getFunction(eApp.ident_, eApp.line_num, eApp.line_num);
+        TypeCheckException e;
 
-        validateCallablesArgumentsMatch(func, eApp.listexpr_, scope, callableDeclaration, eApp.line_num, eApp.col_num);
+        try {
+            FunctionDeclaration func = scope.globalEnvironment.getFunction(eApp.ident_, eApp.line_num, eApp.line_num);
 
-        return func.returnType;
+            validateCallablesArgumentsMatch(func, eApp.listexpr_, scope, callableDeclaration, eApp.line_num, eApp.col_num);
+            return func.getReturnType();
+        } catch (TypeCheckException ex) {
+            e = ex;
+        }
+
+        if (callableDeclaration.isMethod()) {
+            CallableDeclaration callable;
+            if (callableDeclaration.getCallerType().isClassType()) {
+                callable =  callableDeclaration.getCallerType().getClassDefinition().getCallableDeclaration(eApp.ident_, eApp.line_num, eApp.col_num);
+            } else {
+                callable = callableDeclaration.getCallerType().getInterfaceDefinition().getCallableDeclaration(eApp.ident_, eApp.line_num, eApp.col_num);
+            }
+
+            validateCallablesArgumentsMatch(callable, eApp.listexpr_, scope, callableDeclaration, eApp.line_num, eApp.col_num);
+
+            return callable.getReturnType();
+        }
+
+
+        throw e;
     }
 
     public static TypeDefinition typeCheckString(EString str) {
