@@ -4,6 +4,10 @@ bnfc
 
 .idea
 
+simple
+simple.o
+simple.asm
+
 # Compiled class file
 Latte/**/*.class
 Latte/**/*.bak
