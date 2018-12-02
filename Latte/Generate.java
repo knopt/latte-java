@@ -32,16 +32,16 @@ public class Generate {
         /* Other options are: */
         /* not available. */
         Latte.Absyn.Program ast = p.pProgram();
-//    System.out.println();
-//    System.out.println("Parse Succesful!");
-//    System.out.println();
-//    System.out.println("[Abstract Syntax]");
-//    System.out.println();
-//    System.out.println(PrettyPrinter.show(ast));
-//    System.out.println();
-//    System.out.println("[Linearized Tree]");
-//    System.out.println();
-//    System.out.println(PrettyPrinter.print(ast));
+//        System.err.println();
+//        System.err.println("Parse Succesful!");
+//        System.err.println();
+//        System.err.println("[Abstract Syntax]");
+//        System.err.println();
+//        System.err.println(PrettyPrinter.show(ast));
+//        System.err.println();
+//        System.err.println("[Linearized Tree]");
+//        System.err.println();
+//        System.err.println(PrettyPrinter.print(ast));
         return ast;
     }
 

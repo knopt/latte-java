@@ -50,6 +50,7 @@ public class Compile {
     }
 
     public void generateFunction(FunctionDeclaration func) {
+        addInstructions(new CustomInstruction("; code for function " + func.getName()));
         addInstructions(new Label(func.getName()));
         func.getMethodBody().match(
                 null,
