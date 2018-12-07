@@ -274,8 +274,16 @@ public class ExpressionTypeCheck {
 
         TypeDefinition castedToType = getType(cast.typename_, cast.line_num, cast.col_num);
 
+        if (castedToType.equals(castedType)) {
+            return castedToType;
+        }
+
         if (castedToType.isClassType()) {
             validateTypes(new NullTypeDefinition(), castedType, cast.line_num, cast.col_num);
+            return castedToType;
+        }
+
+        if (castedToType.equals(BasicTypeDefinition.INT) && castedType.equals(BasicTypeDefinition.BOOLEAN)) {
             return castedToType;
         }
 

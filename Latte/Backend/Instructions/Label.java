@@ -7,6 +7,9 @@ public class Label implements AssemblyInstruction {
         this.labelName = labelName;
     }
 
+    public String getLabelName() {
+        return labelName;
+    }
 
     @Override
     public String yield() {
