@@ -14,14 +14,15 @@ import java.util.Collections;
 import java.util.List;
 
 import static Latte.Backend.CompileExpression.generateExpr;
+import static Latte.Backend.Instructions.ConstantUtils.WORD_SIZE;
 import static Latte.Frontend.TypeUtils.getType;
 
 public class CompileStatement {
 
     public static List<AssemblyInstruction> generateStmt(Stmt stmt, BackendScope scope) {
         return stmt.match(
-                (x) -> notImplemented(x),
-                (x) -> notImplemented(x),
+                (empty) -> new ArrayList<>(),
+                (bStmt) -> generateBStmt(bStmt, scope),
                 (decl) -> generateDecl(decl, scope),
                 (ass) -> generateAss(ass, scope),
                 (x) -> notImplemented(x),
@@ -57,6 +58,40 @@ public class CompileStatement {
         return instructions;
     }
 
+    public static List<AssemblyInstruction> generateBStmt(BStmt bStmt, BackendScope oldScope) {
+        BackendScope scope = new BackendScope(oldScope);
+
+        List<AssemblyInstruction> instructions = new ArrayList<>();
+
+        instructions.add(new Comment(""));
+        instructions.add(new Comment("block"));
+
+        instructions.addAll(bStmt.block_.match(
+                (blockS) -> generateBlockS(blockS, scope)
+        ));
+
+        int offset = oldScope.getNumberofVariables() * WORD_SIZE;
+
+        instructions.add(new MovInstruction(Register.RSP, Register.RBP));
+        instructions.add(new SubInstruction(Register.RSP, YieldUtils.number(offset)));
+
+        instructions.add(new Comment(""));
+        instructions.add(new Comment("end block"));
+
+        return instructions;
+
+    }
+
+    public static List<AssemblyInstruction> generateBlockS(BlockS block, BackendScope scope) {
+        List<AssemblyInstruction> instructions = new ArrayList<>();
+
+        for (Stmt stmt : block.liststmt_) {
+            instructions.addAll(generateStmt(stmt, scope));
+        }
+
+        return instructions;
+    }
+
     public static List<AssemblyInstruction> generateAss(Ass ass, BackendScope scope) {
         List<AssemblyInstruction> instructions = new ArrayList<>();
 
@@ -74,7 +109,7 @@ public class CompileStatement {
     }
 
     public static List<AssemblyInstruction> generateVariableAss(VariableRawLhs var, String sourceRegister, BackendScope scope) {
-        int varOffset = scope.getVariable(var.ident_).getOffset();
+        int varOffset = scope.getVariable(var.ident_).getOffset() * WORD_SIZE * -1;
 
         AssemblyInstruction instruction = new MovInstruction(MemoryReference.getWithOffset(Register.RBP, varOffset), sourceRegister);
 

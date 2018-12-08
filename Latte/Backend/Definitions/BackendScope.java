@@ -19,6 +19,10 @@ public class BackendScope {
         return globalEnvironment;
     }
 
+    public int getNumberofVariables() {
+        return declaredVariables.size();
+    }
+
     public void declareVariable(String name, TypeDefinition type) {
         VariableCompilerInfo info = new VariableCompilerInfo(name, type, declaredVariables.size() + 1);
 
