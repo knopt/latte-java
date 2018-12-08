@@ -1,6 +1,9 @@
 package Latte.Backend;
 
 import Latte.Absyn.*;
+import Latte.Backend.Definitions.BackendScope;
+import Latte.Backend.Definitions.Register;
+import Latte.Backend.Definitions.VariableCompilerInfo;
 import Latte.Backend.Instructions.*;
 import Latte.Definitions.BasicTypeDefinition;
 import Latte.Definitions.TypeDefinition;
@@ -11,14 +14,15 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static Latte.Backend.Instructions.ConstantUtils.WORD_SIZE;
 import static Latte.Backend.LabelsGenerator.getNonceLabel;
 import static Latte.Frontend.TypeUtils.getType;
 
 public class CompileExpression {
 
-    public static List<AssemblyInstruction> generateExpr(Expr expr, String destRegister, String sourceRegister) {
+    public static List<AssemblyInstruction> generateExpr(Expr expr, String destRegister, String sourceRegister, BackendScope scope) {
         return expr.match(
-                (e) -> notImplemented(e),
+                (var) -> generateVar(var, destRegister, scope),
                 (eInt) -> generateInt(eInt, destRegister),
                 (e) -> generateTrue(destRegister),
                 (e) -> generateFalse(destRegister),
@@ -29,16 +33,24 @@ public class CompileExpression {
                 (e) -> notImplemented(e),
                 (e) -> notImplemented(e),
                 (e) -> notImplemented(e),
-                (neg) -> generateNeg(neg, destRegister, sourceRegister),
-                (not) -> generateNot(not, destRegister, sourceRegister),
-                (mul) -> generateMul(mul, destRegister, sourceRegister),
-                (add) -> generateAdd(add, destRegister, sourceRegister),
-                (rel) -> generateRel(rel, destRegister, sourceRegister),
-                (and) -> generateLazyAnd(and, destRegister, sourceRegister),
-                (eOr) -> generateLazyOr(eOr, destRegister, sourceRegister),
+                (neg) -> generateNeg(neg, destRegister, sourceRegister, scope),
+                (not) -> generateNot(not, destRegister, sourceRegister, scope),
+                (mul) -> generateMul(mul, destRegister, sourceRegister, scope),
+                (add) -> generateAdd(add, destRegister, sourceRegister, scope),
+                (rel) -> generateRel(rel, destRegister, sourceRegister, scope),
+                (and) -> generateLazyAnd(and, destRegister, sourceRegister, scope),
+                (eOr) -> generateLazyOr(eOr, destRegister, sourceRegister, scope),
                 (e) -> notImplemented(e),
-                (cast) -> generateCast(cast, destRegister, sourceRegister)
+                (cast) -> generateCast(cast, destRegister, sourceRegister, scope)
         );
+    }
+
+    public static List<AssemblyInstruction> generateVar(EVar var, String destRegister, BackendScope scope) {
+        VariableCompilerInfo varInfo = scope.getVariable(var.ident_);
+
+        int offset = varInfo.getOffset() * WORD_SIZE * -1;
+
+        return new ArrayList<>(Collections.singletonList(new MovInstruction(destRegister, MemoryReference.getWithOffset(Register.RBP, offset))));
     }
 
     public static List<AssemblyInstruction> generateInt(ELitInt eInt, String destRegister) {
@@ -56,8 +68,8 @@ public class CompileExpression {
         return new ArrayList<>(Collections.singletonList(mov));
     }
 
-    public static List<AssemblyInstruction> generateNeg(Neg neg, String destRegister, String sourceRegister) {
-        List<AssemblyInstruction> assemblyInstructions = generateExpr(neg.expr_, destRegister, sourceRegister);
+    public static List<AssemblyInstruction> generateNeg(Neg neg, String destRegister, String sourceRegister, BackendScope scope) {
+        List<AssemblyInstruction> assemblyInstructions = generateExpr(neg.expr_, destRegister, sourceRegister, scope);
         NegInstruction negInstr = new NegInstruction(destRegister);
 
         assemblyInstructions.add(negInstr);
@@ -65,8 +77,8 @@ public class CompileExpression {
         return assemblyInstructions;
     }
 
-    public static List<AssemblyInstruction> generateNot(Not not, String destRegister, String sourceRegister) {
-        List<AssemblyInstruction> assemblyInstructions = generateExpr(not.expr_, destRegister, sourceRegister);
+    public static List<AssemblyInstruction> generateNot(Not not, String destRegister, String sourceRegister, BackendScope scope) {
+        List<AssemblyInstruction> assemblyInstructions = generateExpr(not.expr_, destRegister, sourceRegister, scope);
 
         CompareInstruction cmpInstr = new CompareInstruction(sourceRegister, YieldUtils.number(0));
         MovInstruction movInstruction = new MovInstruction(sourceRegister, YieldUtils.number(0));
@@ -77,16 +89,16 @@ public class CompileExpression {
         return assemblyInstructions;
     }
 
-    public static List<AssemblyInstruction> generateAdd(EAdd add, String destRegister, String sourceRegister) {
-        List<AssemblyInstruction> instructions = generateExpr(add.expr_2, destRegister, sourceRegister);
+    public static List<AssemblyInstruction> generateAdd(EAdd add, String destRegister, String sourceRegister, BackendScope scope) {
+        List<AssemblyInstruction> instructions = generateExpr(add.expr_2, destRegister, sourceRegister, scope);
         instructions.add(new PushInstruction(Register.RAX));
 
-        instructions.addAll(generateExpr(add.expr_1, destRegister, sourceRegister));
+        instructions.addAll(generateExpr(add.expr_1, destRegister, sourceRegister, scope));
         instructions.add(new PopInstruction(Register.RCX));
 
         List<AssemblyInstruction> oppInstr = add.addop_.match(
-                (ignored) -> getPlusInstruction(Register.RAX, Register.RCX),
-                (ignored) -> getMinusInstruction(Register.RAX, Register.RCX)
+                (ignored) -> getPlusInstruction(Register.RAX, Register.RCX, scope),
+                (ignored) -> getMinusInstruction(Register.RAX, Register.RCX, scope)
         );
 
         instructions.addAll(oppInstr);
@@ -94,20 +106,20 @@ public class CompileExpression {
         return instructions;
     }
 
-    public static List<AssemblyInstruction> getMinusInstruction(String destRegister, String sourceRegister) {
+    public static List<AssemblyInstruction> getMinusInstruction(String destRegister, String sourceRegister, BackendScope scope) {
         return new ArrayList<>(Collections.singletonList(new SubInstruction(destRegister, sourceRegister)));
     }
 
-    public static List<AssemblyInstruction> getPlusInstruction(String destRegister, String sourceRegister) {
+    public static List<AssemblyInstruction> getPlusInstruction(String destRegister, String sourceRegister, BackendScope scope) {
         return new ArrayList<>(Collections.singletonList(new AddInstruction(destRegister, sourceRegister)));
 
     }
 
-    public static List<AssemblyInstruction> generateMul(EMul mul, String destRegister, String sourceRegister) {
+    public static List<AssemblyInstruction> generateMul(EMul mul, String destRegister, String sourceRegister, BackendScope scope) {
         List<AssemblyInstruction> instructions = new ArrayList<>();
 
-        List<AssemblyInstruction> instructions1 = generateExpr(mul.expr_1, destRegister, sourceRegister);
-        List<AssemblyInstruction> instructions2 = generateExpr(mul.expr_2, destRegister, sourceRegister);
+        List<AssemblyInstruction> instructions1 = generateExpr(mul.expr_1, destRegister, sourceRegister, scope);
+        List<AssemblyInstruction> instructions2 = generateExpr(mul.expr_2, destRegister, sourceRegister, scope);
 
         instructions.addAll(instructions2);
         instructions.add(new PushInstruction(Register.RAX));
@@ -116,9 +128,9 @@ public class CompileExpression {
         instructions.add(new PopInstruction(Register.RCX));
 
         List<AssemblyInstruction> oppInstr = mul.mulop_.match(
-                (ignored) -> generateMultiplyInstructions(Register.RAX, Register.RCX),
-                (ignored) -> generateDivideInstructions(Register.RAX, Register.RCX),
-                (ignored) -> generateModInstruction(Register.RAX, Register.RCX)
+                (ignored) -> generateMultiplyInstructions(Register.RAX, Register.RCX, scope),
+                (ignored) -> generateDivideInstructions(Register.RAX, Register.RCX, scope),
+                (ignored) -> generateModInstruction(Register.RAX, Register.RCX, scope)
         );
 
         instructions.addAll(oppInstr);
@@ -126,11 +138,11 @@ public class CompileExpression {
         return instructions;
     }
 
-    public static List<AssemblyInstruction> generateMultiplyInstructions(String destRegister, String sourceRegister) {
+    public static List<AssemblyInstruction> generateMultiplyInstructions(String destRegister, String sourceRegister, BackendScope scope) {
         return new ArrayList<>(Collections.singletonList(new MulInstruction(destRegister, sourceRegister)));
     }
 
-    public static List<AssemblyInstruction> generateDivideInstructions(String destRegsister, String sourceRegister) {
+    public static List<AssemblyInstruction> generateDivideInstructions(String destRegsister, String sourceRegister, BackendScope scope) {
         List<AssemblyInstruction> instructions = new ArrayList<>();
 
         if (!destRegsister.equals(Register.RAX)) {
@@ -147,8 +159,8 @@ public class CompileExpression {
         return instructions;
     }
 
-    public static List<AssemblyInstruction> generateModInstruction(String destRegister, String sourceRegister) {
-        List<AssemblyInstruction> instructions = generateDivideInstructions(destRegister, sourceRegister);
+    public static List<AssemblyInstruction> generateModInstruction(String destRegister, String sourceRegister, BackendScope scope) {
+        List<AssemblyInstruction> instructions = generateDivideInstructions(destRegister, sourceRegister, scope);
         instructions.add(
                 new MovInstruction(Register.RAX, Register.RDX)
         );
@@ -156,8 +168,8 @@ public class CompileExpression {
         return instructions;
     }
 
-    public static List<AssemblyInstruction> generateLazyOr(EOr eOr, String destRegister, String sourceRegister) {
-        List<AssemblyInstruction> expr1Instructions = generateExpr(eOr.expr_1, destRegister, sourceRegister);
+    public static List<AssemblyInstruction> generateLazyOr(EOr eOr, String destRegister, String sourceRegister, BackendScope scope) {
+        List<AssemblyInstruction> expr1Instructions = generateExpr(eOr.expr_1, destRegister, sourceRegister, scope);
 
         Label endLabel = getNonceLabel("or_end");
 
@@ -166,16 +178,17 @@ public class CompileExpression {
         expr1Instructions.add(new JumpInstruction(endLabel, JumpInstruction.Type.EQU));
 
         // sets to RAX rhs of or, so OR value is the same as value of expr_2
-        List<AssemblyInstruction> expr2Instructions = generateExpr(eOr.expr_2, destRegister, sourceRegister);
+        List<AssemblyInstruction> expr2Instructions = generateExpr(eOr.expr_2, destRegister, sourceRegister, scope);
 
         expr1Instructions.addAll(expr2Instructions);
         expr1Instructions.add(endLabel);
 
+
         return expr1Instructions;
     }
 
-    public static List<AssemblyInstruction> generateLazyAnd(EAnd eAnd, String destRegister, String sourceRegister) {
-        List<AssemblyInstruction> expr1Instructions = generateExpr(eAnd.expr_1, destRegister, sourceRegister);
+    public static List<AssemblyInstruction> generateLazyAnd(EAnd eAnd, String destRegister, String sourceRegister, BackendScope scope) {
+        List<AssemblyInstruction> expr1Instructions = generateExpr(eAnd.expr_1, destRegister, sourceRegister, scope);
 
         Label endLabel = getNonceLabel("and_end");
 
@@ -184,7 +197,7 @@ public class CompileExpression {
         expr1Instructions.add(new JumpInstruction(endLabel, JumpInstruction.Type.EQU));
 
         // lhs was 1, so setting RAX value to rhs value is enough to have correct overall AND result
-        List<AssemblyInstruction> expr2Instructions = generateExpr(eAnd.expr_2, destRegister, sourceRegister);
+        List<AssemblyInstruction> expr2Instructions = generateExpr(eAnd.expr_2, destRegister, sourceRegister, scope);
 
         expr1Instructions.addAll(expr2Instructions);
         expr1Instructions.add(endLabel);
@@ -192,11 +205,11 @@ public class CompileExpression {
         return expr1Instructions;
     }
 
-    public static List<AssemblyInstruction> generateRel(ERel rel, String destRegister, String sourceRegister) {
-        List<AssemblyInstruction> instructions = generateExpr(rel.expr_2, destRegister, sourceRegister);
+    public static List<AssemblyInstruction> generateRel(ERel rel, String destRegister, String sourceRegister, BackendScope scope) {
+        List<AssemblyInstruction> instructions = generateExpr(rel.expr_2, destRegister, sourceRegister, scope);
         instructions.add(new PushInstruction(Register.RAX));
 
-        instructions.addAll(generateExpr(rel.expr_1, destRegister, sourceRegister));
+        instructions.addAll(generateExpr(rel.expr_1, destRegister, sourceRegister, scope));
         instructions.add(new PopInstruction(Register.RCX));
 
         instructions.add(new CompareInstruction(Register.RAX, Register.RCX));
@@ -219,10 +232,10 @@ public class CompileExpression {
         return instructions;
     }
 
-    public static List<AssemblyInstruction> generateCast(ECast cast, String destRegister, String sourceRegister) {
-        List<AssemblyInstruction> exprInstructions = generateExpr(cast.expr_, destRegister, sourceRegister);
+    public static List<AssemblyInstruction> generateCast(ECast cast, String destRegister, String sourceRegister, BackendScope scope) {
+        List<AssemblyInstruction> exprInstructions = generateExpr(cast.expr_, destRegister, sourceRegister, scope);
 
-        TypeDefinition castedToType = getType(cast.typename_, cast.line_num, cast.col_num);
+        TypeDefinition castedToType = getType(cast.typename_, scope.getGlobalEnvironment(), cast.line_num, cast.col_num);
 
         if (castedToType.equals(BasicTypeDefinition.INT)) {
             // do nothing, treat register value as an int

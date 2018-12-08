@@ -12,7 +12,7 @@ import static Latte.Frontend.TypeUtils.validateTypes;
 
 public class ExpressionTypeCheck {
 
-    public static TypeDefinition typeCheckExpr(Expr expr, Scope scope, CallableDeclaration callableDeclaration) {
+    public static TypeDefinition typeCheckExpr(Expr expr, FrontendScope scope, CallableDeclaration callableDeclaration) {
 
         return expr.match(
                 (var) -> typeCheckEVar(var, scope, callableDeclaration),
@@ -38,7 +38,7 @@ public class ExpressionTypeCheck {
         );
     }
 
-    public static TypeDefinition typeCheckEVar(EVar var, Scope scope, CallableDeclaration callableDeclaration) {
+    public static TypeDefinition typeCheckEVar(EVar var, FrontendScope scope, CallableDeclaration callableDeclaration) {
         return TypeUtils.getVariableType(var.ident_, scope, callableDeclaration, var.line_num, var.col_num);
     }
 
@@ -66,7 +66,7 @@ public class ExpressionTypeCheck {
         return new NullTypeDefinition();
     }
 
-    public static TypeDefinition typeCheckEApp(EApp eApp, Scope scope, CallableDeclaration callableDeclaration) {
+    public static TypeDefinition typeCheckEApp(EApp eApp, FrontendScope scope, CallableDeclaration callableDeclaration) {
         TypeCheckException e;
 
         try {
@@ -99,7 +99,7 @@ public class ExpressionTypeCheck {
         return BasicTypeDefinition.STRING;
     }
 
-    public static TypeDefinition typeCheckConstr(EConstr constr, Scope scope) {
+    public static TypeDefinition typeCheckConstr(EConstr constr, FrontendScope scope) {
         TypeDefinition typeDefinition = scope.getType(constr.ident_, constr.line_num, constr.col_num);
 
         if (!typeDefinition.isClassType()) {
@@ -111,7 +111,7 @@ public class ExpressionTypeCheck {
 
     }
 
-    public static TypeDefinition typeCheckArrConstr(EArrConstr arrConstr, Scope scope, CallableDeclaration callableDeclaration) {
+    public static TypeDefinition typeCheckArrConstr(EArrConstr arrConstr, FrontendScope scope, CallableDeclaration callableDeclaration) {
         String elemTypeName = arrConstr.typename_.match(
                 TypeUtils::getTypeName,
                 TypeUtils::getTypeName
@@ -131,7 +131,7 @@ public class ExpressionTypeCheck {
         return arrayType;
     }
 
-    public static TypeDefinition typeCheckENDArrayAcc(ENDArrAcc arrAcc, Scope scope, CallableDeclaration callableDeclaration) {
+    public static TypeDefinition typeCheckENDArrayAcc(ENDArrAcc arrAcc, FrontendScope scope, CallableDeclaration callableDeclaration) {
         TypeDefinition arrayType = typeCheckExpr(arrAcc.expr_1, scope, callableDeclaration);
 
         if (!arrayType.isArrayType()) {
@@ -145,7 +145,7 @@ public class ExpressionTypeCheck {
         return arrayType.getArrayTypeDefinition().getInnerTypeDefinition();
     }
 
-    public static TypeDefinition typeCheckNeg(Neg neg, Scope scope, CallableDeclaration callableDeclaration) {
+    public static TypeDefinition typeCheckNeg(Neg neg, FrontendScope scope, CallableDeclaration callableDeclaration) {
         TypeDefinition exprType = typeCheckExpr(neg.expr_, scope, callableDeclaration);
 
         validateTypes(BasicTypeDefinition.INT, exprType, neg.line_num, neg.col_num);
@@ -153,7 +153,7 @@ public class ExpressionTypeCheck {
         return BasicTypeDefinition.INT;
     }
 
-    public static TypeDefinition typeCheckNot(Not not, Scope scope, CallableDeclaration callableDeclaration) {
+    public static TypeDefinition typeCheckNot(Not not, FrontendScope scope, CallableDeclaration callableDeclaration) {
         TypeDefinition exprType = typeCheckExpr(not.expr_, scope, callableDeclaration);
 
         validateTypes(BasicTypeDefinition.BOOLEAN, exprType, not.line_num, not.col_num);
@@ -161,7 +161,7 @@ public class ExpressionTypeCheck {
         return BasicTypeDefinition.BOOLEAN;
     }
 
-    public static TypeDefinition typeCheckMul(EMul mul, Scope scope, CallableDeclaration callableDeclaration) {
+    public static TypeDefinition typeCheckMul(EMul mul, FrontendScope scope, CallableDeclaration callableDeclaration) {
         TypeDefinition exprType1 = typeCheckExpr(mul.expr_1, scope, callableDeclaration);
         TypeDefinition exprType2 = typeCheckExpr(mul.expr_2, scope, callableDeclaration);
 
@@ -172,7 +172,7 @@ public class ExpressionTypeCheck {
         return BasicTypeDefinition.INT;
     }
 
-    public static TypeDefinition typeCheckAdd(EAdd add, Scope scope, CallableDeclaration callableDeclaration) {
+    public static TypeDefinition typeCheckAdd(EAdd add, FrontendScope scope, CallableDeclaration callableDeclaration) {
         TypeDefinition exprType1 = typeCheckExpr(add.expr_1, scope, callableDeclaration);
         TypeDefinition exprType2 = typeCheckExpr(add.expr_2, scope, callableDeclaration);
 
@@ -189,7 +189,7 @@ public class ExpressionTypeCheck {
         return exprType1;
     }
 
-    public static TypeDefinition typeCheckRel(ERel rel, Scope scope, CallableDeclaration callableDeclaration) {
+    public static TypeDefinition typeCheckRel(ERel rel, FrontendScope scope, CallableDeclaration callableDeclaration) {
         TypeDefinition exprType1 = typeCheckExpr(rel.expr_1, scope, callableDeclaration);
         TypeDefinition exprType2 = typeCheckExpr(rel.expr_2, scope, callableDeclaration);
 
@@ -208,7 +208,7 @@ public class ExpressionTypeCheck {
         return BasicTypeDefinition.BOOLEAN;
     }
 
-    public static TypeDefinition typeCheckAnd(EAnd and, Scope scope, CallableDeclaration callableDeclaration) {
+    public static TypeDefinition typeCheckAnd(EAnd and, FrontendScope scope, CallableDeclaration callableDeclaration) {
         TypeDefinition exprType1 = typeCheckExpr(and.expr_1, scope, callableDeclaration);
         TypeDefinition exprType2 = typeCheckExpr(and.expr_2, scope, callableDeclaration);
 
@@ -219,7 +219,7 @@ public class ExpressionTypeCheck {
         return BasicTypeDefinition.BOOLEAN;
     }
 
-    public static TypeDefinition typeCheckOr(EOr eOr, Scope scope, CallableDeclaration callableDeclaration) {
+    public static TypeDefinition typeCheckOr(EOr eOr, FrontendScope scope, CallableDeclaration callableDeclaration) {
         TypeDefinition exprType1 = typeCheckExpr(eOr.expr_1, scope, callableDeclaration);
         TypeDefinition exprType2 = typeCheckExpr(eOr.expr_2, scope, callableDeclaration);
 
@@ -230,7 +230,7 @@ public class ExpressionTypeCheck {
         return BasicTypeDefinition.BOOLEAN;
     }
 
-    public static TypeDefinition typeCheckObjAcc(EObjAcc objAcc, Scope scope, CallableDeclaration callableDeclaration) {
+    public static TypeDefinition typeCheckObjAcc(EObjAcc objAcc, FrontendScope scope, CallableDeclaration callableDeclaration) {
         TypeDefinition typeDefinition = typeCheckExpr(objAcc.expr_, scope, callableDeclaration);
 
         return objAcc.objacc_.match(
@@ -251,7 +251,7 @@ public class ExpressionTypeCheck {
         throw new TypeCheckException("Type " + objTypeDefinition + " is not allowed to have any fields", fieldAcc.line_num, fieldAcc.col_num);
     }
 
-    public static TypeDefinition typeCheckObjMthAcc(ObjMethAcc mthAcc, TypeDefinition objTypeDefinition, Scope scope, CallableDeclaration callableDeclaration) {
+    public static TypeDefinition typeCheckObjMthAcc(ObjMethAcc mthAcc, TypeDefinition objTypeDefinition, FrontendScope scope, CallableDeclaration callableDeclaration) {
         CallableDeclaration callable;
 
         if (!objTypeDefinition.isClassType() && !objTypeDefinition.isInterfaceType()) {
@@ -269,10 +269,10 @@ public class ExpressionTypeCheck {
         return callable.getReturnType();
     }
 
-    public static TypeDefinition typeCheckCast(ECast cast, Scope scope, CallableDeclaration callableDeclaration) {
+    public static TypeDefinition typeCheckCast(ECast cast, FrontendScope scope, CallableDeclaration callableDeclaration) {
         TypeDefinition castedType = typeCheckExpr(cast.expr_, scope, callableDeclaration);
 
-        TypeDefinition castedToType = getType(cast.typename_, cast.line_num, cast.col_num);
+        TypeDefinition castedToType = getType(cast.typename_, scope.globalEnvironment, cast.line_num, cast.col_num);
 
         if (castedToType.equals(castedType)) {
             return castedToType;
@@ -294,7 +294,7 @@ public class ExpressionTypeCheck {
         throw new TypeCheckException(castedType + " cannot be casted to " + castedToType, cast.line_num, cast.col_num);
     }
 
-    private static void validateCallablesArgumentsMatch(CallableDeclaration callable, ListExpr listExpr, Scope scope, CallableDeclaration callableDeclaration, int lineNumber, int colNumber) {
+    private static void validateCallablesArgumentsMatch(CallableDeclaration callable, ListExpr listExpr, FrontendScope scope, CallableDeclaration callableDeclaration, int lineNumber, int colNumber) {
         if (callable.getArgumentList().size() != listExpr.size()) {
             throw new TypeCheckException("Number of method " + callable.getName() + " arguments doesn't match. Expected " + callable.getArgumentList().size() + ", got " + listExpr.size());
         }

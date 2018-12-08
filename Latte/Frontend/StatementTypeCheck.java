@@ -10,11 +10,12 @@ import Latte.Exceptions.InternalStateException;
 import Latte.Exceptions.TypeCheckException;
 
 import static Latte.Frontend.ExpressionTypeCheck.typeCheckExpr;
+import static Latte.Frontend.TypeUtils.getType;
 import static Latte.Frontend.TypeUtils.getVariableType;
 
 
 public class StatementTypeCheck {
-    public static void typeCheckStatement(Stmt stmt, Scope scope, CallableDeclaration callableDeclaration) {
+    public static void typeCheckStatement(Stmt stmt, FrontendScope scope, CallableDeclaration callableDeclaration) {
         stmt.match(
                 StatementTypeCheck::typeCheckEmpty,
                 (bStmt) -> typeCheckBStmt(bStmt, scope, callableDeclaration),
@@ -36,8 +37,8 @@ public class StatementTypeCheck {
         return true;
     }
 
-    public static Boolean typeCheckBStmt(BStmt bStmt, Scope oldScope, CallableDeclaration callableDeclaration) {
-        Scope scope = new Scope(oldScope);
+    public static Boolean typeCheckBStmt(BStmt bStmt, FrontendScope oldScope, CallableDeclaration callableDeclaration) {
+        FrontendScope scope = new FrontendScope(oldScope);
 
         bStmt.block_.match(
                 (block) -> typeCheckBlockS(block, scope, callableDeclaration)
@@ -46,7 +47,7 @@ public class StatementTypeCheck {
         return true;
     }
 
-    public static Boolean typeCheckBlockS(BlockS blockS, Scope scope, CallableDeclaration callableDeclaration) {
+    public static Boolean typeCheckBlockS(BlockS blockS, FrontendScope scope, CallableDeclaration callableDeclaration) {
         for (Stmt stmt : blockS.liststmt_) {
             typeCheckStatement(stmt, scope, callableDeclaration);
         }
@@ -54,10 +55,10 @@ public class StatementTypeCheck {
         return true;
     }
 
-    public static Boolean typeCheckDecl(Decl decl, Scope scope, CallableDeclaration callableDeclaration) {
+    public static Boolean typeCheckDecl(Decl decl, FrontendScope scope, CallableDeclaration callableDeclaration) {
         TypeDefinition type = decl.type_.match(
-                TypeUtils::getType,
-                TypeUtils::getType
+                (arrayType) -> getType(arrayType, scope.globalEnvironment),
+                (typeNameS) -> getType(typeNameS, scope.globalEnvironment)
         );
 
         for (Item item : decl.listitem_) {
@@ -70,7 +71,7 @@ public class StatementTypeCheck {
         return true;
     }
 
-    public static Boolean typeCheckInit(Init init, TypeDefinition itemType, Scope scope, CallableDeclaration callableDeclaration) {
+    public static Boolean typeCheckInit(Init init, TypeDefinition itemType, FrontendScope scope, CallableDeclaration callableDeclaration) {
         TypeDefinition valueType = typeCheckExpr(init.expr_, scope, callableDeclaration);
 
         TypeUtils.validateTypes(itemType, valueType, init.line_num, init.col_num);
@@ -80,13 +81,13 @@ public class StatementTypeCheck {
         return true;
     }
 
-    public static Boolean typeCheckNoInit(NoInit noInit, TypeDefinition itemType, Scope scope) {
+    public static Boolean typeCheckNoInit(NoInit noInit, TypeDefinition itemType, FrontendScope scope) {
         scope.declareVariable(noInit.ident_, itemType, noInit.line_num, noInit.col_num);
 
         return true;
     }
 
-    public static Boolean typeCheckAss(Ass ass, Scope scope, CallableDeclaration callableDeclaration) {
+    public static Boolean typeCheckAss(Ass ass, FrontendScope scope, CallableDeclaration callableDeclaration) {
         TypeDefinition lhs = getLhsType(ass.lhs_, scope, callableDeclaration);
 
         if (BasicTypeDefinition.VOID.equals(lhs)) {
@@ -100,14 +101,14 @@ public class StatementTypeCheck {
         return true;
     }
 
-    public static TypeDefinition getLhsType(Lhs lhs, Scope scope, CallableDeclaration callableDeclaration) {
+    public static TypeDefinition getLhsType(Lhs lhs, FrontendScope scope, CallableDeclaration callableDeclaration) {
         return lhs.match(
                 (rLhs) -> getVariableType(rLhs.ident_, scope, callableDeclaration, rLhs.line_num, rLhs.col_num),
                 (aLhs) -> getALhsType(aLhs, scope, callableDeclaration)
         );
     }
 
-    public static TypeDefinition getALhsType(ArrElemLhs elem, Scope scope, CallableDeclaration callableDeclaration) {
+    public static TypeDefinition getALhsType(ArrElemLhs elem, FrontendScope scope, CallableDeclaration callableDeclaration) {
         TypeDefinition typeDefinition = scope.getVariable(elem.ident_, elem.line_num, elem.col_num).getType();
 
         if (!typeDefinition.isArrayType()) {
@@ -121,7 +122,7 @@ public class StatementTypeCheck {
         return typeDefinition.getArrayTypeDefinition().getInnerTypeDefinition();
     }
 
-    public static Boolean typeCheckIncr(Incr incr, Scope scope, CallableDeclaration callableDeclaration) {
+    public static Boolean typeCheckIncr(Incr incr, FrontendScope scope, CallableDeclaration callableDeclaration) {
         TypeDefinition lhsType = getLhsType(incr.lhs_, scope, callableDeclaration);
 
         TypeUtils.validateTypes(BasicTypeDefinition.INT, lhsType, incr.line_num, incr.col_num);
@@ -129,7 +130,7 @@ public class StatementTypeCheck {
         return true;
     }
 
-    public static Boolean typeCheckDecr(Decr decr, Scope scope, CallableDeclaration callableDeclaration) {
+    public static Boolean typeCheckDecr(Decr decr, FrontendScope scope, CallableDeclaration callableDeclaration) {
         TypeDefinition lhsType = getLhsType(decr.lhs_, scope, callableDeclaration);
 
         TypeUtils.validateTypes(BasicTypeDefinition.INT, lhsType, decr.line_num, decr.col_num);
@@ -137,7 +138,7 @@ public class StatementTypeCheck {
         return true;
     }
 
-    public static Boolean typeCheckRet(Ret ret, Scope scope, CallableDeclaration callableDeclaration) {
+    public static Boolean typeCheckRet(Ret ret, FrontendScope scope, CallableDeclaration callableDeclaration) {
         TypeDefinition retType = typeCheckExpr(ret.expr_, scope, callableDeclaration);
 
         TypeUtils.validateTypes(retType, callableDeclaration.getReturnType(), ret.line_num, ret.col_num);
@@ -151,7 +152,7 @@ public class StatementTypeCheck {
         return true;
     }
 
-    public static Boolean typeCheckCond(Cond cond, Scope scope, CallableDeclaration callableDeclaration) {
+    public static Boolean typeCheckCond(Cond cond, FrontendScope scope, CallableDeclaration callableDeclaration) {
         TypeDefinition condType = typeCheckExpr(cond.expr_, scope, callableDeclaration);
 
         TypeUtils.validateTypes(BasicTypeDefinition.BOOLEAN, condType, cond.line_num, cond.col_num);
@@ -161,7 +162,7 @@ public class StatementTypeCheck {
         return true;
     }
 
-    public static Boolean typeCheckCondElse(CondElse condElse, Scope scope, CallableDeclaration callableDeclaration) {
+    public static Boolean typeCheckCondElse(CondElse condElse, FrontendScope scope, CallableDeclaration callableDeclaration) {
         TypeDefinition condType = typeCheckExpr(condElse.expr_, scope, callableDeclaration);
 
         TypeUtils.validateTypes(BasicTypeDefinition.BOOLEAN, condType, condElse.line_num, condElse.col_num);
@@ -172,7 +173,7 @@ public class StatementTypeCheck {
         return true;
     }
 
-    public static Boolean typeCheckWhile(While sWhile, Scope scope, CallableDeclaration callableDeclaration) {
+    public static Boolean typeCheckWhile(While sWhile, FrontendScope scope, CallableDeclaration callableDeclaration) {
         TypeDefinition condType = typeCheckExpr(sWhile.expr_, scope, callableDeclaration);
 
         TypeUtils.validateTypes(BasicTypeDefinition.BOOLEAN, condType, sWhile.line_num, sWhile.col_num);
@@ -182,13 +183,13 @@ public class StatementTypeCheck {
         return true;
     }
 
-    public static Boolean typeCheckExpression(SExp expr, Scope scope, CallableDeclaration callableDeclaration) {
+    public static Boolean typeCheckExpression(SExp expr, FrontendScope scope, CallableDeclaration callableDeclaration) {
         typeCheckExpr(expr.expr_, scope, callableDeclaration);
 
         return true;
     }
 
-    public static Boolean typeCheckForArray(ForArr forArr, Scope scope, CallableDeclaration callableDeclaration) {
+    public static Boolean typeCheckForArray(ForArr forArr, FrontendScope scope, CallableDeclaration callableDeclaration) {
         TypeDefinition exprType = typeCheckExpr(forArr.expr_, scope, callableDeclaration);
 
         if (!exprType.isArrayType()) {
@@ -210,7 +211,7 @@ public class StatementTypeCheck {
 
         TypeUtils.validateTypes(elemType, arrayType.getInnerTypeDefinition(), forArr.line_num, forArr.col_num);
 
-        Scope withElemScope = new Scope(scope);
+        FrontendScope withElemScope = new FrontendScope(scope);
         withElemScope.declareVariable(forArr.ident_, elemType, forArr.line_num, forArr.col_num);
 
         typeCheckStatement(forArr.stmt_, withElemScope, callableDeclaration);

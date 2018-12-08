@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Scope {
+public class FrontendScope {
     public Environment globalEnvironment;
     public Map<String, VariableDefinition> declaredVariables;
     public Map<String, VariableDefinition> scopesDeclaredVariables;
@@ -57,19 +57,19 @@ public class Scope {
         return globalEnvironment.declaredTypes.get(name);
     }
 
-    public Scope(Environment globalEnvironment) {
+    public FrontendScope(Environment globalEnvironment) {
         this.globalEnvironment = globalEnvironment;
         this.declaredVariables = new HashMap<>();
         this.scopesDeclaredVariables = new HashMap<>();
     }
 
-    public Scope(Scope that) {
+    public FrontendScope(FrontendScope that) {
         this.globalEnvironment = that.globalEnvironment;
         this.declaredVariables = new HashMap<>(that.declaredVariables);
         this.scopesDeclaredVariables = new HashMap<>();
     }
 
-    public Scope withVariables(List<VariableDefinition> variables, int lineNumber, int colNumber) {
+    public FrontendScope withVariables(List<VariableDefinition> variables, int lineNumber, int colNumber) {
         for (VariableDefinition var : variables) {
             declareVariable(var, lineNumber, colNumber);
         }

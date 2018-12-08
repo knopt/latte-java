@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import static Latte.Frontend.StatementTypeCheck.checkCallableReturns;
 import static Latte.Frontend.StatementTypeCheck.typeCheckStatement;
+import static Latte.Frontend.TypeUtils.getType;
 
 public class TypeCheck {
     public static Environment env = new Environment().withBasicTypes().withBasicFunctions();
@@ -155,8 +156,8 @@ public class TypeCheck {
 
     public static MethodDeclaration getMethodDefinitionFromDMth(Dmth dMth, TypeDefinition callerType) {
         TypeDefinition returnType = dMth.type_.match(
-                TypeUtils::getType,
-                TypeUtils::getType
+                (arrayType) -> getType(arrayType, env),
+                (typeNameS) -> getType(typeNameS, env)
         );
 
         String methodName = dMth.ident_;
@@ -175,8 +176,8 @@ public class TypeCheck {
 
     public static FunctionDeclaration gatherFunctionsDefinitions(FnDef fnDef) {
         TypeDefinition returnType = fnDef.type_.match(
-                TypeUtils::getType,
-                TypeUtils::getType
+                (arrayType) -> getType(arrayType, env),
+                (typeNameS) -> getType(typeNameS, env)
         );
 
         String functionName = fnDef.ident_;
@@ -194,8 +195,8 @@ public class TypeCheck {
 
     public static VariableDefinition getVariable(ArgTI arg) {
         TypeDefinition argumentType = arg.type_.match(
-                TypeUtils::getType,
-                TypeUtils::getType
+                (arrayType) -> getType(arrayType, env),
+                (typeNameS) -> getType(typeNameS, env)
         );
 
         return new VariableDefinition(arg.ident_, argumentType);
@@ -282,8 +283,8 @@ public class TypeCheck {
         ClassTypeDefinition classDefinition = typeDefinition.getClassDefinition();
 
         TypeDefinition fieldType = var.type_.match(
-                TypeUtils::getType,
-                TypeUtils::getType
+                (arrayType) -> getType(arrayType, env),
+                (typeNameS) -> getType(typeNameS, env)
         );
 
         for (Item i : var.listitem_) {
@@ -364,7 +365,7 @@ public class TypeCheck {
     }
 
     public static Boolean typeCheckCallablesBlock(BlockS block, CallableDeclaration callableDeclaration) {
-        Scope scope = new Scope(env).withVariables(callableDeclaration.getArgumentList(), block.line_num, block.col_num);
+        FrontendScope scope = new FrontendScope(env).withVariables(callableDeclaration.getArgumentList(), block.line_num, block.col_num);
 
         for (Stmt stmt : block.liststmt_) {
             typeCheckStatement(

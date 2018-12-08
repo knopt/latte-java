@@ -10,7 +10,7 @@ import java.util.List;
 
 public class TypeUtils {
 
-    public static TypeDefinition getType(ArrayType arrayType) {
+    public static TypeDefinition getType(ArrayType arrayType, Environment env) {
         String typeName = arrayType.typename_.match(
                 TypeUtils::getTypeName,
                 TypeUtils::getTypeName
@@ -21,27 +21,27 @@ public class TypeUtils {
             throw new IllegalTypeException(typeName, arrayType.line_num, arrayType.col_num);
         }
 
-        TypeDefinition arrayedType = TypeCheck.env.declaredTypes.get(typeName);
+        TypeDefinition arrayedType = env.declaredTypes.get(typeName);
 
         return new ArrayTypeDefinition(arrayedType);
     }
 
-    public static TypeDefinition getType(TypeName typeNameE, int lineNum, int colNum) {
+    public static TypeDefinition getType(TypeName typeNameE, Environment env, int lineNum, int colNum) {
         String typeName = typeNameE.match(
                 TypeUtils::getTypeName,
                 TypeUtils::getTypeName
         );
 
 
-        if (!TypeCheck.env.declaredTypes.containsKey(typeName)) {
+        if (!env.declaredTypes.containsKey(typeName)) {
             throw new IllegalTypeException(typeName, lineNum, colNum);
         }
 
-        return TypeCheck.env.declaredTypes.get(typeName);
+        return env.declaredTypes.get(typeName);
     }
 
-    public static TypeDefinition getType(TypeNameS typeNameS) {
-        return getType(typeNameS.typename_, typeNameS.line_num, typeNameS.col_num);
+    public static TypeDefinition getType(TypeNameS typeNameS, Environment env) {
+        return getType(typeNameS.typename_, env, typeNameS.line_num, typeNameS.col_num);
     }
 
     public static String getTypeName(BuiltIn builtIn) {
@@ -57,7 +57,7 @@ public class TypeUtils {
         return className.ident_;
     }
 
-    public static TypeDefinition getVariableType(String varName, Scope scope, CallableDeclaration callableDeclaration, int lineNum, int colNum) {
+    public static TypeDefinition getVariableType(String varName, FrontendScope scope, CallableDeclaration callableDeclaration, int lineNum, int colNum) {
         TypeCheckException e;
 
         try {
