@@ -6,7 +6,6 @@ import Latte.Backend.Definitions.Register;
 import Latte.Backend.Instructions.*;
 import Latte.Definitions.TypeDefinition;
 import Latte.Exceptions.CompilerException;
-import Latte.Frontend.TypeUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,16 +24,62 @@ public class CompileStatement {
                 (bStmt) -> generateBStmt(bStmt, scope),
                 (decl) -> generateDecl(decl, scope),
                 (ass) -> generateAss(ass, scope),
-                (x) -> notImplemented(x),
-                (x) -> notImplemented(x),
+                (incr) -> generateIncr(incr, scope),
+                (decr) -> generateDecr(decr, scope),
                 (ret) -> generateReturn(ret, scope),
-                (x) -> notImplemented(x),
-                (x) -> notImplemented(x),
-                (x) -> notImplemented(x),
-                (x) -> notImplemented(x),
-                (x) -> notImplemented(x),
+                (vret) -> generateVReturn(vret),
+                (cond) -> generateCond(cond, scope),
+                (condElse) -> generateCondElse(condElse, scope),
+                (sWhile) -> generateWhile(sWhile, scope),
+                (sExp) -> generateStmtExpr(sExp, scope),
                 (x) -> notImplemented(x)
         );
+    }
+
+    public static List<AssemblyInstruction> generateDecr(Decr decr, BackendScope scope) {
+        return decr.lhs_.match(
+                (var) -> generateVarDecr(var, scope),
+                (arr) -> generateArrDecr(arr, scope)
+        );
+    }
+
+    public static List<AssemblyInstruction> generateIncr(Incr incr, BackendScope scope) {
+        return incr.lhs_.match(
+                (var) -> generateVarIncr(var, scope),
+                (arr) -> generateArrIncr(arr, scope)
+        );
+    }
+
+    public static List<AssemblyInstruction> generateVarIncr(VariableRawLhs var, BackendScope scope) {
+        List<AssemblyInstruction> instructions = new ArrayList<>();
+
+        int offset = scope.getVariable(var.ident_).getOffset() * WORD_SIZE * -1;
+
+        instructions.add(new MovInstruction(Register.RAX, MemoryReference.getWithOffset(Register.RBP, offset)));
+        instructions.add(new AddInstruction(Register.RAX, YieldUtils.number(1)));
+        instructions.add(new MovInstruction(MemoryReference.getWithOffset(Register.RBP, offset), Register.RAX));
+
+        return instructions;
+    }
+
+    public static List<AssemblyInstruction> generateArrIncr(ArrElemLhs arrElem, BackendScope scope) {
+        return notImplemented(null);
+    }
+
+    public static List<AssemblyInstruction> generateVarDecr(VariableRawLhs var, BackendScope scope) {
+        List<AssemblyInstruction> instructions = new ArrayList<>();
+
+        int offset = scope.getVariable(var.ident_).getOffset() * WORD_SIZE * -1;
+
+        instructions.add(new MovInstruction(Register.RAX, MemoryReference.getWithOffset(Register.RBP, offset)));
+        instructions.add(new SubInstruction(Register.RAX, YieldUtils.number(1)));
+        instructions.add(new MovInstruction(MemoryReference.getWithOffset(Register.RBP, offset), Register.RAX));
+
+        return instructions;
+    }
+
+    public static List<AssemblyInstruction> generateArrDecr(ArrElemLhs arrElem, BackendScope scope) {
+        return notImplemented(null);
     }
 
     public static List<AssemblyInstruction> generateDecl(Decl decl, BackendScope scope) {
@@ -57,6 +102,62 @@ public class CompileStatement {
 
         return instructions;
     }
+
+    public static List<AssemblyInstruction> generateStmtExpr(SExp exp, BackendScope scope) {
+        return generateExpr(exp.expr_, Register.RAX, Register.RAX, scope);
+    }
+
+    public static List<AssemblyInstruction> generateWhile(While sWhile, BackendScope scope) {
+        List<AssemblyInstruction> instructions = new ArrayList<>();
+
+        Label start = LabelsGenerator.getNonceLabel("start_while");
+        Label end = LabelsGenerator.getNonceLabel("end_start");
+
+        instructions.add(start);
+        instructions.addAll(generateExpr(sWhile.expr_, Register.RAX, Register.RAX, scope));
+        instructions.add(new CompareInstruction(Register.RAX, YieldUtils.number(1)));
+        instructions.add(new JumpInstruction(end, JumpInstruction.Type.NE));
+
+        instructions.addAll(generateStmt(sWhile.stmt_, scope));
+        instructions.add(new JumpInstruction(start, JumpInstruction.Type.ALWAYS));
+        instructions.add(end);
+
+        return instructions;
+    }
+
+    public static List<AssemblyInstruction> generateCond(Cond cond, BackendScope scope) {
+        List<AssemblyInstruction> instructions = generateExpr(cond.expr_, Register.RAX, Register.RAX, scope);
+
+        Label afterLabel = LabelsGenerator.getNonceLabel("end_if");
+
+        instructions.add(new CompareInstruction(Register.RAX, YieldUtils.number(1)));
+        instructions.add(new JumpInstruction(afterLabel, JumpInstruction.Type.NE));
+
+        instructions.addAll(generateStmt(cond.stmt_, scope));
+        instructions.add(afterLabel);
+
+        return instructions;
+    }
+
+    public static List<AssemblyInstruction> generateCondElse(CondElse cond, BackendScope scope) {
+        List<AssemblyInstruction> instructions = generateExpr(cond.expr_, Register.RAX, Register.RAX, scope);
+
+        Label afterLabel = LabelsGenerator.getNonceLabel("end_if");
+        Label elseLabel = LabelsGenerator.getNonceLabel("else");
+
+        instructions.add(new CompareInstruction(Register.RAX, YieldUtils.number(1)));
+        instructions.add(new JumpInstruction(elseLabel, JumpInstruction.Type.NE));
+
+        instructions.addAll(generateStmt(cond.stmt_1, scope));
+        instructions.add(new JumpInstruction(afterLabel, JumpInstruction.Type.ALWAYS));
+
+        instructions.add(elseLabel);
+        instructions.addAll(generateStmt(cond.stmt_2, scope));
+        instructions.add(afterLabel);
+
+        return instructions;
+    }
+
 
     public static List<AssemblyInstruction> generateBStmt(BStmt bStmt, BackendScope oldScope) {
         BackendScope scope = new BackendScope(oldScope);
@@ -141,14 +242,30 @@ public class CompileStatement {
         return instructions;
     }
 
-    public static List<AssemblyInstruction> generateReturn(Ret ret, BackendScope scope) {
-        List<AssemblyInstruction> instructions = new ArrayList<>(Arrays.asList(new Comment(""), new Comment("return from function")));
-        instructions.addAll(generateExpr(ret.expr_, Register.RAX, Register.RAX, scope));
+    private static List<AssemblyInstruction> generateEpilog() {
+        List<AssemblyInstruction> instructions = new ArrayList<>();
 
         instructions.add(new MovInstruction(Register.RSP, Register.RBP));
         instructions.add(new PopInstruction(Register.RBP));
 
         instructions.add(new Return());
+
+        return instructions;
+    }
+
+    public static List<AssemblyInstruction> generateReturn(Ret ret, BackendScope scope) {
+        List<AssemblyInstruction> instructions = new ArrayList<>(Arrays.asList(new Comment(""), new Comment("return from function")));
+        instructions.addAll(generateExpr(ret.expr_, Register.RAX, Register.RAX, scope));
+
+        instructions.addAll(generateEpilog());
+
+        return instructions;
+    }
+
+    public static List<AssemblyInstruction> generateVReturn(VRet ret) {
+        List<AssemblyInstruction> instructions = new ArrayList<>(Arrays.asList(new Comment(""), new Comment("void return from function")));
+
+        instructions.addAll(generateEpilog());
 
         return instructions;
     }

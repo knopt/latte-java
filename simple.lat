@@ -1,15 +1,12 @@
 int main() {
 
-  int x;
- 
-  {
-    int z = 5;
+  int x = 0;
 
-    x = 4 * z;
+  while (x < 10) {
+    x++;
   }
 
-  int z = x;
-
-  return z * 1000;
+  return x;
+  // return z * 1000;
   // return (z * 1000 + 10) + 20 + (30 - 10) ;
 }
