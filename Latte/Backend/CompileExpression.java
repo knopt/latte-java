@@ -17,6 +17,7 @@ import java.util.List;
 import static Latte.Backend.Instructions.ConstantUtils.WORD_SIZE;
 import static Latte.Backend.LabelsGenerator.getNonceLabel;
 import static Latte.Frontend.TypeUtils.getType;
+import static java.lang.Math.max;
 
 public class CompileExpression {
 
@@ -28,7 +29,7 @@ public class CompileExpression {
                 (e) -> generateFalse(destRegister),
                 (e) -> notImplemented(e),
                 (e) -> notImplemented(e),
-                (e) -> notImplemented(e),
+                (eApp) -> generateApp(eApp, destRegister, scope),
                 (e) -> notImplemented(e),
                 (e) -> notImplemented(e),
                 (e) -> notImplemented(e),
@@ -45,10 +46,63 @@ public class CompileExpression {
         );
     }
 
+    public static List<AssemblyInstruction> generateApp(EApp eApp, String destRegister, BackendScope scope) {
+        List<AssemblyInstruction> instructions = new ArrayList<>();
+
+        String funcName = eApp.ident_;
+
+        if (eApp.listexpr_.size() > 0) {
+            instructions.addAll(generateExpr(eApp.listexpr_.get(0), Register.RAX, Register.RAX, scope));
+            instructions.add(new MovInstruction(Register.RDI, Register.RAX));
+        }
+
+        if (eApp.listexpr_.size() > 1) {
+            instructions.addAll(generateExpr(eApp.listexpr_.get(1), Register.RAX, Register.RAX, scope));
+            instructions.add(new MovInstruction(Register.RSI, Register.RAX));
+        }
+
+        if (eApp.listexpr_.size() > 2) {
+            instructions.addAll(generateExpr(eApp.listexpr_.get(2), Register.RAX, Register.RAX, scope));
+            instructions.add(new MovInstruction(Register.RDX, Register.RAX));
+        }
+
+        if (eApp.listexpr_.size() > 3) {
+            instructions.addAll(generateExpr(eApp.listexpr_.get(3), Register.RAX, Register.RAX, scope));
+            instructions.add(new MovInstruction(Register.RCX, Register.RAX));
+        }
+
+        if (eApp.listexpr_.size() > 4) {
+            instructions.addAll(generateExpr(eApp.listexpr_.get(4), Register.RAX, Register.RAX, scope));
+            instructions.add(new MovInstruction(Register.R8, Register.RAX));
+        }
+
+        if (eApp.listexpr_.size() > 5) {
+            instructions.addAll(generateExpr(eApp.listexpr_.get(5), Register.RAX, Register.RAX, scope));
+            instructions.add(new MovInstruction(Register.R9, Register.RAX));
+        }
+
+        for (int i = eApp.listexpr_.size(); i > 6; i--) {
+            instructions.addAll(generateExpr(eApp.listexpr_.get(i-1), Register.RAX, Register.RAX, scope));
+            instructions.add(new PushInstruction(Register.RAX));
+        }
+
+        instructions.add(new CallInstruction(funcName));
+
+
+        int offset = max(0, (eApp.listexpr_.size() - 6)) * WORD_SIZE;
+
+        if (offset > 0) {
+            instructions.add(new AddInstruction(Register.RSP, YieldUtils.number(offset)));
+        }
+
+        return instructions;
+
+    }
+
     public static List<AssemblyInstruction> generateVar(EVar var, String destRegister, BackendScope scope) {
         VariableCompilerInfo varInfo = scope.getVariable(var.ident_);
 
-        int offset = varInfo.getOffset() * WORD_SIZE * -1;
+        int offset = varInfo.getOffset() * WORD_SIZE;
 
         return new ArrayList<>(Collections.singletonList(new MovInstruction(destRegister, MemoryReference.getWithOffset(Register.RBP, offset))));
     }
@@ -90,7 +144,11 @@ public class CompileExpression {
     }
 
     public static List<AssemblyInstruction> generateAdd(EAdd add, String destRegister, String sourceRegister, BackendScope scope) {
-        List<AssemblyInstruction> instructions = generateExpr(add.expr_2, destRegister, sourceRegister, scope);
+        List<AssemblyInstruction> instructions = new ArrayList<>();
+
+        instructions.add(new PushInstruction(Register.RCX));
+
+        instructions.addAll(generateExpr(add.expr_2, destRegister, sourceRegister, scope));
         instructions.add(new PushInstruction(Register.RAX));
 
         instructions.addAll(generateExpr(add.expr_1, destRegister, sourceRegister, scope));
@@ -102,6 +160,8 @@ public class CompileExpression {
         );
 
         instructions.addAll(oppInstr);
+
+        instructions.add(new PopInstruction(Register.RCX));
 
         return instructions;
     }
@@ -117,6 +177,8 @@ public class CompileExpression {
 
     public static List<AssemblyInstruction> generateMul(EMul mul, String destRegister, String sourceRegister, BackendScope scope) {
         List<AssemblyInstruction> instructions = new ArrayList<>();
+
+        instructions.add(new PushInstruction(Register.RCX));
 
         List<AssemblyInstruction> instructions1 = generateExpr(mul.expr_1, destRegister, sourceRegister, scope);
         List<AssemblyInstruction> instructions2 = generateExpr(mul.expr_2, destRegister, sourceRegister, scope);
@@ -135,6 +197,8 @@ public class CompileExpression {
 
         instructions.addAll(oppInstr);
 
+        instructions.add(new PopInstruction(Register.RCX));
+
         return instructions;
     }
 
@@ -142,28 +206,44 @@ public class CompileExpression {
         return new ArrayList<>(Collections.singletonList(new MulInstruction(destRegister, sourceRegister)));
     }
 
-    public static List<AssemblyInstruction> generateDivideInstructions(String destRegsister, String sourceRegister, BackendScope scope) {
+    public static List<AssemblyInstruction> generateDivideInstructions(String destRegister, String sourceRegister, BackendScope scope) {
         List<AssemblyInstruction> instructions = new ArrayList<>();
 
-        if (!destRegsister.equals(Register.RAX)) {
-            instructions.add(new MovInstruction(Register.RAX, destRegsister));
+
+        instructions.add(new PushInstruction(Register.RDX));
+
+        if (!destRegister.equals(Register.RAX)) {
+            instructions.add(new MovInstruction(Register.RAX, destRegister));
         }
 
         instructions.add(new XorInstruction(Register.RDX, Register.RDX));
         instructions.add(new DivInstruction(sourceRegister));
 
-        if (!destRegsister.equals(Register.RAX)) {
-            instructions.add(new MovInstruction(destRegsister, Register.RAX));
+        if (!destRegister.equals(Register.RAX)) {
+            instructions.add(new MovInstruction(destRegister, Register.RAX));
         }
+
+        instructions.add(new PopInstruction(Register.RDX));
 
         return instructions;
     }
 
     public static List<AssemblyInstruction> generateModInstruction(String destRegister, String sourceRegister, BackendScope scope) {
-        List<AssemblyInstruction> instructions = generateDivideInstructions(destRegister, sourceRegister, scope);
-        instructions.add(
-                new MovInstruction(Register.RAX, Register.RDX)
-        );
+        List<AssemblyInstruction> instructions = new ArrayList<>();
+
+
+        instructions.add(new PushInstruction(Register.RDX));
+
+        if (!destRegister.equals(Register.RAX)) {
+            instructions.add(new MovInstruction(Register.RAX, destRegister));
+        }
+
+        instructions.add(new XorInstruction(Register.RDX, Register.RDX));
+        instructions.add(new DivInstruction(sourceRegister));
+
+        instructions.add(new MovInstruction(destRegister, Register.RDX));
+
+        instructions.add(new PopInstruction(Register.RDX));
 
         return instructions;
     }
@@ -171,7 +251,7 @@ public class CompileExpression {
     public static List<AssemblyInstruction> generateLazyOr(EOr eOr, String destRegister, String sourceRegister, BackendScope scope) {
         List<AssemblyInstruction> expr1Instructions = generateExpr(eOr.expr_1, destRegister, sourceRegister, scope);
 
-        Label endLabel = getNonceLabel("or_end");
+        Label endLabel = getNonceLabel("_or_end");
 
         expr1Instructions.add(new CompareInstruction(destRegister, YieldUtils.number(1)));
         // if jumps, in RAX there is 1, so the result is correct
@@ -190,7 +270,7 @@ public class CompileExpression {
     public static List<AssemblyInstruction> generateLazyAnd(EAnd eAnd, String destRegister, String sourceRegister, BackendScope scope) {
         List<AssemblyInstruction> expr1Instructions = generateExpr(eAnd.expr_1, destRegister, sourceRegister, scope);
 
-        Label endLabel = getNonceLabel("and_end");
+        Label endLabel = getNonceLabel("_and_end");
 
         expr1Instructions.add(new CompareInstruction(destRegister, YieldUtils.number(0)));
         // if jumps, in RAX there is 0, so the result of AND is 0, so we can end
@@ -206,7 +286,11 @@ public class CompileExpression {
     }
 
     public static List<AssemblyInstruction> generateRel(ERel rel, String destRegister, String sourceRegister, BackendScope scope) {
-        List<AssemblyInstruction> instructions = generateExpr(rel.expr_2, destRegister, sourceRegister, scope);
+        List<AssemblyInstruction> instructions = new ArrayList<>();
+
+        instructions.add(new PushInstruction(Register.RCX));
+
+        instructions.addAll(generateExpr(rel.expr_2, destRegister, sourceRegister, scope));
         instructions.add(new PushInstruction(Register.RAX));
 
         instructions.addAll(generateExpr(rel.expr_1, destRegister, sourceRegister, scope));
@@ -215,7 +299,7 @@ public class CompileExpression {
         instructions.add(new CompareInstruction(Register.RAX, Register.RCX));
         instructions.add(new MovInstruction(destRegister, YieldUtils.number(1)));
 
-        Label endLabel = LabelsGenerator.getNonceLabel("rel_end");
+        Label endLabel = LabelsGenerator.getNonceLabel("_rel_end");
 
         instructions.add(rel.relop_.match(
                 (lth) -> new JumpInstruction(endLabel, JumpInstruction.Type.LTH),
@@ -228,6 +312,8 @@ public class CompileExpression {
 
         instructions.add(new MovInstruction(destRegister, YieldUtils.number(0)));
         instructions.add(endLabel);
+
+        instructions.add(new PopInstruction(Register.RCX));
 
         return instructions;
     }

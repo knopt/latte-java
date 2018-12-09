@@ -53,7 +53,7 @@ public class CompileStatement {
     public static List<AssemblyInstruction> generateVarIncr(VariableRawLhs var, BackendScope scope) {
         List<AssemblyInstruction> instructions = new ArrayList<>();
 
-        int offset = scope.getVariable(var.ident_).getOffset() * WORD_SIZE * -1;
+        int offset = scope.getVariable(var.ident_).getOffset() * WORD_SIZE;
 
         instructions.add(new MovInstruction(Register.RAX, MemoryReference.getWithOffset(Register.RBP, offset)));
         instructions.add(new AddInstruction(Register.RAX, YieldUtils.number(1)));
@@ -69,7 +69,7 @@ public class CompileStatement {
     public static List<AssemblyInstruction> generateVarDecr(VariableRawLhs var, BackendScope scope) {
         List<AssemblyInstruction> instructions = new ArrayList<>();
 
-        int offset = scope.getVariable(var.ident_).getOffset() * WORD_SIZE * -1;
+        int offset = scope.getVariable(var.ident_).getOffset() * WORD_SIZE;
 
         instructions.add(new MovInstruction(Register.RAX, MemoryReference.getWithOffset(Register.RBP, offset)));
         instructions.add(new SubInstruction(Register.RAX, YieldUtils.number(1)));
@@ -110,8 +110,8 @@ public class CompileStatement {
     public static List<AssemblyInstruction> generateWhile(While sWhile, BackendScope scope) {
         List<AssemblyInstruction> instructions = new ArrayList<>();
 
-        Label start = LabelsGenerator.getNonceLabel("start_while");
-        Label end = LabelsGenerator.getNonceLabel("end_start");
+        Label start = LabelsGenerator.getNonceLabel("_start_while");
+        Label end = LabelsGenerator.getNonceLabel("_end_start");
 
         instructions.add(start);
         instructions.addAll(generateExpr(sWhile.expr_, Register.RAX, Register.RAX, scope));
@@ -128,7 +128,7 @@ public class CompileStatement {
     public static List<AssemblyInstruction> generateCond(Cond cond, BackendScope scope) {
         List<AssemblyInstruction> instructions = generateExpr(cond.expr_, Register.RAX, Register.RAX, scope);
 
-        Label afterLabel = LabelsGenerator.getNonceLabel("end_if");
+        Label afterLabel = LabelsGenerator.getNonceLabel("_end_if");
 
         instructions.add(new CompareInstruction(Register.RAX, YieldUtils.number(1)));
         instructions.add(new JumpInstruction(afterLabel, JumpInstruction.Type.NE));
@@ -142,8 +142,8 @@ public class CompileStatement {
     public static List<AssemblyInstruction> generateCondElse(CondElse cond, BackendScope scope) {
         List<AssemblyInstruction> instructions = generateExpr(cond.expr_, Register.RAX, Register.RAX, scope);
 
-        Label afterLabel = LabelsGenerator.getNonceLabel("end_if");
-        Label elseLabel = LabelsGenerator.getNonceLabel("else");
+        Label afterLabel = LabelsGenerator.getNonceLabel("_end_if");
+        Label elseLabel = LabelsGenerator.getNonceLabel("_else");
 
         instructions.add(new CompareInstruction(Register.RAX, YieldUtils.number(1)));
         instructions.add(new JumpInstruction(elseLabel, JumpInstruction.Type.NE));
@@ -171,7 +171,7 @@ public class CompileStatement {
                 (blockS) -> generateBlockS(blockS, scope)
         ));
 
-        int offset = oldScope.getNumberofVariables() * WORD_SIZE;
+        int offset = oldScope.getNumberOfVariablesOnStack() * WORD_SIZE;
 
         instructions.add(new MovInstruction(Register.RSP, Register.RBP));
         instructions.add(new SubInstruction(Register.RSP, YieldUtils.number(offset)));
@@ -210,7 +210,7 @@ public class CompileStatement {
     }
 
     public static List<AssemblyInstruction> generateVariableAss(VariableRawLhs var, String sourceRegister, BackendScope scope) {
-        int varOffset = scope.getVariable(var.ident_).getOffset() * WORD_SIZE * -1;
+        int varOffset = scope.getVariable(var.ident_).getOffset() * WORD_SIZE;
 
         AssemblyInstruction instruction = new MovInstruction(MemoryReference.getWithOffset(Register.RBP, varOffset), sourceRegister);
 

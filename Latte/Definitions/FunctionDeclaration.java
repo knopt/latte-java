@@ -12,6 +12,7 @@ public class FunctionDeclaration implements CallableDeclaration {
     private List<VariableDefinition> argumentList;
     private MethodBody methodBody;
     private TypeDefinition returnType;
+    private boolean isExternal;
 
     @Override
     public String getName() {
@@ -83,10 +84,20 @@ public class FunctionDeclaration implements CallableDeclaration {
         return Objects.hash(name, argumentList, methodBody, returnType);
     }
 
+    public boolean isExternal() {
+        return isExternal;
+    }
+
+    public FunctionDeclaration setExternal(boolean external) {
+        isExternal = external;
+        return this;
+    }
+
     public FunctionDeclaration(String name, List<VariableDefinition> argumentList, Block block, TypeDefinition returnType) {
         this.name = name;
         this.argumentList = argumentList;
         this.methodBody = new MBody(block);
         this.returnType = returnType;
+        this.isExternal = false;
     }
 }

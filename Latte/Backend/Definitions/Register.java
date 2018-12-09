@@ -6,4 +6,8 @@ public class Register {
     public static String RDX = "rdx";
     public static String RBP = "rbp";
     public static String RSP = "rsp";
+    public static String RDI = "rdi";
+    public static String RSI = "rsi";
+    public static String R8 = "r8";
+    public static String R9 = "r9";
 }

@@ -21,23 +21,23 @@ public class Environment {
                     "printInt",
                     Arrays.asList(new VariableDefinition("x", BasicTypeDefinition.INT)),
                     null,
-                    BasicTypeDefinition.VOID),
+                    BasicTypeDefinition.VOID).setExternal(true),
             new FunctionDeclaration(
                     "printString",
                     Arrays.asList(new VariableDefinition("x", BasicTypeDefinition.STRING)),
                     null,
-                    BasicTypeDefinition.VOID),
+                    BasicTypeDefinition.VOID).setExternal(true),
             new FunctionDeclaration(
                     "readInt",
                     Collections.emptyList(),
                     null,
-                    BasicTypeDefinition.INT),
+                    BasicTypeDefinition.INT).setExternal(true),
             new FunctionDeclaration(
                     "readString",
                     Collections.emptyList(),
                     null,
                     BasicTypeDefinition.STRING
-            )
+            ).setExternal(true)
     );
 
     public Map<String, TypeDefinition> declaredTypes;

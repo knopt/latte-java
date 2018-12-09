@@ -1,12 +1,15 @@
-int main() {
-
-  int x = 0;
-
-  while (x < 10) {
-    x++;
+int fibo(int n) {
+  if (n > 1) {
+    return fibo(n - 1) + fibo(n - 2); 
   }
 
-  return x;
-  // return z * 1000;
-  // return (z * 1000 + 10) + 20 + (30 - 10) ;
+  return n;
+}
+
+
+int main() {
+
+  return fibo(13);
+
+
 }

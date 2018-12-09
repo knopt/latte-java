@@ -7,6 +7,7 @@ import Latte.Backend.Definitions.BackendScope;
 import Latte.Backend.Definitions.Register;
 import Latte.Backend.Instructions.*;
 import Latte.Definitions.FunctionDeclaration;
+import Latte.Definitions.VariableDefinition;
 import Latte.Frontend.Environment;
 
 import java.util.ArrayList;
@@ -33,20 +34,27 @@ public class Compile {
     }
 
     public List<AssemblyInstruction> generateEntryInstructions() {
-        return Arrays.asList(
-                new CustomInstruction(ConstantUtils.TAB + "section .text"),
-                new CustomInstruction(ConstantUtils.TAB + "align " + ConstantUtils.WORD_SIZE),
-                new CustomInstruction(ConstantUtils.TAB + "global main")
-        );
+        List<AssemblyInstruction> instructions = new ArrayList<>();
+
+        instructions.add(new CustomInstruction(ConstantUtils.TAB + "section .text"));
+        instructions.add(new CustomInstruction(ConstantUtils.TAB + "align " + ConstantUtils.WORD_SIZE));
+
+        for (FunctionDeclaration func : env.declaredFunctions.values()) {
+            instructions.add(new CustomInstruction(ConstantUtils.TAB + "global " + func.getName()));
+        }
+
+        return instructions;
     }
 
 
     public void generate() {
         addInstructions(generateEntryInstructions());
 
-        FunctionDeclaration func = env.declaredFunctions.get("main");
-
-        generateFunction(func);
+        for (FunctionDeclaration func : env.declaredFunctions.values()) {
+            if (!func.isExternal()) {
+                generateFunction(func);
+            }
+        }
     }
 
     public void generateFunction(FunctionDeclaration func) {
@@ -54,14 +62,62 @@ public class Compile {
 
         addInstructions(new Comment("code for function " + func.getName()));
         addInstructions(new Label(func.getName()));
-        addInstructions(generateEpilog());
+        addInstructions(generateProlog());
+
+        generateEntryArguments(func, scope);
+
+        BackendScope scopeWithArgs = new BackendScope(scope);
+
         func.getMethodBody().match(
                 null,
-                (body) -> generateBody(body, scope)
+                (body) -> generateBody(body, scopeWithArgs)
         );
     }
 
-    public List<AssemblyInstruction> generateEpilog() {
+    public void generateEntryArguments(FunctionDeclaration func, BackendScope scope) {
+        List<AssemblyInstruction> instructions = new ArrayList<>();
+
+        List<VariableDefinition> args = func.getArgumentList();
+
+        if (args.size() > 0) {
+            instructions.add(new PushInstruction(Register.RDI));
+            scope.declareVariable(args.get(0).getVariableName(), args.get(0).getType());
+        }
+
+        if (args.size() > 1) {
+            instructions.add(new PushInstruction(Register.RSI));
+            scope.declareVariable(args.get(1).getVariableName(), args.get(1).getType());
+        }
+
+        if (args.size() > 2) {
+            instructions.add(new PushInstruction(Register.RDX));
+            scope.declareVariable(args.get(2).getVariableName(), args.get(2).getType());
+        }
+
+        if (args.size() > 3) {
+            instructions.add(new PushInstruction(Register.RCX));
+            scope.declareVariable(args.get(3).getVariableName(), args.get(3).getType());
+        }
+
+        if (args.size() > 4) {
+            instructions.add(new PushInstruction(Register.R8));
+            scope.declareVariable(args.get(4).getVariableName(), args.get(4).getType());
+        }
+
+        if (args.size() > 5) {
+            instructions.add(new PushInstruction(Register.R9));
+            scope.declareVariable(args.get(5).getVariableName(), args.get(5).getType());
+        }
+
+        for (int i = 6; i < args.size(); i++) {
+            int offset = i - 4; // below rbp and return address
+            scope.declareVariable(args.get(i).getVariableName(), args.get(i).getType(), offset, false);
+        }
+
+        addInstructions(instructions);
+    }
+
+    public List<AssemblyInstruction> generateProlog() {
         List<AssemblyInstruction> instructions = new ArrayList<>();
 
         instructions.add(new PushInstruction(Register.RBP));
