@@ -181,12 +181,14 @@ public class ExpressionTypeCheck {
         // check they're equal
         validateTypes(exprType1, exprType2, add.line_num, add.col_num);
         // check they can be added
-        validateTypes(
-                Arrays.asList(
-                        BasicTypeDefinition.INT,
-                        BasicTypeDefinition.STRING
-                ),
-                exprType1, add.line_num, add.col_num);
+
+        add.addop_.match(
+                (plus) -> validateTypes(Arrays.asList(BasicTypeDefinition.INT, BasicTypeDefinition.STRING), exprType1, add.line_num, add.col_num),
+                (minus) -> validateTypes(BasicTypeDefinition.INT, exprType1, add.line_num, add.col_num)
+        );
+
+
+        add.type = exprType1;
 
         return exprType1;
     }

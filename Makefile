@@ -1,5 +1,4 @@
-export CLASSPATH=$CLASSPATH:bnfc/testing/data/java-cup-11b-runtime.jar:.
-
+export CLASSPATH=.:bnfc/testing/data/java-cup-11b-runtime.jar:.:lib/commons-lang3-3.8.1.jar
 
 JAVAC=javac
 JAVAC_FLAGS=-sourcepath .

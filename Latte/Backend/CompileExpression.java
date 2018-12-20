@@ -2,6 +2,7 @@ package Latte.Backend;
 
 import Latte.Absyn.*;
 import Latte.Backend.Definitions.BackendScope;
+import Latte.Backend.Definitions.ExternalFunctions;
 import Latte.Backend.Definitions.Register;
 import Latte.Backend.Definitions.VariableCompilerInfo;
 import Latte.Backend.Instructions.*;
@@ -144,6 +145,10 @@ public class CompileExpression {
     }
 
     public static List<AssemblyInstruction> generateAdd(EAdd add, String destRegister, String sourceRegister, BackendScope scope) {
+        if (BasicTypeDefinition.STRING.equals(add.type)) {
+            return generateStringAdd(add, destRegister, scope);
+        }
+
         List<AssemblyInstruction> instructions = new ArrayList<>();
 
         instructions.add(new PushInstruction(Register.RCX));
@@ -164,6 +169,32 @@ public class CompileExpression {
         instructions.add(new PopInstruction(Register.RCX));
 
         return instructions;
+    }
+
+    public static List<AssemblyInstruction> generateStringAdd(EAdd add, String destRegister, BackendScope scope) {
+        // here it has to be string + as there's no - in strings
+        List<AssemblyInstruction> instructions = new ArrayList<>();
+
+        instructions.add(new PushInstruction(Register.RDI));
+        instructions.add(new PushInstruction(Register.RSI));
+
+        instructions.addAll(generateExpr(add.expr_1, Register.RAX, Register.RAX, scope));
+        instructions.add(new MovInstruction(Register.RDI, Register.RAX));
+
+        instructions.addAll(generateExpr(add.expr_2, Register.RAX, Register.RAX, scope));
+        instructions.add(new MovInstruction(Register.RSI, Register.RAX));
+
+        instructions.add(new CallInstruction(ExternalFunctions.ADD_STRINGS));
+
+        instructions.add(new PopInstruction(Register.RSI));
+        instructions.add(new PopInstruction(Register.RDI));
+
+        if (!destRegister.equals(Register.RAX)) {
+            instructions.add(new MovInstruction(destRegister, Register.RAX));
+        }
+
+        return instructions;
+
     }
 
     public static List<AssemblyInstruction> getMinusInstruction(String destRegister, String sourceRegister, BackendScope scope) {

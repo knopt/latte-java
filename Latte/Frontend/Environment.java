@@ -1,5 +1,6 @@
 package Latte.Frontend;
 
+import Latte.Backend.Definitions.ExternalFunctions;
 import Latte.Backend.Instructions.Label;
 import Latte.Definitions.BasicTypeDefinition;
 import Latte.Definitions.FunctionDeclaration;
@@ -19,32 +20,11 @@ public class Environment {
     );
 
     public static List<FunctionDeclaration> basicFunctions = Arrays.asList(
-            new FunctionDeclaration(
-                    "printInt",
-                    Arrays.asList(new VariableDefinition("x", BasicTypeDefinition.INT)),
-                    null,
-                    BasicTypeDefinition.VOID).setExternal(true),
-            new FunctionDeclaration(
-                    "printString",
-                    Arrays.asList(new VariableDefinition("x", BasicTypeDefinition.STRING)),
-                    null,
-                    BasicTypeDefinition.VOID).setExternal(true),
-            new FunctionDeclaration(
-                    "error",
-                    Collections.emptyList(),
-                    null,
-                    BasicTypeDefinition.VOID).setExternal(true),
-            new FunctionDeclaration(
-                    "readInt",
-                    Collections.emptyList(),
-                    null,
-                    BasicTypeDefinition.INT).setExternal(true),
-            new FunctionDeclaration(
-                    "readString",
-                    Collections.emptyList(),
-                    null,
-                    BasicTypeDefinition.STRING
-            ).setExternal(true)
+            ExternalFunctions.PRINT_INT,
+            ExternalFunctions.PRINT_STRING,
+            ExternalFunctions.READ_INT,
+            ExternalFunctions.READ_STRING,
+            ExternalFunctions.ERROR
     );
 
     public Map<String, TypeDefinition> declaredTypes;

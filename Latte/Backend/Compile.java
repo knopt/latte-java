@@ -4,6 +4,7 @@ import Latte.Absyn.BlockS;
 import Latte.Absyn.MBody;
 import Latte.Absyn.Stmt;
 import Latte.Backend.Definitions.BackendScope;
+import Latte.Backend.Definitions.ExternalFunctions;
 import Latte.Backend.Definitions.Register;
 import Latte.Backend.Instructions.*;
 import Latte.Definitions.FunctionDeclaration;
@@ -33,27 +34,34 @@ public class Compile {
         this.code.add(instruction);
     }
 
-    public List<AssemblyInstruction> generateEntryInstructions() {
+    public List<AssemblyInstruction> generateSectionTextEntryInstructions() {
         List<AssemblyInstruction> instructions = new ArrayList<>();
 
-        instructions.add(new CustomInstruction(ConstantUtils.TAB + "section .text"));
+        instructions.add(new CustomInstruction("section .text"));
         instructions.add(new CustomInstruction(ConstantUtils.TAB + "align " + ConstantUtils.WORD_SIZE));
 
         for (FunctionDeclaration func : env.declaredFunctions.values()) {
-            instructions.add(new CustomInstruction(ConstantUtils.TAB + "global " + func.getName()));
+            if (func.isExternal()) {
+                instructions.add(new CustomInstruction(ConstantUtils.TAB + "extern " + func.getName()));
+            } else {
+                instructions.add(new CustomInstruction(ConstantUtils.TAB + "global " + func.getName()));
+            }
         }
+
+        instructions.add(new CustomInstruction(ConstantUtils.TAB + "extern " + ExternalFunctions.ADD_STRINGS));
 
         return instructions;
     }
 
-    public List<AssemblyInstruction> generateStringSections() {
+    public List<AssemblyInstruction> generateStringSection() {
         assignLabelsToStrings(env);
 
         List<AssemblyInstruction> instructions = new ArrayList<>();
 
+        instructions.add(new CustomInstruction("section .rodata"));
+
         for (String k : env.stringLiterals.keySet()) {
-            instructions.add(env.getStringLabel(k));
-            instructions.add(new StringInstruction(k));
+            instructions.add(new StringInstruction(env.getStringLabel(k).getLabelName(), k));
         }
 
         return instructions;
@@ -61,8 +69,8 @@ public class Compile {
 
 
     public void generate() {
-        addInstructions(generateEntryInstructions());
-        addInstructions(generateStringSections());
+        addInstructions(generateStringSection());
+        addInstructions(generateSectionTextEntryInstructions());
 
         for (FunctionDeclaration func : env.declaredFunctions.values()) {
             if (!func.isExternal()) {
@@ -75,7 +83,7 @@ public class Compile {
         Set<String> keys = env.stringLiterals.keySet();
 
         for (String k : keys) {
-            Label l = LabelsGenerator.getNonceLabel(".STR");
+            Label l = LabelsGenerator.getNonceLabel("str");
             env.declareStringLiteral(k, l);
         }
 

@@ -1,23 +1,14 @@
-int fibo(int n) {
-  if (n > 1) {
-    return fibo(n - 1) + fibo(n - 2); 
-  }
-
-  return n;
-}
-
-int g() {
-  if (true == true) {
-    return 0;
-  }
-
-  return 1;
-}
-
 
 int main() {
 
-  return fibo(13);
+  string s1 = "Hello world,";
+  string s2 = " the other part of the sentence which can be very long\n\n\n";
+
+  string s3 = s1 + s2 + "cos tam" + " nie wiem w sumie co";
+
+  printString(s3);
+ 
+  return 0;
 
 
 }
