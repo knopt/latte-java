@@ -11,9 +11,9 @@ import Latte.Definitions.VariableDefinition;
 import Latte.Frontend.Environment;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 public class Compile {
     Environment env;
@@ -46,15 +46,41 @@ public class Compile {
         return instructions;
     }
 
+    public List<AssemblyInstruction> generateStringSections() {
+        assignLabelsToStrings(env);
+
+        List<AssemblyInstruction> instructions = new ArrayList<>();
+
+        for (String k : env.stringLiterals.keySet()) {
+            instructions.add(env.getStringLabel(k));
+            instructions.add(new StringInstruction(k));
+        }
+
+        return instructions;
+    }
+
 
     public void generate() {
         addInstructions(generateEntryInstructions());
+        addInstructions(generateStringSections());
 
         for (FunctionDeclaration func : env.declaredFunctions.values()) {
             if (!func.isExternal()) {
                 generateFunction(func);
             }
         }
+    }
+
+    public void assignLabelsToStrings(Environment env) {
+        Set<String> keys = env.stringLiterals.keySet();
+
+        for (String k : keys) {
+            Label l = LabelsGenerator.getNonceLabel(".STR");
+            env.declareStringLiteral(k, l);
+        }
+
+        return;
+
     }
 
     public void generateFunction(FunctionDeclaration func) {
@@ -64,7 +90,7 @@ public class Compile {
         addInstructions(new Label(func.getName()));
         addInstructions(generateProlog());
 
-        generateEntryArguments(func, scope);
+        generatePushEntryArgumentsToStack(func, scope);
 
         BackendScope scopeWithArgs = new BackendScope(scope);
 
@@ -74,7 +100,7 @@ public class Compile {
         );
     }
 
-    public void generateEntryArguments(FunctionDeclaration func, BackendScope scope) {
+    public void generatePushEntryArgumentsToStack(FunctionDeclaration func, BackendScope scope) {
         List<AssemblyInstruction> instructions = new ArrayList<>();
 
         List<VariableDefinition> args = func.getArgumentList();

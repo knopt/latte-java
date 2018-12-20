@@ -30,7 +30,7 @@ public class CompileExpression {
                 (e) -> notImplemented(e),
                 (e) -> notImplemented(e),
                 (eApp) -> generateApp(eApp, destRegister, scope),
-                (e) -> notImplemented(e),
+                (str) -> generateStr(str, destRegister, scope),
                 (e) -> notImplemented(e),
                 (e) -> notImplemented(e),
                 (e) -> notImplemented(e),
@@ -329,6 +329,15 @@ public class CompileExpression {
         }
 
         return notImplemented(cast);
+    }
+
+    public static List<AssemblyInstruction> generateStr(EString str, String destRegister, BackendScope scope) {
+        List<AssemblyInstruction> instructions = new ArrayList<>();
+        Label l = scope.getGlobalEnvironment().getStringLabel(str.string_);
+
+        instructions.add(new MovInstruction(destRegister, l.getLabelName()));
+
+        return instructions;
     }
 
 

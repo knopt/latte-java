@@ -1,9 +1,11 @@
 package Latte.Frontend;
 
+import Latte.Backend.Instructions.Label;
 import Latte.Definitions.BasicTypeDefinition;
 import Latte.Definitions.FunctionDeclaration;
 import Latte.Definitions.TypeDefinition;
 import Latte.Definitions.VariableDefinition;
+import Latte.Exceptions.InternalStateException;
 import Latte.Exceptions.TypeCheckException;
 
 import java.util.*;
@@ -28,6 +30,11 @@ public class Environment {
                     null,
                     BasicTypeDefinition.VOID).setExternal(true),
             new FunctionDeclaration(
+                    "error",
+                    Collections.emptyList(),
+                    null,
+                    BasicTypeDefinition.VOID).setExternal(true),
+            new FunctionDeclaration(
                     "readInt",
                     Collections.emptyList(),
                     null,
@@ -42,10 +49,12 @@ public class Environment {
 
     public Map<String, TypeDefinition> declaredTypes;
     public Map<String, FunctionDeclaration> declaredFunctions;
+    public Map<String, Label> stringLiterals;
 
     public Environment() {
         this.declaredTypes = new HashMap<>();
         this.declaredFunctions = new HashMap<>();
+        this.stringLiterals = new HashMap<>();
     }
 
     public Environment withBasicTypes() {
@@ -88,5 +97,21 @@ public class Environment {
         }
 
         return declaredFunctions.get(name);
+    }
+
+    public void declareStringLiteral(String str) {
+        this.stringLiterals.put(str, null);
+    }
+
+    public void declareStringLiteral(String str, Label label) {
+        this.stringLiterals.put(str, label);
+    }
+
+    public Label getStringLabel(String s) {
+        if (!this.stringLiterals.containsKey(s)) {
+            throw new InternalStateException("Env is supposed to have string literal declared");
+        }
+
+        return this.stringLiterals.get(s);
     }
 }

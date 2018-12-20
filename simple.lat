@@ -6,6 +6,14 @@ int fibo(int n) {
   return n;
 }
 
+int g() {
+  if (true == true) {
+    return 0;
+  }
+
+  return 1;
+}
+
 
 int main() {
 

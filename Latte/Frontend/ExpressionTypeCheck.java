@@ -6,6 +6,7 @@ import Latte.Exceptions.IllegalTypeException;
 import Latte.Exceptions.TypeCheckException;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static Latte.Frontend.TypeUtils.getType;
 import static Latte.Frontend.TypeUtils.validateTypes;
@@ -22,7 +23,7 @@ public class ExpressionTypeCheck {
                 (eThis) -> typeCheckThis(eThis, callableDeclaration),
                 ExpressionTypeCheck::typeCheckNull,
                 (eApp) -> typeCheckEApp(eApp, scope, callableDeclaration),
-                ExpressionTypeCheck::typeCheckString,
+                (str) -> typeCheckString(str, scope),
                 (constr) -> typeCheckConstr(constr, scope),
                 (arrConstr) -> typeCheckArrConstr(arrConstr, scope, callableDeclaration),
                 (arrAcc) -> typeCheckENDArrayAcc(arrAcc, scope, callableDeclaration),
@@ -95,7 +96,8 @@ public class ExpressionTypeCheck {
         throw e;
     }
 
-    public static TypeDefinition typeCheckString(EString str) {
+    public static TypeDefinition typeCheckString(EString str, FrontendScope scope) {
+        scope.globalEnvironment.declareStringLiteral(str.string_);
         return BasicTypeDefinition.STRING;
     }
 
@@ -195,14 +197,16 @@ public class ExpressionTypeCheck {
 
         validateTypes(exprType1, exprType2, rel.line_num, rel.col_num);
 
+        List<BasicTypeDefinition> types = Arrays.asList(BasicTypeDefinition.INT, BasicTypeDefinition.INT);
+
 
         rel.relop_.match(
                 (ignored) -> validateTypes(BasicTypeDefinition.INT, exprType1, rel.line_num, rel.col_num),
                 (ignored) -> validateTypes(BasicTypeDefinition.INT, exprType1, rel.line_num, rel.col_num),
                 (ignored) -> validateTypes(BasicTypeDefinition.INT, exprType1, rel.line_num, rel.col_num),
                 (ignored) -> validateTypes(BasicTypeDefinition.INT, exprType1, rel.line_num, rel.col_num),
-                (ignored) -> null,
-                (ignored) -> null
+                (ignored) -> validateTypes(types, exprType1, rel.line_num, rel.col_num),
+                (ignored) -> validateTypes(types, exprType1, rel.line_num, rel.col_num)
         );
 
         return BasicTypeDefinition.BOOLEAN;
