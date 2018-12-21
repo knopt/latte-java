@@ -19,12 +19,17 @@ public class MemoryReference {
         return multiplier + " * ";
     }
 
+
     public static String getWithOffset(String register, int offset) {
         return "[" + register + offsetToString(offset) + "]";
     }
 
     public static String get(String register, int multiplier, int offset) {
         return "[" + multipilerToString(multiplier) + register + offsetToString(offset) + "]";
+    }
+
+    public static String getWithConstOffset(String baseRegister, String indexRegister, int offset, int multiplier) {
+        return "[" + baseRegister + " + " + multipilerToString(multiplier) + indexRegister + offsetToString(offset) + "]";
     }
 
     public static String getWithMultiplier(String register, int multiplier) {

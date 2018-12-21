@@ -49,6 +49,7 @@ public class Compile {
         }
 
         instructions.add(new CustomInstruction(ConstantUtils.TAB + "extern " + ExternalFunctions.ADD_STRINGS));
+        instructions.add(new CustomInstruction(ConstantUtils.TAB + "extern " + ExternalFunctions.MALLOC_ARRAY));
 
         return instructions;
     }

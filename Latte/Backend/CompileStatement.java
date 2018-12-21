@@ -15,6 +15,7 @@ import java.util.List;
 import static Latte.Backend.CompileExpression.generateExpr;
 import static Latte.Backend.Instructions.ConstantUtils.WORD_SIZE;
 import static Latte.Frontend.TypeUtils.getType;
+import static Latte.PrettyPrinter.print;
 
 public class CompileStatement {
 
@@ -86,12 +87,13 @@ public class CompileStatement {
         List<AssemblyInstruction> instructions = new ArrayList<>();
 
         instructions.add(new Comment(""));
-        instructions.add(new Comment(" declaration"));
+        instructions.add(new Comment(" declaration " + print(decl)));
 
         TypeDefinition type = decl.type_.match(
                 (arrayType) -> getType(arrayType, scope.getGlobalEnvironment()),
                 (typeNameS) -> getType(typeNameS, scope.getGlobalEnvironment())
         );
+
 
         for (Item item : decl.listitem_) {
             instructions.addAll(item.match(
@@ -197,7 +199,7 @@ public class CompileStatement {
         List<AssemblyInstruction> instructions = new ArrayList<>();
 
         instructions.add(new Comment(""));
-        instructions.add(new Comment("assignment"));
+        instructions.add(new Comment("assignment " + print(ass)));
 
         instructions.addAll(generateExpr(ass.expr_, Register.RAX, Register.RAX, scope));
 
@@ -217,8 +219,30 @@ public class CompileStatement {
         return new ArrayList<>(Collections.singletonList(instruction));
     }
 
-    public static List<AssemblyInstruction> generateVariableArrayAss(ArrElemLhs arrElem, String sourceRegister, BackendScope scope) {
-        throw new CompilerException("ArrElemAss not implemented!");
+    public static List<AssemblyInstruction> generateVariableArrayAss(ArrElemLhs arrElem, String registerOfValue, BackendScope scope) {
+        int varOffset = scope.getVariable(arrElem.ident_).getOffset() * WORD_SIZE;
+        List<AssemblyInstruction> instructions = new ArrayList<>();
+
+        instructions.add(new PushInstruction(Register.RCX));
+        instructions.add(new PushInstruction(Register.RDX));
+        instructions.add(new PushInstruction(registerOfValue));
+
+        // expr odpowiedzialne za index
+        instructions.addAll(generateExpr(arrElem.expr_, Register.RAX, Register.RAX, scope));
+        instructions.add(new MovInstruction(Register.RDX, Register.RAX));
+
+        // adres początku tablicy
+        instructions.add(new MovInstruction(Register.RCX, MemoryReference.getWithOffset(Register.RBP, varOffset)));
+
+        instructions.add(new PopInstruction(Register.RAX));
+
+        // wzielismy to co jest pod adresem, musimy teraz policzyc offset na podstawie indexu i wpisac tam wartość która była w source Register
+        instructions.add(new MovInstruction(MemoryReference.getWithConstOffset(Register.RCX, Register.RDX, WORD_SIZE * 1, WORD_SIZE), Register.RAX));
+
+        instructions.add(new PopInstruction(Register.RDX));
+        instructions.add(new PopInstruction(Register.RCX));
+
+        return instructions;
     }
 
     public static List<AssemblyInstruction> generateNoInit(NoInit noInit, TypeDefinition type, BackendScope scope) {

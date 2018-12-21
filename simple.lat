@@ -1,13 +1,26 @@
 
 int main() {
 
-  string s1 = "Hello world,";
-  string s2 = " the other part of the sentence which can be very long\n\n\n";
 
-  string s3 = s1 + s2 + "cos tam" + " nie wiem w sumie co";
+  int[] a = new int[5];
 
-  printString(s3);
+  a[0] = 1;
+  a[1] = 2;
+  a[2] = 3;
+  a[3] = 4;
+  a[4] = 5;
  
+  int sum = 0;
+  int i = 0;
+
+  while (i < 5) {
+    sum = sum + a[i];
+    i++;
+  }
+
+
+  printInt(sum);
+
   return 0;
 
 

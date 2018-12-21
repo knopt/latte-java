@@ -45,3 +45,19 @@ char* _addStrings(char* s1, char* s2) {
 
       return s3;
 }
+
+int* _mallocArray(int size) {
+    if (size <= 0) {
+        printf("can't malloc non positive size\n");
+        exit(1);
+    }
+
+    int* arr = (int *) malloc((1 + size) * sizeof(long));
+
+    if (!arr) {
+        printf("malloc error of size %d\n", size);
+        exit(1);
+    }
+
+    return arr;
+}

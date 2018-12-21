@@ -43,5 +43,6 @@ public class ExternalFunctions {
 
 
     public static String ADD_STRINGS = "_addStrings";
+    public static String MALLOC_ARRAY = "_mallocArray";
 
 }

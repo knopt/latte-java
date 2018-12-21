@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static Latte.Backend.Definitions.Register.memAcc;
 import static Latte.Backend.Instructions.ConstantUtils.WORD_SIZE;
 import static Latte.Backend.LabelsGenerator.getNonceLabel;
 import static Latte.Frontend.TypeUtils.getType;
@@ -29,12 +30,12 @@ public class CompileExpression {
                 (e) -> generateTrue(destRegister),
                 (e) -> generateFalse(destRegister),
                 (e) -> notImplemented(e),
-                (e) -> notImplemented(e),
+                (ignored) -> generateNull(destRegister),
                 (eApp) -> generateApp(eApp, destRegister, scope),
                 (str) -> generateStr(str, destRegister, scope),
                 (e) -> notImplemented(e),
-                (e) -> notImplemented(e),
-                (e) -> notImplemented(e),
+                (arrConstr) -> generateArrConstr(arrConstr, destRegister, scope),
+                (arrAcc) -> generateArrAcc(arrAcc, destRegister, scope),
                 (neg) -> generateNeg(neg, destRegister, sourceRegister, scope),
                 (not) -> generateNot(not, destRegister, sourceRegister, scope),
                 (mul) -> generateMul(mul, destRegister, sourceRegister, scope),
@@ -367,6 +368,54 @@ public class CompileExpression {
         Label l = scope.getGlobalEnvironment().getStringLabel(str.string_);
 
         instructions.add(new MovInstruction(destRegister, l.getLabelName()));
+
+        return instructions;
+    }
+
+    public static List<AssemblyInstruction> generateNull(String destRegister) {
+        List<AssemblyInstruction> instructions = new ArrayList<>();
+
+        instructions.add(new XorInstruction(destRegister, destRegister));
+
+        return instructions;
+    }
+
+    public static List<AssemblyInstruction> generateArrConstr(EArrConstr constr, String destRegister, BackendScope scope) {
+        List<AssemblyInstruction> instructions = new ArrayList<>();
+
+        instructions.addAll(generateExpr(constr.expr_, Register.RAX, Register.RAX, scope));
+        instructions.add(new MovInstruction(Register.RDI, Register.RAX));
+
+        instructions.add(new PushInstruction(Register.RDI));
+        instructions.add(new CallInstruction(ExternalFunctions.MALLOC_ARRAY));
+        instructions.add(new PopInstruction(Register.RDI));
+
+        if (!destRegister.equals(Register.RAX)) {
+            instructions.add(new MovInstruction(destRegister, Register.RAX));
+        }
+
+        return  instructions;
+
+    }
+
+    public static List<AssemblyInstruction> generateArrAcc(ENDArrAcc acc, String destRegister, BackendScope scope) {
+        List<AssemblyInstruction> instructions = new ArrayList<>();
+
+        instructions.add(new PushInstruction(Register.RCX));
+
+        instructions.addAll(generateExpr(acc.expr_1, Register.RAX, Register.RAX, scope));
+        instructions.add(new PushInstruction(Register.RAX));
+        instructions.addAll(generateExpr(acc.expr_2, Register.RAX, Register.RAX, scope));
+
+        instructions.add(new PopInstruction(Register.RCX));
+
+        instructions.add(new MovInstruction(Register.RAX, MemoryReference.getWithConstOffset(Register.RCX,Register.RAX, 8 , WORD_SIZE)));
+
+        instructions.add(new PopInstruction(Register.RCX));
+
+        if (!destRegister.equals(Register.RAX)) {
+            instructions.add(new MovInstruction(destRegister, Register.RAX));
+        }
 
         return instructions;
     }
