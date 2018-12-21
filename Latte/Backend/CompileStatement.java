@@ -64,7 +64,24 @@ public class CompileStatement {
     }
 
     public static List<AssemblyInstruction> generateArrIncr(ArrElemLhs arrElem, BackendScope scope) {
-        return notImplemented(null);
+        int varOffset = scope.getVariable(arrElem.ident_).getOffset() * WORD_SIZE;
+        List<AssemblyInstruction> instructions = new ArrayList<>();
+
+        instructions.add(new PushInstruction(Register.RCX));
+
+
+        instructions.addAll(generateExpr(arrElem.expr_, Register.RAX, Register.RAX, scope));
+        instructions.add(new AddInstruction(Register.RAX, YieldUtils.number(1)));
+        instructions.add(new MulInstruction(Register.RAX, YieldUtils.number(WORD_SIZE)));
+        instructions.add(new AddInstruction(Register.RAX, MemoryReference.getWithOffset(Register.RBP, varOffset)));
+
+        instructions.add(new MovInstruction(Register.RCX, MemoryReference.getRaw(Register.RAX)));
+        instructions.add(new AddInstruction(Register.RCX, YieldUtils.number(1)));
+        instructions.add(new MovInstruction(MemoryReference.getRaw(Register.RAX), Register.RCX));
+
+        instructions.add(new PopInstruction(Register.RCX));
+
+        return instructions;
     }
 
     public static List<AssemblyInstruction> generateVarDecr(VariableRawLhs var, BackendScope scope) {
@@ -80,7 +97,24 @@ public class CompileStatement {
     }
 
     public static List<AssemblyInstruction> generateArrDecr(ArrElemLhs arrElem, BackendScope scope) {
-        return notImplemented(null);
+        int varOffset = scope.getVariable(arrElem.ident_).getOffset() * WORD_SIZE;
+        List<AssemblyInstruction> instructions = new ArrayList<>();
+
+        instructions.add(new PushInstruction(Register.RCX));
+
+
+        instructions.addAll(generateExpr(arrElem.expr_, Register.RAX, Register.RAX, scope));
+        instructions.add(new AddInstruction(Register.RAX, YieldUtils.number(1)));
+        instructions.add(new MulInstruction(Register.RAX, YieldUtils.number(WORD_SIZE)));
+        instructions.add(new AddInstruction(Register.RAX, MemoryReference.getWithOffset(Register.RBP, varOffset)));
+
+        instructions.add(new MovInstruction(Register.RCX, MemoryReference.getRaw(Register.RAX)));
+        instructions.add(new SubInstruction(Register.RCX, YieldUtils.number(1)));
+        instructions.add(new MovInstruction(MemoryReference.getRaw(Register.RAX), Register.RCX));
+
+        instructions.add(new PopInstruction(Register.RCX));
+
+        return instructions;
     }
 
     public static List<AssemblyInstruction> generateDecl(Decl decl, BackendScope scope) {
