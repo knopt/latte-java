@@ -224,22 +224,18 @@ public class CompileStatement {
         List<AssemblyInstruction> instructions = new ArrayList<>();
 
         instructions.add(new PushInstruction(Register.RCX));
-        instructions.add(new PushInstruction(Register.RDX));
-        instructions.add(new PushInstruction(registerOfValue));
 
-        // expr odpowiedzialne za index
+        if (!registerOfValue.equals(Register.RCX)) {
+            instructions.add(new MovInstruction(Register.RCX, registerOfValue));
+        }
+
         instructions.addAll(generateExpr(arrElem.expr_, Register.RAX, Register.RAX, scope));
-        instructions.add(new MovInstruction(Register.RDX, Register.RAX));
+        instructions.add(new AddInstruction(Register.RAX, YieldUtils.number(1)));
+        instructions.add(new MulInstruction(Register.RAX, YieldUtils.number(WORD_SIZE)));
+        instructions.add(new AddInstruction(Register.RAX, MemoryReference.getWithOffset(Register.RBP, varOffset)));
 
-        // adres początku tablicy
-        instructions.add(new MovInstruction(Register.RCX, MemoryReference.getWithOffset(Register.RBP, varOffset)));
+        instructions.add(new MovInstruction(MemoryReference.getRaw(Register.RAX), Register.RCX));
 
-        instructions.add(new PopInstruction(Register.RAX));
-
-        // wzielismy to co jest pod adresem, musimy teraz policzyc offset na podstawie indexu i wpisac tam wartość która była w source Register
-        instructions.add(new MovInstruction(MemoryReference.getWithConstOffset(Register.RCX, Register.RDX, WORD_SIZE * 1, WORD_SIZE), Register.RAX));
-
-        instructions.add(new PopInstruction(Register.RDX));
         instructions.add(new PopInstruction(Register.RCX));
 
         return instructions;

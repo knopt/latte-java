@@ -35,4 +35,8 @@ public class MemoryReference {
     public static String getWithMultiplier(String register, int multiplier) {
         return "[" + multipilerToString(multiplier) + register + "]";
     }
+
+    public static String getRaw(String register) {
+        return "[" + register + "]";
+    }
 }
