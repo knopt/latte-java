@@ -18,4 +18,8 @@ public interface CallableDeclaration {
     public TypeDefinition getCallerType();
 
     public Boolean isMethod();
+
+    public int getNumberOfVariables();
+
+    public void setNumberOfVariables(int number);
 }

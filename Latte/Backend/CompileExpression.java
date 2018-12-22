@@ -88,6 +88,7 @@ public class CompileExpression {
             instructions.add(new PushInstruction(Register.RAX));
         }
 
+
         instructions.add(new CallInstruction(funcName));
 
 

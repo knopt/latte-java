@@ -13,6 +13,7 @@ public class FunctionDeclaration implements CallableDeclaration {
     private MethodBody methodBody;
     private TypeDefinition returnType;
     private boolean isExternal;
+    private int numberOfVariables;
 
     @Override
     public String getName() {
@@ -77,6 +78,16 @@ public class FunctionDeclaration implements CallableDeclaration {
     @Override
     public Boolean isMethod() {
         return false;
+    }
+
+    @Override
+    public int getNumberOfVariables() {
+        return numberOfVariables;
+    }
+
+    @Override
+    public void setNumberOfVariables(int number) {
+        this.numberOfVariables = number;
     }
 
     @Override

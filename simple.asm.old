@@ -1,0 +1,38 @@
+section .rodata
+   str_0 db "b:", 0
+section .text
+   align 8
+   extern printInt
+   extern readString
+   global main
+   extern printString
+   extern readInt
+   extern error
+   extern _addStrings
+   extern _mallocArray
+; code for function main
+main:
+   push rbp
+   mov rbp, rsp
+; 
+;  declaration int [] a;
+
+   mov rax, 0
+   push rax
+; 
+;  declaration int b = readInt ();
+
+   call readInt
+   push rax
+   mov rax, str_0
+   mov rdi, rax
+   call printString
+   mov rax, [rbp - 16]
+   mov rdi, rax
+   call printInt
+; 
+; return from function
+   mov rax, 0
+   mov rsp, rbp
+   pop rbp
+   ret

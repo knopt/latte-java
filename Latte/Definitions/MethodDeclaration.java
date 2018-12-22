@@ -11,6 +11,7 @@ public class MethodDeclaration implements CallableDeclaration {
     public TypeDefinition returnType;
     public MethodBody methodBody;
     public TypeDefinition callerType;
+    public int numberOfVariables;
 
     public MethodDeclaration(String name, List<VariableDefinition> argumentList, MethodBody methodBody, TypeDefinition returnType, TypeDefinition callerType) {
         this.name = name;
@@ -82,6 +83,16 @@ public class MethodDeclaration implements CallableDeclaration {
     @Override
     public Boolean isMethod() {
         return true;
+    }
+
+    @Override
+    public int getNumberOfVariables() {
+        return numberOfVariables;
+    }
+
+    @Override
+    public void setNumberOfVariables(int number) {
+        this.numberOfVariables = number;
     }
 
 }

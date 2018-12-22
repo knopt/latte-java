@@ -16,6 +16,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import static Latte.Backend.Instructions.ConstantUtils.WORD_SIZE;
+
 public class Compile {
     Environment env;
 
@@ -38,7 +40,7 @@ public class Compile {
         List<AssemblyInstruction> instructions = new ArrayList<>();
 
         instructions.add(new CustomInstruction("section .text"));
-        instructions.add(new CustomInstruction(ConstantUtils.TAB + "align " + ConstantUtils.WORD_SIZE));
+        instructions.add(new CustomInstruction(ConstantUtils.TAB + "align " + 16));
 
         for (FunctionDeclaration func : env.declaredFunctions.values()) {
             if (func.isExternal()) {
@@ -97,7 +99,7 @@ public class Compile {
 
         addInstructions(new Comment("code for function " + func.getName()));
         addInstructions(new Label(func.getName()));
-        addInstructions(generateProlog());
+        addInstructions(generateProlog(func.getNumberOfVariables()));
 
         generatePushEntryArgumentsToStack(func, scope);
 
@@ -115,33 +117,51 @@ public class Compile {
         List<VariableDefinition> args = func.getArgumentList();
 
         if (args.size() > 0) {
-            instructions.add(new PushInstruction(Register.RDI));
-            scope.declareVariable(args.get(0).getVariableName(), args.get(0).getType());
+            int pos = 0;
+            String register = Register.RDI;
+            scope.declareVariable(args.get(pos).getVariableName(), args.get(pos).getType());
+            int offset = scope.getVariable(args.get(pos).getVariableName()).getOffset() * WORD_SIZE;
+            instructions.add(new MovInstruction(MemoryReference.getWithOffset(Register.RBP, offset), register));
         }
 
         if (args.size() > 1) {
-            instructions.add(new PushInstruction(Register.RSI));
-            scope.declareVariable(args.get(1).getVariableName(), args.get(1).getType());
+            int pos = 1;
+            String register = Register.RSI;
+            scope.declareVariable(args.get(pos).getVariableName(), args.get(pos).getType());
+            int offset = scope.getVariable(args.get(pos).getVariableName()).getOffset() * WORD_SIZE;
+            instructions.add(new MovInstruction(MemoryReference.getWithOffset(Register.RBP, offset), register));
         }
 
         if (args.size() > 2) {
-            instructions.add(new PushInstruction(Register.RDX));
-            scope.declareVariable(args.get(2).getVariableName(), args.get(2).getType());
+            int pos = 2;
+            String register = Register.RDX;
+            scope.declareVariable(args.get(pos).getVariableName(), args.get(pos).getType());
+            int offset = scope.getVariable(args.get(pos).getVariableName()).getOffset() * WORD_SIZE;
+            instructions.add(new MovInstruction(MemoryReference.getWithOffset(Register.RBP, offset), register));
         }
 
         if (args.size() > 3) {
-            instructions.add(new PushInstruction(Register.RCX));
-            scope.declareVariable(args.get(3).getVariableName(), args.get(3).getType());
+            int pos = 3;
+            String register = Register.RCX;
+            scope.declareVariable(args.get(pos).getVariableName(), args.get(pos).getType());
+            int offset = scope.getVariable(args.get(pos).getVariableName()).getOffset() * WORD_SIZE;
+            instructions.add(new MovInstruction(MemoryReference.getWithOffset(Register.RBP, offset), register));
         }
 
         if (args.size() > 4) {
-            instructions.add(new PushInstruction(Register.R8));
-            scope.declareVariable(args.get(4).getVariableName(), args.get(4).getType());
+            int pos = 4;
+            String register = Register.R8;
+            scope.declareVariable(args.get(pos).getVariableName(), args.get(pos).getType());
+            int offset = scope.getVariable(args.get(pos).getVariableName()).getOffset() * WORD_SIZE;
+            instructions.add(new MovInstruction(MemoryReference.getWithOffset(Register.RBP, offset), register));
         }
 
         if (args.size() > 5) {
-            instructions.add(new PushInstruction(Register.R9));
-            scope.declareVariable(args.get(5).getVariableName(), args.get(5).getType());
+            int pos = 5;
+            String register = Register.R9;
+            scope.declareVariable(args.get(pos).getVariableName(), args.get(pos).getType());
+            int offset = scope.getVariable(args.get(pos).getVariableName()).getOffset() * WORD_SIZE;
+            instructions.add(new MovInstruction(MemoryReference.getWithOffset(Register.RBP, offset), register));
         }
 
         for (int i = 6; i < args.size(); i++) {
@@ -152,11 +172,12 @@ public class Compile {
         addInstructions(instructions);
     }
 
-    public List<AssemblyInstruction> generateProlog() {
+    public List<AssemblyInstruction> generateProlog(int numberOfVariables) {
         List<AssemblyInstruction> instructions = new ArrayList<>();
 
         instructions.add(new PushInstruction(Register.RBP));
         instructions.add(new MovInstruction(Register.RBP, Register.RSP));
+        instructions.add(new SubInstruction(Register.RSP, YieldUtils.number(numberOfVariables * WORD_SIZE)));
 
         return instructions;
     }

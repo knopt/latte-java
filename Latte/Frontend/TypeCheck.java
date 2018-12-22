@@ -351,6 +351,8 @@ public class TypeCheck {
                 TypeCheck::typeCheckCallable,
                 (body) -> typeCheckCallable(body, callableDeclaration)
         );
+
+        callableDeclaration.setNumberOfVariables(LocalVariablesCounter.callableVariablesCounter(callableDeclaration));
     }
 
     public static Boolean typeCheckCallable(EmptyMBody emptyMBody) {

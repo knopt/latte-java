@@ -207,11 +207,6 @@ public class CompileStatement {
                 (blockS) -> generateBlockS(blockS, scope)
         ));
 
-        int offset = oldScope.getNumberOfVariablesOnStack() * WORD_SIZE;
-
-        instructions.add(new MovInstruction(Register.RSP, Register.RBP));
-        instructions.add(new SubInstruction(Register.RSP, YieldUtils.number(offset)));
-
         instructions.add(new Comment(""));
         instructions.add(new Comment("end block"));
 
@@ -278,10 +273,10 @@ public class CompileStatement {
     public static List<AssemblyInstruction> generateNoInit(NoInit noInit, TypeDefinition type, BackendScope scope) {
         List<AssemblyInstruction> instructions = new ArrayList<>();
 
-        instructions.add(new MovInstruction(Register.RAX, YieldUtils.number(0)));
-        instructions.add(new PushInstruction(Register.RAX));
-
         scope.declareVariable(noInit.ident_, type);
+        int offset = scope.getVariable(noInit.ident_).getOffset() * WORD_SIZE;
+        instructions.add(new MovInstruction(Register.RAX, YieldUtils.number(0)));
+        instructions.add(new MovInstruction(MemoryReference.getWithOffset(Register.RBP, offset), Register.RAX));
 
         return instructions;
     }
@@ -289,9 +284,10 @@ public class CompileStatement {
     public static List<AssemblyInstruction> generateInit(Init init, TypeDefinition type, BackendScope scope) {
         List<AssemblyInstruction> instructions = generateExpr(init.expr_, Register.RAX, Register.RAX, scope);
 
-        instructions.add(new PushInstruction(Register.RAX));
-
         scope.declareVariable(init.ident_, type);
+        int offset = scope.getVariable(init.ident_).getOffset() * WORD_SIZE;
+        instructions.add(new MovInstruction(MemoryReference.getWithOffset(Register.RBP, offset), Register.RAX));
+
 
         return instructions;
     }
@@ -327,5 +323,6 @@ public class CompileStatement {
     public static List<AssemblyInstruction> notImplemented(Stmt stmt) {
         throw new CompilerException("Compiling statement " + stmt.getClass() + " not implemented yet");
     }
+
 
 }

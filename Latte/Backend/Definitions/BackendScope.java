@@ -15,6 +15,7 @@ public class BackendScope {
     private Map<String, VariableCompilerInfo> declaredVariables;
     private Map<String, VariableCompilerInfo> scopesDeclaredVariables;
     private int numberOfVarsOnStack;
+    private int stackHeight;
 
     public Environment getGlobalEnvironment() {
         return globalEnvironment;
@@ -65,6 +66,7 @@ public class BackendScope {
         this.declaredVariables = new HashMap<>();
         this.scopesDeclaredVariables = new HashMap<>();
         this.numberOfVarsOnStack = 0;
+        this.stackHeight = 0;
     }
 
     public BackendScope(BackendScope that) {
@@ -72,6 +74,7 @@ public class BackendScope {
         this.declaredVariables = new HashMap<>(that.declaredVariables);
         this.scopesDeclaredVariables = new HashMap<>();
         this.numberOfVarsOnStack = that.numberOfVarsOnStack;
+        this.stackHeight = that.stackHeight;
     }
 
     public BackendScope withVariables(List<VariableCompilerInfo> variables) {

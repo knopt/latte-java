@@ -1,28 +1,26 @@
 
 int main() {
-
-
-  int[] a = new int[5];
-
-  a[0] = 1;
-  a[1] = 2;
-  a[2] = 3;
-  a[3] = 4;
-  a[4] = 5;
-
-  a[0]++;
-  a[1]--;
+  
+  int a = 0;
+  int z = 1;
  
-  int sum = 0;
-  int i = 0;
+  printInt(a);
 
-  while (i < 5) {
-    sum = sum + a[i];
-    i++;
+  {
+    int a = 5;
+    z = 42;
+
+    {
+      a = 10;
+      printInt(a);
+    } 
+
+    printInt(a);
   }
 
-
-  printInt(sum);
+  printInt(a);
+  printInt(z);
+  
 
   return 0;
 

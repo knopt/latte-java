@@ -4,11 +4,11 @@
 
 
 void printInt(int i) {
-    printf("%d", i);
+    printf("%d\n", i);
 }
 
 void printString(char* str) {
-    printf("%s", str);
+    printf("%s\n", str);
 }
 
 char* readString() {
@@ -26,9 +26,10 @@ char* readString() {
     return line;
 }
 
-int readInt() {
-    int i = 0;
-    scanf("%d", &i);
+long readInt() {
+    long i = 0;
+
+    scanf("%ld", &i);
 
     return i;
 }
