@@ -1,26 +1,17 @@
 
 int main() {
   
-  int a = 0;
-  int z = 1;
- 
-  printInt(a);
-
-  {
-    int a = 5;
-    z = 42;
-
-    {
-      a = 10;
-      printInt(a);
-    } 
-
-    printInt(a);
-  }
-
-  printInt(a);
-  printInt(z);
+  string b = "hehe!";
   
+  printString(b);
+
+  int[] a;
+
+  int c = readInt();
+
+  printString("100 / przeczytana wartosc:");
+
+  printInt( c);
 
   return 0;
 

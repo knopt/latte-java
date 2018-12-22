@@ -21,8 +21,20 @@ public class BackendScope {
         return globalEnvironment;
     }
 
-    public int getNumberOfVariablesOnStack() {
-        return numberOfVarsOnStack;
+    public int getNumberOfTempsOnStack() {
+        return stackHeight;
+    }
+
+    public void incrTempsOnStack() {
+        stackHeight++;
+    }
+
+    public void decrTempsOnStack() {
+        stackHeight--;
+    }
+
+    public void changeTempsOnStack(int change) {
+        stackHeight += change;
     }
 
     public void declareVariable(String name, TypeDefinition type) {

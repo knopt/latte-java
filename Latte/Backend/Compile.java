@@ -177,7 +177,10 @@ public class Compile {
 
         instructions.add(new PushInstruction(Register.RBP));
         instructions.add(new MovInstruction(Register.RBP, Register.RSP));
-        instructions.add(new SubInstruction(Register.RSP, YieldUtils.number(numberOfVariables * WORD_SIZE)));
+
+        int rspOffset = (numberOfVariables % 2 == 0) ? numberOfVariables : numberOfVariables + 1; // align to 16 bytes
+
+        instructions.add(new SubInstruction(Register.RSP, YieldUtils.number(rspOffset * WORD_SIZE)));
 
         return instructions;
     }

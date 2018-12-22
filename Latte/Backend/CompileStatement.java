@@ -20,7 +20,8 @@ import static Latte.PrettyPrinter.print;
 public class CompileStatement {
 
     public static List<AssemblyInstruction> generateStmt(Stmt stmt, BackendScope scope) {
-        return stmt.match(
+        List<AssemblyInstruction> instructions = new ArrayList<>();
+        instructions.addAll(stmt.match(
                 (empty) -> new ArrayList<>(),
                 (bStmt) -> generateBStmt(bStmt, scope),
                 (decl) -> generateDecl(decl, scope),
@@ -34,7 +35,9 @@ public class CompileStatement {
                 (sWhile) -> generateWhile(sWhile, scope),
                 (sExp) -> generateStmtExpr(sExp, scope),
                 (x) -> notImplemented(x)
-        );
+        ));
+
+        return instructions;
     }
 
     public static List<AssemblyInstruction> generateDecr(Decr decr, BackendScope scope) {
@@ -67,7 +70,7 @@ public class CompileStatement {
         int varOffset = scope.getVariable(arrElem.ident_).getOffset() * WORD_SIZE;
         List<AssemblyInstruction> instructions = new ArrayList<>();
 
-        instructions.add(new PushInstruction(Register.RCX));
+        instructions.add(new PushInstruction(Register.RCX, scope));
 
 
         instructions.addAll(generateExpr(arrElem.expr_, Register.RAX, Register.RAX, scope));
@@ -79,7 +82,7 @@ public class CompileStatement {
         instructions.add(new AddInstruction(Register.RCX, YieldUtils.number(1)));
         instructions.add(new MovInstruction(MemoryReference.getRaw(Register.RAX), Register.RCX));
 
-        instructions.add(new PopInstruction(Register.RCX));
+        instructions.add(new PopInstruction(Register.RCX, scope));
 
         return instructions;
     }
@@ -100,7 +103,7 @@ public class CompileStatement {
         int varOffset = scope.getVariable(arrElem.ident_).getOffset() * WORD_SIZE;
         List<AssemblyInstruction> instructions = new ArrayList<>();
 
-        instructions.add(new PushInstruction(Register.RCX));
+        instructions.add(new PushInstruction(Register.RCX, scope));
 
 
         instructions.addAll(generateExpr(arrElem.expr_, Register.RAX, Register.RAX, scope));
@@ -112,7 +115,7 @@ public class CompileStatement {
         instructions.add(new SubInstruction(Register.RCX, YieldUtils.number(1)));
         instructions.add(new MovInstruction(MemoryReference.getRaw(Register.RAX), Register.RCX));
 
-        instructions.add(new PopInstruction(Register.RCX));
+        instructions.add(new PopInstruction(Register.RCX, scope));
 
         return instructions;
     }
@@ -252,7 +255,7 @@ public class CompileStatement {
         int varOffset = scope.getVariable(arrElem.ident_).getOffset() * WORD_SIZE;
         List<AssemblyInstruction> instructions = new ArrayList<>();
 
-        instructions.add(new PushInstruction(Register.RCX));
+        instructions.add(new PushInstruction(Register.RCX, scope));
 
         if (!registerOfValue.equals(Register.RCX)) {
             instructions.add(new MovInstruction(Register.RCX, registerOfValue));
@@ -265,7 +268,7 @@ public class CompileStatement {
 
         instructions.add(new MovInstruction(MemoryReference.getRaw(Register.RAX), Register.RCX));
 
-        instructions.add(new PopInstruction(Register.RCX));
+        instructions.add(new PopInstruction(Register.RCX, scope));
 
         return instructions;
     }

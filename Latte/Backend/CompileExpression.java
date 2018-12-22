@@ -15,7 +15,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static Latte.Backend.Definitions.Register.memAcc;
 import static Latte.Backend.Instructions.ConstantUtils.WORD_SIZE;
 import static Latte.Backend.LabelsGenerator.getNonceLabel;
 import static Latte.Frontend.TypeUtils.getType;
@@ -53,6 +52,18 @@ public class CompileExpression {
 
         String funcName = eApp.ident_;
 
+        int numberOfArgsPassedOnStack = max(0, (eApp.listexpr_.size() - 6));
+        int numberOfTempsOnStack = scope.getNumberOfTempsOnStack();
+
+        System.err.println(eApp.ident_ + " number of args passed on stack " + numberOfArgsPassedOnStack + " temps on stack " + numberOfTempsOnStack);
+
+        boolean hasToAlignStack = (numberOfArgsPassedOnStack + numberOfTempsOnStack) % 2 != 0;
+
+        if (hasToAlignStack) {
+            instructions.add(new Comment("aligning stack"));
+            instructions.add(new SubInstruction(Register.RSP, YieldUtils.number(WORD_SIZE)));
+        }
+
         if (eApp.listexpr_.size() > 0) {
             instructions.addAll(generateExpr(eApp.listexpr_.get(0), Register.RAX, Register.RAX, scope));
             instructions.add(new MovInstruction(Register.RDI, Register.RAX));
@@ -85,7 +96,7 @@ public class CompileExpression {
 
         for (int i = eApp.listexpr_.size(); i > 6; i--) {
             instructions.addAll(generateExpr(eApp.listexpr_.get(i-1), Register.RAX, Register.RAX, scope));
-            instructions.add(new PushInstruction(Register.RAX));
+            instructions.add(new PushInstruction(Register.RAX, scope));
         }
 
 
@@ -94,8 +105,13 @@ public class CompileExpression {
 
         int offset = max(0, (eApp.listexpr_.size() - 6)) * WORD_SIZE;
 
+        if (hasToAlignStack) {
+            instructions.add(new AddInstruction(Register.RSP, YieldUtils.number(WORD_SIZE)));
+        }
+
         if (offset > 0) {
             instructions.add(new AddInstruction(Register.RSP, YieldUtils.number(offset)));
+            scope.changeTempsOnStack(-offset);
         }
 
         return instructions;
@@ -153,13 +169,13 @@ public class CompileExpression {
 
         List<AssemblyInstruction> instructions = new ArrayList<>();
 
-        instructions.add(new PushInstruction(Register.RCX));
+        instructions.add(new PushInstruction(Register.RCX, scope));
 
         instructions.addAll(generateExpr(add.expr_2, destRegister, sourceRegister, scope));
-        instructions.add(new PushInstruction(Register.RAX));
+        instructions.add(new PushInstruction(Register.RAX, scope));
 
         instructions.addAll(generateExpr(add.expr_1, destRegister, sourceRegister, scope));
-        instructions.add(new PopInstruction(Register.RCX));
+        instructions.add(new PopInstruction(Register.RCX, scope));
 
         List<AssemblyInstruction> oppInstr = add.addop_.match(
                 (ignored) -> getPlusInstruction(Register.RAX, Register.RCX, scope),
@@ -168,7 +184,7 @@ public class CompileExpression {
 
         instructions.addAll(oppInstr);
 
-        instructions.add(new PopInstruction(Register.RCX));
+        instructions.add(new PopInstruction(Register.RCX, scope));
 
         return instructions;
     }
@@ -177,8 +193,8 @@ public class CompileExpression {
         // here it has to be string + as there's no - in strings
         List<AssemblyInstruction> instructions = new ArrayList<>();
 
-        instructions.add(new PushInstruction(Register.RDI));
-        instructions.add(new PushInstruction(Register.RSI));
+        instructions.add(new PushInstruction(Register.RDI, scope));
+        instructions.add(new PushInstruction(Register.RSI, scope));
 
         instructions.addAll(generateExpr(add.expr_1, Register.RAX, Register.RAX, scope));
         instructions.add(new MovInstruction(Register.RDI, Register.RAX));
@@ -188,8 +204,8 @@ public class CompileExpression {
 
         instructions.add(new CallInstruction(ExternalFunctions.ADD_STRINGS));
 
-        instructions.add(new PopInstruction(Register.RSI));
-        instructions.add(new PopInstruction(Register.RDI));
+        instructions.add(new PopInstruction(Register.RSI, scope));
+        instructions.add(new PopInstruction(Register.RDI, scope));
 
         if (!destRegister.equals(Register.RAX)) {
             instructions.add(new MovInstruction(destRegister, Register.RAX));
@@ -211,16 +227,16 @@ public class CompileExpression {
     public static List<AssemblyInstruction> generateMul(EMul mul, String destRegister, String sourceRegister, BackendScope scope) {
         List<AssemblyInstruction> instructions = new ArrayList<>();
 
-        instructions.add(new PushInstruction(Register.RCX));
+        instructions.add(new PushInstruction(Register.RCX, scope));
 
         List<AssemblyInstruction> instructions1 = generateExpr(mul.expr_1, destRegister, sourceRegister, scope);
         List<AssemblyInstruction> instructions2 = generateExpr(mul.expr_2, destRegister, sourceRegister, scope);
 
         instructions.addAll(instructions2);
-        instructions.add(new PushInstruction(Register.RAX));
+        instructions.add(new PushInstruction(Register.RAX, scope));
 
         instructions.addAll(instructions1);
-        instructions.add(new PopInstruction(Register.RCX));
+        instructions.add(new PopInstruction(Register.RCX, scope));
 
         List<AssemblyInstruction> oppInstr = mul.mulop_.match(
                 (ignored) -> generateMultiplyInstructions(Register.RAX, Register.RCX, scope),
@@ -230,7 +246,7 @@ public class CompileExpression {
 
         instructions.addAll(oppInstr);
 
-        instructions.add(new PopInstruction(Register.RCX));
+        instructions.add(new PopInstruction(Register.RCX, scope));
 
         return instructions;
     }
@@ -243,7 +259,7 @@ public class CompileExpression {
         List<AssemblyInstruction> instructions = new ArrayList<>();
 
 
-        instructions.add(new PushInstruction(Register.RDX));
+        instructions.add(new PushInstruction(Register.RDX, scope));
 
         if (!destRegister.equals(Register.RAX)) {
             instructions.add(new MovInstruction(Register.RAX, destRegister));
@@ -256,7 +272,7 @@ public class CompileExpression {
             instructions.add(new MovInstruction(destRegister, Register.RAX));
         }
 
-        instructions.add(new PopInstruction(Register.RDX));
+        instructions.add(new PopInstruction(Register.RDX, scope));
 
         return instructions;
     }
@@ -265,7 +281,7 @@ public class CompileExpression {
         List<AssemblyInstruction> instructions = new ArrayList<>();
 
 
-        instructions.add(new PushInstruction(Register.RDX));
+        instructions.add(new PushInstruction(Register.RDX, scope));
 
         if (!destRegister.equals(Register.RAX)) {
             instructions.add(new MovInstruction(Register.RAX, destRegister));
@@ -276,7 +292,7 @@ public class CompileExpression {
 
         instructions.add(new MovInstruction(destRegister, Register.RDX));
 
-        instructions.add(new PopInstruction(Register.RDX));
+        instructions.add(new PopInstruction(Register.RDX, scope));
 
         return instructions;
     }
@@ -321,13 +337,13 @@ public class CompileExpression {
     public static List<AssemblyInstruction> generateRel(ERel rel, String destRegister, String sourceRegister, BackendScope scope) {
         List<AssemblyInstruction> instructions = new ArrayList<>();
 
-        instructions.add(new PushInstruction(Register.RCX));
+        instructions.add(new PushInstruction(Register.RCX, scope));
 
         instructions.addAll(generateExpr(rel.expr_2, destRegister, sourceRegister, scope));
-        instructions.add(new PushInstruction(Register.RAX));
+        instructions.add(new PushInstruction(Register.RAX, scope));
 
         instructions.addAll(generateExpr(rel.expr_1, destRegister, sourceRegister, scope));
-        instructions.add(new PopInstruction(Register.RCX));
+        instructions.add(new PopInstruction(Register.RCX, scope));
 
         instructions.add(new CompareInstruction(Register.RAX, Register.RCX));
         instructions.add(new MovInstruction(destRegister, YieldUtils.number(1)));
@@ -346,7 +362,7 @@ public class CompileExpression {
         instructions.add(new MovInstruction(destRegister, YieldUtils.number(0)));
         instructions.add(endLabel);
 
-        instructions.add(new PopInstruction(Register.RCX));
+        instructions.add(new PopInstruction(Register.RCX, scope));
 
         return instructions;
     }
@@ -387,9 +403,9 @@ public class CompileExpression {
         instructions.addAll(generateExpr(constr.expr_, Register.RAX, Register.RAX, scope));
         instructions.add(new MovInstruction(Register.RDI, Register.RAX));
 
-        instructions.add(new PushInstruction(Register.RDI));
+        instructions.add(new PushInstruction(Register.RDI, scope));
         instructions.add(new CallInstruction(ExternalFunctions.MALLOC_ARRAY));
-        instructions.add(new PopInstruction(Register.RDI));
+        instructions.add(new PopInstruction(Register.RDI, scope));
 
         if (!destRegister.equals(Register.RAX)) {
             instructions.add(new MovInstruction(destRegister, Register.RAX));
@@ -402,17 +418,17 @@ public class CompileExpression {
     public static List<AssemblyInstruction> generateArrAcc(ENDArrAcc acc, String destRegister, BackendScope scope) {
         List<AssemblyInstruction> instructions = new ArrayList<>();
 
-        instructions.add(new PushInstruction(Register.RCX));
+        instructions.add(new PushInstruction(Register.RCX, scope));
 
         instructions.addAll(generateExpr(acc.expr_1, Register.RAX, Register.RAX, scope));
-        instructions.add(new PushInstruction(Register.RAX));
+        instructions.add(new PushInstruction(Register.RAX, scope));
         instructions.addAll(generateExpr(acc.expr_2, Register.RAX, Register.RAX, scope));
 
-        instructions.add(new PopInstruction(Register.RCX));
+        instructions.add(new PopInstruction(Register.RCX, scope));
 
         instructions.add(new MovInstruction(Register.RAX, MemoryReference.getWithConstOffset(Register.RCX,Register.RAX, 8 , WORD_SIZE)));
 
-        instructions.add(new PopInstruction(Register.RCX));
+        instructions.add(new PopInstruction(Register.RCX, scope));
 
         if (!destRegister.equals(Register.RAX)) {
             instructions.add(new MovInstruction(destRegister, Register.RAX));
