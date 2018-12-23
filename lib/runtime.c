@@ -60,5 +60,7 @@ int* _mallocArray(int size) {
         exit(1);
     }
 
+    arr[0] = size;
+
     return arr;
 }

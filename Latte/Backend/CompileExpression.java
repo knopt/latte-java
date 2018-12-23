@@ -55,8 +55,6 @@ public class CompileExpression {
         int numberOfArgsPassedOnStack = max(0, (eApp.listexpr_.size() - 6));
         int numberOfTempsOnStack = scope.getNumberOfTempsOnStack();
 
-        System.err.println(eApp.ident_ + " number of args passed on stack " + numberOfArgsPassedOnStack + " temps on stack " + numberOfTempsOnStack);
-
         boolean hasToAlignStack = (numberOfArgsPassedOnStack + numberOfTempsOnStack) % 2 != 0;
 
         if (hasToAlignStack) {

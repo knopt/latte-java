@@ -29,12 +29,12 @@ public class CompileStatement {
                 (incr) -> generateIncr(incr, scope),
                 (decr) -> generateDecr(decr, scope),
                 (ret) -> generateReturn(ret, scope),
-                (vret) -> generateVReturn(vret),
+                CompileStatement::generateVReturn,
                 (cond) -> generateCond(cond, scope),
                 (condElse) -> generateCondElse(condElse, scope),
                 (sWhile) -> generateWhile(sWhile, scope),
                 (sExp) -> generateStmtExpr(sExp, scope),
-                (x) -> notImplemented(x)
+                (forArr) -> generateForArr(forArr, scope)
         ));
 
         return instructions;
@@ -319,6 +319,47 @@ public class CompileStatement {
         List<AssemblyInstruction> instructions = new ArrayList<>(Arrays.asList(new Comment(""), new Comment("void return from function")));
 
         instructions.addAll(generateEpilog());
+
+        return instructions;
+    }
+
+    public static List<AssemblyInstruction> generateForArr(ForArr forArr, BackendScope oldScope) {
+        BackendScope scope = new BackendScope(oldScope);
+
+        List<AssemblyInstruction> instructions = new ArrayList<>();
+
+        Label start = LabelsGenerator.getNonceLabel("_start_for_arr");
+        Label end = LabelsGenerator.getNonceLabel("_end_for_arr");
+
+        scope.declareVariable(forArr.ident_, getType(forArr.typename_, scope.getGlobalEnvironment(), -1, -1));
+        int offset = scope.getVariable(forArr.ident_).getOffset() * WORD_SIZE;
+
+        instructions.add(new PushInstruction(Register.RDX));
+        instructions.add(new PushInstruction(Register.RCX));
+
+        instructions.addAll(generateExpr(forArr.expr_, Register.RAX, Register.RAX, scope)); // get array beginning
+        instructions.add(new MovInstruction(Register.RCX, Register.RAX));
+        instructions.add(new MovInstruction(Register.RDX, MemoryReference.getRaw(Register.RCX)));
+
+        instructions.add(start);
+        instructions.add(new CompareInstruction(Register.RDX, YieldUtils.number(0)));
+        instructions.add(new JumpInstruction(end, JumpInstruction.Type.EQU));
+
+        instructions.add(new MovInstruction(Register.RAX, Register.RDX));
+        instructions.add(new MulInstruction(Register.RAX, YieldUtils.number(WORD_SIZE)));
+        instructions.add(new AddInstruction(Register.RAX, Register.RCX)); // add address of begining of an array
+        instructions.add(new MovInstruction(Register.RAX, MemoryReference.getRaw(Register.RAX)));
+        instructions.add(new MovInstruction(MemoryReference.getWithOffset(Register.RBP, offset), Register.RAX));
+
+        instructions.addAll(generateStmt(forArr.stmt_, scope));
+
+        instructions.add(new SubInstruction(Register.RDX, YieldUtils.number(1)));
+
+        instructions.add(new JumpInstruction(start, JumpInstruction.Type.ALWAYS));
+        instructions.add(end);
+
+        instructions.add(new PopInstruction(Register.RCX));
+        instructions.add(new PopInstruction(Register.RDX));
 
         return instructions;
     }

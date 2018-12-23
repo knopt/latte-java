@@ -1,17 +1,28 @@
 
 int main() {
   
-  string b = "hehe!";
-  
-  printString(b);
+  int[] a = new int[5];
 
-  int[] a;
+  int x = 42;
+  int sum = 0;
 
-  int c = readInt();
+  a[0] = 1;
+  a[1] = 2;
+  a[2] = 3;
+  a[3] = 4;
+  a[4] = 5;
 
-  printString("100 / przeczytana wartosc:");
 
-  printInt( c);
+  for (int x : a) {
+    sum = sum + x;
+  }
+
+  printString("x 42? :");
+  printInt(x);
+
+  printString("sum: ");
+  printInt(sum);
+
 
   return 0;
 
