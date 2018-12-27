@@ -66,18 +66,18 @@ public class TypeUtils {
             e = exception;
         }
 
-        if (callableDeclaration.isMethod() && callableDeclaration.getCallerType().isClassType()) {
-            ClassTypeDefinition classTypeDefinition = callableDeclaration.getCallerType().getClassDefinition();
-            if (classTypeDefinition.fields.containsKey(varName)) {
-                return classTypeDefinition.fields.get(varName).getType();
-            }
-        }
+//        if (callableDeclaration.isMethod() && callableDeclaration.getCallerType().isClassType()) {
+//            ClassTypeDefinition classTypeDefinition = callableDeclaration.getCallerType().getClassDefinition();
+//            if (classTypeDefinition.fields.containsKey(varName)) {
+//                return classTypeDefinition.fields.get(varName).getType();
+//            }
+//        }
 
         throw e;
     }
 
     public static TypeDefinition validateTypes(TypeDefinition type1, TypeDefinition type2, int lineNum, int colNum) {
-        if (StatementTypeCheck.typesMatch(type1, type2)) {
+        if (TypeCheckStatement.typesMatch(type1, type2)) {
             return type1;
         }
 
@@ -85,7 +85,7 @@ public class TypeUtils {
     }
 
     public static TypeDefinition validateTypes(List<BasicTypeDefinition> types, TypeDefinition type1, int lineNum, int colNum) {
-        if (types.stream().anyMatch((type) -> StatementTypeCheck.typesMatch(type1, type))) {
+        if (types.stream().anyMatch((type) -> TypeCheckStatement.typesMatch(type1, type))) {
             return type1;
         }
 

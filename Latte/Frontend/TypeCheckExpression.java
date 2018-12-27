@@ -11,17 +11,17 @@ import java.util.List;
 import static Latte.Frontend.TypeUtils.getType;
 import static Latte.Frontend.TypeUtils.validateTypes;
 
-public class ExpressionTypeCheck {
+public class TypeCheckExpression {
 
     public static TypeDefinition typeCheckExpr(Expr expr, FrontendScope scope, CallableDeclaration callableDeclaration) {
 
-        return expr.match(
+        TypeDefinition typeDefinition = expr.match(
                 (var) -> typeCheckEVar(var, scope, callableDeclaration),
                 (elitInt) -> typeCheckELitInt(),
                 (elitTrue) -> typeCheckELitTrue(),
                 (elitFalse) -> typeCheckELitFalse(),
                 (eThis) -> typeCheckThis(eThis, callableDeclaration),
-                ExpressionTypeCheck::typeCheckNull,
+                TypeCheckExpression::typeCheckNull,
                 (eApp) -> typeCheckEApp(eApp, scope, callableDeclaration),
                 (str) -> typeCheckString(str, scope),
                 (constr) -> typeCheckConstr(constr, scope),
@@ -37,6 +37,9 @@ public class ExpressionTypeCheck {
                 (objAcc) -> typeCheckObjAcc(objAcc, scope, callableDeclaration),
                 (cast) -> typeCheckCast(cast, scope, callableDeclaration)
         );
+
+        expr.type = typeDefinition;
+        return typeDefinition;
     }
 
     public static TypeDefinition typeCheckEVar(EVar var, FrontendScope scope, CallableDeclaration callableDeclaration) {

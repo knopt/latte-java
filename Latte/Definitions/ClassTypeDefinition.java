@@ -6,11 +6,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import static Latte.Backend.Instructions.ConstantUtils.WORD_SIZE;
+
 public class ClassTypeDefinition implements TypeDefinition, Arrayable {
     public String className;
     public Map<String, ClassFieldDeclaration> fields;
     public Map<String, CallableDeclaration> methods;
     public InterfaceTypeDefinition implementedInterface;
+    private Map<String, Integer> fieldsOffsetTable;
+    private Map<String, Integer> methodsOffsetTable;
 
     @Override
     public String toString() {
@@ -24,6 +28,8 @@ public class ClassTypeDefinition implements TypeDefinition, Arrayable {
         this.fields = new HashMap<>();
         this.methods = new HashMap<>();
         this.implementedInterface = null;
+        this.fieldsOffsetTable = new HashMap<>();
+        this.methodsOffsetTable = new HashMap<>();
     }
 
     public void addField(String name, ClassFieldDeclaration d) {
@@ -53,6 +59,38 @@ public class ClassTypeDefinition implements TypeDefinition, Arrayable {
         }
 
         return this.methods.get(name);
+    }
+
+    public void createOffSetTable() {
+        createFieldsOffsetTable();
+        createMethodsOffsetTable();
+    }
+
+
+    public void createFieldsOffsetTable() {
+        int i = 0;
+
+        for (String field : fields.keySet()) {
+            fieldsOffsetTable.put(field, i * WORD_SIZE);
+            i++;
+        }
+    }
+
+    public void createMethodsOffsetTable() {
+        int i = 0;
+
+        for (String method : methods.keySet()) {
+            methodsOffsetTable.put(method, i * WORD_SIZE);
+            i++;
+        }
+    }
+
+    public int getFieldOffset(String fieldName) {
+        return fieldsOffsetTable.get(fieldName);
+    }
+
+    public int getMethodOffset(String methodName) {
+        return fieldsOffsetTable.size() * WORD_SIZE + methodsOffsetTable.get(methodName);
     }
 
 

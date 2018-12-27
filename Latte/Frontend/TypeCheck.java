@@ -9,8 +9,8 @@ import Latte.Exceptions.TypeCheckException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static Latte.Frontend.StatementTypeCheck.checkCallableReturns;
-import static Latte.Frontend.StatementTypeCheck.typeCheckStatement;
+import static Latte.Frontend.TypeCheckStatement.checkCallableReturns;
+import static Latte.Frontend.TypeCheckStatement.typeCheckStatement;
 import static Latte.Frontend.TypeUtils.getType;
 
 public class TypeCheck {

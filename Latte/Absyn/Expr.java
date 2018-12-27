@@ -6,6 +6,8 @@ import java.util.function.Function;
 
 public abstract class Expr implements java.io.Serializable {
 
+    public TypeDefinition type;
+
     public abstract <T> T match(Function<EVar, T> eVar,
                                 Function<ELitInt, T> eLitInt,
                                 Function<ELitTrue, T> eLitTrue,

@@ -9,15 +9,15 @@ import Latte.Exceptions.IllegalTypeException;
 import Latte.Exceptions.InternalStateException;
 import Latte.Exceptions.TypeCheckException;
 
-import static Latte.Frontend.ExpressionTypeCheck.typeCheckExpr;
+import static Latte.Frontend.TypeCheckExpression.typeCheckExpr;
 import static Latte.Frontend.TypeUtils.getType;
 import static Latte.Frontend.TypeUtils.getVariableType;
 
 
-public class StatementTypeCheck {
+public class TypeCheckStatement {
     public static void typeCheckStatement(Stmt stmt, FrontendScope scope, CallableDeclaration callableDeclaration) {
         stmt.match(
-                StatementTypeCheck::typeCheckEmpty,
+                TypeCheckStatement::typeCheckEmpty,
                 (bStmt) -> typeCheckBStmt(bStmt, scope, callableDeclaration),
                 (decl) -> typeCheckDecl(decl, scope, callableDeclaration),
                 (ass) -> typeCheckAss(ass, scope, callableDeclaration),
@@ -238,30 +238,30 @@ public class StatementTypeCheck {
 
     private static Boolean stmtReturns(Stmt stmt) {
         return stmt.match(
-                (x) -> false, StatementTypeCheck::stmtReturns, (x) -> false, (x) -> false, (x) -> false, (x) -> false,
+                (x) -> false, TypeCheckStatement::stmtReturns, (x) -> false, (x) -> false, (x) -> false, (x) -> false,
                 (x) -> true, (x) -> true,
-                StatementTypeCheck::stmtReturns, StatementTypeCheck::stmtReturns, StatementTypeCheck::stmtReturns,
+                TypeCheckStatement::stmtReturns, TypeCheckStatement::stmtReturns, TypeCheckStatement::stmtReturns,
                 (x) -> false, (x) -> false
         );
     }
 
     private static Boolean stmtReturns(BStmt bStmt) {
-        return bStmt.block_.match((block) -> block.liststmt_.stream().anyMatch(StatementTypeCheck::stmtReturns));
+        return bStmt.block_.match((block) -> block.liststmt_.stream().anyMatch(TypeCheckStatement::stmtReturns));
     }
 
     private static Boolean stmtReturns(Cond cond) {
-        Boolean exprTrue = ExpressionTypeCheck.exprTriviallyTrue(cond.expr_);
+        Boolean exprTrue = TypeCheckExpression.exprTriviallyTrue(cond.expr_);
 
         return exprTrue && stmtReturns(cond.stmt_);
     }
 
     private static Boolean stmtReturns(While sWhile) {
-        return ExpressionTypeCheck.exprTriviallyTrue(sWhile.expr_) && stmtReturns(sWhile.stmt_);
+        return TypeCheckExpression.exprTriviallyTrue(sWhile.expr_) && stmtReturns(sWhile.stmt_);
     }
 
     private static Boolean stmtReturns(CondElse cond) {
-        Boolean exprTrue = ExpressionTypeCheck.exprTriviallyTrue(cond.expr_);
-        Boolean exprFalse = ExpressionTypeCheck.exprTriviallyFalse(cond.expr_);
+        Boolean exprTrue = TypeCheckExpression.exprTriviallyTrue(cond.expr_);
+        Boolean exprFalse = TypeCheckExpression.exprTriviallyFalse(cond.expr_);
         Boolean ifReturns = stmtReturns(cond.stmt_1);
         Boolean elseReturns = stmtReturns(cond.stmt_2);
 
@@ -275,7 +275,7 @@ public class StatementTypeCheck {
             return true;
         }
 
-        if (block.liststmt_.stream().anyMatch(StatementTypeCheck::stmtReturns)) {
+        if (block.liststmt_.stream().anyMatch(TypeCheckStatement::stmtReturns)) {
             return true;
         }
 

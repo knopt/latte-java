@@ -42,7 +42,7 @@ public class CompileExpression {
                 (rel) -> generateRel(rel, destRegister, sourceRegister, scope),
                 (and) -> generateLazyAnd(and, destRegister, sourceRegister, scope),
                 (eOr) -> generateLazyOr(eOr, destRegister, sourceRegister, scope),
-                (e) -> notImplemented(e),
+                (objAcc) -> generateObjAcc(objAcc, destRegister, scope),
                 (cast) -> generateCast(cast, destRegister, sourceRegister, scope)
         );
     }
@@ -433,6 +433,39 @@ public class CompileExpression {
         }
 
         return instructions;
+    }
+
+    public static List<AssemblyInstruction> generateObjAcc(EObjAcc objAcc, String destRegister, BackendScope scope) {
+        List<AssemblyInstruction> instructions = new ArrayList<>();
+
+        instructions.addAll(generateExpr(objAcc.expr_, Register.RAX, Register.RAX, scope));
+
+        instructions.addAll(objAcc.objacc_.match(
+                (fieldAcc) -> generateFieldAcc(fieldAcc, objAcc.expr_.type, Register.RAX, scope),
+                (methAcc) -> generateMethAcc(methAcc, objAcc.expr_.type, Register.RAX, scope)
+        ));
+
+        return instructions;
+    }
+
+    public static List<AssemblyInstruction> generateFieldAcc(ObjFieldAcc acc, TypeDefinition type, String destRegister, BackendScope scope) {
+        if (!type.isArrayType()) {
+            return notImplemented(null);
+        }
+
+        // expression result in RAX
+        // it has to be length field acc, checked in typecheck
+
+        List<AssemblyInstruction> instructions = new ArrayList<>();
+
+        // length of an array is stored in first 8 bytes
+        instructions.add(new MovInstruction(destRegister, MemoryReference.getRaw(Register.RAX)));
+
+        return instructions;
+    }
+
+    public static List<AssemblyInstruction> generateMethAcc(ObjMethAcc acc, TypeDefinition type, String destRegister, BackendScope scope) {
+        return notImplemented(null);
     }
 
 

@@ -6,9 +6,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import static Latte.Backend.Instructions.ConstantUtils.WORD_SIZE;
+
 public class InterfaceTypeDefinition implements TypeDefinition, Arrayable {
     public String className;
     public Map<String, CallableDeclaration> methods;
+    public Map<String, Integer> methodsOffsetTable;
 
     public InterfaceTypeDefinition(String className) {
         this.className = className;
@@ -68,6 +71,24 @@ public class InterfaceTypeDefinition implements TypeDefinition, Arrayable {
         }
 
         return true;
+    }
+
+
+    public void createOffSetTable() {
+        createMethodsOffsetTable();
+    }
+
+    public int getMethodOffset(String methodName) {
+        return methodsOffsetTable.get(methodName);
+    }
+
+    public void createMethodsOffsetTable() {
+        int i = 0;
+
+        for (String method : methods.keySet()) {
+            methodsOffsetTable.put(method, i * WORD_SIZE);
+            i++;
+        }
     }
 
 
