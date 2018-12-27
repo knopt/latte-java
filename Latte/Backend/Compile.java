@@ -8,6 +8,7 @@ import Latte.Backend.Definitions.ExternalFunctions;
 import Latte.Backend.Definitions.Register;
 import Latte.Backend.Instructions.*;
 import Latte.Definitions.FunctionDeclaration;
+import Latte.Definitions.MethodDeclaration;
 import Latte.Definitions.VariableDefinition;
 import Latte.Frontend.Environment;
 
@@ -110,6 +111,23 @@ public class Compile {
                 (body) -> generateBody(body, scopeWithArgs)
         );
     }
+
+//    public void generateMethod(MethodDeclaration mth) {
+//        BackendScope scope = new BackendScope(this.env);
+//
+//        addInstructions(new Comment("code for method" + mth.getName()));
+//        addInstructions(new Label("_" + mth.callerType.getName() + "_" + mth.getName()));
+//        addInstructions(generateProlog(mth.getNumberOfVariables() + 1));
+//
+//        generatePushEntryArgumentsToStack(func, scope);
+//
+//        BackendScope scopeWithArgs = new BackendScope(scope);
+//
+//        func.getMethodBody().match(
+//                null,
+//                (body) -> generateBody(body, scopeWithArgs)
+//        );
+//    }
 
     public void generatePushEntryArgumentsToStack(FunctionDeclaration func, BackendScope scope) {
         List<AssemblyInstruction> instructions = new ArrayList<>();

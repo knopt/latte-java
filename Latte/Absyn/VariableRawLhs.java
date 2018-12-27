@@ -31,7 +31,8 @@ public class VariableRawLhs extends Lhs implements Positioned {
     }
 
     public <T> T match(Function<VariableRawLhs, T> variableRawLhs,
-                       Function<ArrElemLhs, T> arrElemLhs) {
+                       Function<ArrElemLhs, T> arrElemLhs,
+                       Function<FieldLhs, T> fieldLhs) {
         return variableRawLhs.apply(this);
     }
 

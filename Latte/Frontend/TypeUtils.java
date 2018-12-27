@@ -1,6 +1,7 @@
 package Latte.Frontend;
 
 import Latte.Absyn.*;
+import Latte.Backend.Definitions.Binding;
 import Latte.Definitions.*;
 import Latte.Exceptions.IllegalTypeException;
 import Latte.Exceptions.TypeCheckException;
@@ -57,8 +58,16 @@ public class TypeUtils {
         return className.ident_;
     }
 
-    public static TypeDefinition getVariableType(String varName, FrontendScope scope, CallableDeclaration callableDeclaration, int lineNum, int colNum) {
+    public static TypeDefinition getVariableType(EVar eVar, Lhs lhs, String varName, FrontendScope scope, CallableDeclaration callableDeclaration, int lineNum, int colNum) {
         TypeCheckException e;
+
+        if (lhs != null) {
+            lhs.binding = Binding.VARIABLE_BINDING;
+        }
+
+        if (eVar != null) {
+            lhs.binding = Binding.VARIABLE_BINDING;
+        }
 
         try {
             return scope.getVariable(varName, lineNum, colNum).getType();
@@ -66,14 +75,35 @@ public class TypeUtils {
             e = exception;
         }
 
-//        if (callableDeclaration.isMethod() && callableDeclaration.getCallerType().isClassType()) {
-//            ClassTypeDefinition classTypeDefinition = callableDeclaration.getCallerType().getClassDefinition();
-//            if (classTypeDefinition.fields.containsKey(varName)) {
-//                return classTypeDefinition.fields.get(varName).getType();
-//            }
-//        }
+        if (callableDeclaration.isMethod() && callableDeclaration.getCallerType().isClassType()) {
+            ClassTypeDefinition classTypeDefinition = callableDeclaration.getCallerType().getClassDefinition();
+            if (classTypeDefinition.fields.containsKey(varName)) {
+
+                if (lhs != null) {
+                    lhs.binding = Binding.getFieldBinding(classTypeDefinition);
+                }
+
+                if (eVar != null) {
+                    eVar.binding = Binding.getFieldBinding(classTypeDefinition);
+                }
+
+                return classTypeDefinition.fields.get(varName).getType();
+            }
+        }
 
         throw e;
+    }
+
+    public static TypeDefinition getVariableType(Lhs lhs, String varName, FrontendScope scope, CallableDeclaration callableDeclaration, int lineNum, int colNum) {
+        return getVariableType(null , lhs, varName, scope, callableDeclaration, lineNum, colNum);
+    }
+
+    public static TypeDefinition getVariableType(EVar eVar, String varName, FrontendScope scope, CallableDeclaration callableDeclaration, int lineNum, int colNum) {
+        return getVariableType(eVar, null, varName, scope, callableDeclaration, lineNum, colNum);
+    }
+
+    public static TypeDefinition getVariableType(String varName, FrontendScope scope, CallableDeclaration callableDeclaration, int lineNum, int colNum) {
+        return getVariableType(null ,null, varName, scope, callableDeclaration, lineNum, colNum);
     }
 
     public static TypeDefinition validateTypes(TypeDefinition type1, TypeDefinition type2, int lineNum, int colNum) {

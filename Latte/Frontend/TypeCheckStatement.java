@@ -1,6 +1,7 @@
 package Latte.Frontend;
 
 import Latte.Absyn.*;
+import Latte.Backend.Definitions.Binding;
 import Latte.Definitions.ArrayTypeDefinition;
 import Latte.Definitions.BasicTypeDefinition;
 import Latte.Definitions.CallableDeclaration;
@@ -103,8 +104,9 @@ public class TypeCheckStatement {
 
     public static TypeDefinition getLhsType(Lhs lhs, FrontendScope scope, CallableDeclaration callableDeclaration) {
         return lhs.match(
-                (rLhs) -> getVariableType(rLhs.ident_, scope, callableDeclaration, rLhs.line_num, rLhs.col_num),
-                (aLhs) -> getALhsType(aLhs, scope, callableDeclaration)
+                (rLhs) -> getVariableType(rLhs, rLhs.ident_, scope, callableDeclaration, rLhs.line_num, rLhs.col_num),
+                (aLhs) -> getALhsType(aLhs, scope, callableDeclaration),
+                (fLhs) -> getFLhsType(fLhs, scope, callableDeclaration)
         );
     }
 
@@ -120,6 +122,18 @@ public class TypeCheckStatement {
         TypeUtils.validateTypes(BasicTypeDefinition.INT, indexExprType, elem.line_num, elem.col_num);
 
         return typeDefinition.getArrayTypeDefinition().getInnerTypeDefinition();
+    }
+
+    public static TypeDefinition getFLhsType(FieldLhs lhs, FrontendScope scope, CallableDeclaration callable) {
+        TypeDefinition type = typeCheckExpr(lhs.expr_, scope, callable);
+
+        if (!type.isClassType()) {
+            throw new TypeCheckException("Type " + type + " is not allowed to have any fields", lhs.line_num, lhs.col_num);
+        }
+
+        lhs.binding = Binding.getFieldBinding(type);
+
+        return type.getClassDefinition().getFieldDeclaration(lhs.ident_, lhs.line_num, lhs.line_num).getType();
     }
 
     public static Boolean typeCheckIncr(Incr incr, FrontendScope scope, CallableDeclaration callableDeclaration) {

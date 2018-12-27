@@ -1,10 +1,7 @@
 package Latte.Backend;
 
 import Latte.Absyn.*;
-import Latte.Backend.Definitions.BackendScope;
-import Latte.Backend.Definitions.ExternalFunctions;
-import Latte.Backend.Definitions.Register;
-import Latte.Backend.Definitions.VariableCompilerInfo;
+import Latte.Backend.Definitions.*;
 import Latte.Backend.Instructions.*;
 import Latte.Definitions.BasicTypeDefinition;
 import Latte.Definitions.TypeDefinition;
@@ -117,11 +114,29 @@ public class CompileExpression {
     }
 
     public static List<AssemblyInstruction> generateVar(EVar var, String destRegister, BackendScope scope) {
+        if (!Binding.VARIABLE_BINDING.equals(var.binding)) {
+            return generateFieldFromVar(var, destRegister, scope);
+        }
+
         VariableCompilerInfo varInfo = scope.getVariable(var.ident_);
 
         int offset = varInfo.getOffset() * WORD_SIZE;
 
         return new ArrayList<>(Collections.singletonList(new MovInstruction(destRegister, MemoryReference.getWithOffset(Register.RBP, offset))));
+    }
+
+    public static List<AssemblyInstruction> generateFieldFromVar(EVar var, String destRegister, BackendScope scope) {
+        List<AssemblyInstruction> instructions = new ArrayList<>();
+        // TODO: add 1 to max stack size to fit 'this'
+
+        int thisOffset = scope.getVariable("this").getOffset() * WORD_SIZE;
+        int fieldOffset = var.binding.getBindedClass().getClassDefinition().getFieldOffset(var.ident_);
+
+        instructions.add(new MovInstruction(Register.RAX, MemoryReference.getWithOffset(Register.RBP, thisOffset)));
+        instructions.add(new AddInstruction(Register.RAX, YieldUtils.number(fieldOffset)));
+        instructions.add(new MovInstruction(Register.RAX, MemoryReference.getRaw(Register.RAX)));
+
+        return instructions;
     }
 
     public static List<AssemblyInstruction> generateInt(ELitInt eInt, String destRegister) {
@@ -449,10 +464,34 @@ public class CompileExpression {
     }
 
     public static List<AssemblyInstruction> generateFieldAcc(ObjFieldAcc acc, TypeDefinition type, String destRegister, BackendScope scope) {
-        if (!type.isArrayType()) {
-            return notImplemented(null);
+        // object in RAX, just take the field
+
+        if (type.isArrayType()) {
+            return generateArrayFieldAcc(acc, type, destRegister, scope);
         }
 
+        if (type.isClassType()) {
+            return generateClassFieldAcc(acc, type, destRegister, scope);
+        }
+
+        return new ArrayList<>();
+    }
+
+    public static List<AssemblyInstruction> generateClassFieldAcc(ObjFieldAcc acc, TypeDefinition type, String destRegister, BackendScope scope) {
+        // base object's address already in RAX
+        return generateClassFieldAcc(acc.ident_, type, destRegister, scope);
+    }
+
+    public static List<AssemblyInstruction> generateClassFieldAcc(String fieldName, TypeDefinition type, String destRegister, BackendScope scope) {
+        List<AssemblyInstruction> instructions = new ArrayList<>();
+        int offset = type.getClassDefinition().getFieldOffset(fieldName);
+
+        instructions.add(new MovInstruction(Register.RAX, MemoryReference.getWithOffset(Register.RAX, offset)));
+
+        return instructions;
+    }
+
+    public static List<AssemblyInstruction> generateArrayFieldAcc(ObjFieldAcc acc, TypeDefinition type, String destRegister, BackendScope scope) {
         // expression result in RAX
         // it has to be length field acc, checked in typecheck
 

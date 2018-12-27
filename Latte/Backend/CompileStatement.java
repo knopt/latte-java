@@ -2,6 +2,7 @@ package Latte.Backend;
 
 import Latte.Absyn.*;
 import Latte.Backend.Definitions.BackendScope;
+import Latte.Backend.Definitions.Binding;
 import Latte.Backend.Definitions.Register;
 import Latte.Backend.Instructions.*;
 import Latte.Definitions.TypeDefinition;
@@ -43,14 +44,16 @@ public class CompileStatement {
     public static List<AssemblyInstruction> generateDecr(Decr decr, BackendScope scope) {
         return decr.lhs_.match(
                 (var) -> generateVarDecr(var, scope),
-                (arr) -> generateArrDecr(arr, scope)
+                (arr) -> generateArrDecr(arr, scope),
+                (field) -> generateFieldDecr(field, scope)
         );
     }
 
     public static List<AssemblyInstruction> generateIncr(Incr incr, BackendScope scope) {
         return incr.lhs_.match(
                 (var) -> generateVarIncr(var, scope),
-                (arr) -> generateArrIncr(arr, scope)
+                (arr) -> generateArrIncr(arr, scope),
+                (field) -> generateFieldIncr(field, scope)
         );
     }
 
@@ -116,6 +119,38 @@ public class CompileStatement {
         instructions.add(new MovInstruction(MemoryReference.getRaw(Register.RAX), Register.RCX));
 
         instructions.add(new PopInstruction(Register.RCX, scope));
+
+        return instructions;
+    }
+
+    public static List<AssemblyInstruction> generateFieldDecr(FieldLhs fieldLhs, BackendScope scope) {
+        List<AssemblyInstruction> instructions = new ArrayList<>();
+        int offset = fieldLhs.expr_.type.getClassDefinition().getFieldOffset(fieldLhs.ident_);
+
+        instructions.add(new PushInstruction(Register.RCX));
+
+        instructions.addAll(generateExpr(fieldLhs.expr_, Register.RAX, Register.RAX, scope));
+        instructions.add(new MovInstruction(Register.RCX, MemoryReference.getWithOffset(Register.RAX, offset)));
+        instructions.add(new SubInstruction(Register.RCX, YieldUtils.number(1)));
+        instructions.add(new MovInstruction(MemoryReference.getWithOffset(Register.RAX, offset), Register.RCX));
+
+        instructions.add(new PopInstruction(Register.RCX));
+
+        return instructions;
+    }
+
+    public static List<AssemblyInstruction> generateFieldIncr(FieldLhs fieldLhs, BackendScope scope) {
+        List<AssemblyInstruction> instructions = new ArrayList<>();
+        int offset = fieldLhs.expr_.type.getClassDefinition().getFieldOffset(fieldLhs.ident_);
+
+        instructions.add(new PushInstruction(Register.RCX));
+
+        instructions.addAll(generateExpr(fieldLhs.expr_, Register.RAX, Register.RAX, scope));
+        instructions.add(new MovInstruction(Register.RCX, MemoryReference.getWithOffset(Register.RAX, offset)));
+        instructions.add(new AddInstruction(Register.RCX, YieldUtils.number(1)));
+        instructions.add(new MovInstruction(MemoryReference.getWithOffset(Register.RAX, offset), Register.RCX));
+
+        instructions.add(new PopInstruction(Register.RCX));
 
         return instructions;
     }
@@ -237,18 +272,56 @@ public class CompileStatement {
 
         instructions.addAll(ass.lhs_.match(
                 (var) -> generateVariableAss(var, Register.RAX, scope),
-                (arr) -> generateVariableArrayAss(arr, Register.RAX, scope)
+                (arr) -> generateVariableArrayAss(arr, Register.RAX, scope),
+                (field) -> generateFieldAss(field, Register.RAX, scope)
         ));
 
         return instructions;
     }
 
     public static List<AssemblyInstruction> generateVariableAss(VariableRawLhs var, String sourceRegister, BackendScope scope) {
+        if (var.binding.isField()) {
+            return generateFieldAssFromVar(var, sourceRegister, scope);
+        }
+
         int varOffset = scope.getVariable(var.ident_).getOffset() * WORD_SIZE;
 
         AssemblyInstruction instruction = new MovInstruction(MemoryReference.getWithOffset(Register.RBP, varOffset), sourceRegister);
 
         return new ArrayList<>(Collections.singletonList(instruction));
+    }
+
+    public static List<AssemblyInstruction> generateFieldAss(FieldLhs fieldLhs, String sourceRegister, BackendScope scope) {
+        List<AssemblyInstruction> instructions = new ArrayList<>();
+        int offset = fieldLhs.expr_.type.getClassDefinition().getFieldOffset(fieldLhs.ident_);
+
+        instructions.add(new PushInstruction(Register.RCX));
+
+        instructions.add(new MovInstruction(Register.RCX, Register.RAX));
+        instructions.addAll(generateExpr(fieldLhs.expr_, Register.RAX, Register.RAX, scope));
+        instructions.add(new MovInstruction(MemoryReference.getWithOffset(Register.RAX, offset), Register.RCX));
+
+        instructions.add(new PopInstruction(Register.RCX));
+
+        return instructions;
+    }
+
+    public static List<AssemblyInstruction> generateFieldAssFromVar(VariableRawLhs lhs, String sourceRegister, BackendScope scope) {
+        List<AssemblyInstruction> instructions = new ArrayList<>();
+        // TODO: add 1 to max stack size to fit 'this'
+        // wartość do zapisania jest w RAX
+        int thisOffset = scope.getVariable("this").getOffset() * WORD_SIZE;
+        int fieldOffset = lhs.binding.getBindedClass().getClassDefinition().getFieldOffset(lhs.ident_);
+
+        instructions.add(new PushInstruction(Register.RCX));
+
+        instructions.add(new MovInstruction(Register.RCX, MemoryReference.getWithOffset(Register.RBP, thisOffset)));
+        instructions.add(new AddInstruction(Register.RCX, YieldUtils.number(fieldOffset)));
+        instructions.add(new MovInstruction(MemoryReference.getRaw(Register.RCX), Register.RAX));
+
+        instructions.add(new PopInstruction(Register.RCX));
+
+        return instructions;
     }
 
     public static List<AssemblyInstruction> generateVariableArrayAss(ArrElemLhs arrElem, String registerOfValue, BackendScope scope) {

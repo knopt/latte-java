@@ -43,7 +43,7 @@ public class TypeCheckExpression {
     }
 
     public static TypeDefinition typeCheckEVar(EVar var, FrontendScope scope, CallableDeclaration callableDeclaration) {
-        return TypeUtils.getVariableType(var.ident_, scope, callableDeclaration, var.line_num, var.col_num);
+        return TypeUtils.getVariableType(var, var.ident_, scope, callableDeclaration, var.line_num, var.col_num);
     }
 
     public static TypeDefinition typeCheckELitInt() {
