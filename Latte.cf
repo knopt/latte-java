@@ -81,7 +81,7 @@ SExp.      Stmt ::= Expr  ";" ;
 
 VariableRawLhs.     Lhs ::= Ident ;
 ArrElemLhs.         Lhs ::= Ident "[" Expr "]" ;
-
+FieldLhs.           Lhs ::= Expr "." Ident ;
 
 
 
