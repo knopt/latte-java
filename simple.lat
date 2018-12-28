@@ -7,9 +7,16 @@ class Node {
 int main() {
   
   Node n1 = new Node;
- 
-  n1.value++;
+  Node n2 = new Node; 
+
+  n1.value = 10;
+  n2.value = 5;
+
+  n1.next = n2;
+  n2.next = null;
   
+  printInt(n1.value);
+  printInt(n1.next.value);
 
   return 0;
 }

@@ -81,7 +81,7 @@ SExp.      Stmt ::= Expr  ";" ;
 
 VariableRawLhs.     Lhs ::= Ident ;
 ArrElemLhs.         Lhs ::= Ident "[" Expr "]" ;
-FieldLhs.           Lhs ::= Expr "." Ident ;
+FieldLhs.           Lhs ::= Expr7 "." Ident ;
 
 -- Types ---------------------------------------------------
 
@@ -114,7 +114,7 @@ EConstr.   Expr9 ::= "new" Ident ;
 EArrConstr. Expr8 ::= "new" TypeName "[" Expr "]" ;
 ENDArrAcc.  Expr8 ::= Expr9 "[" Expr "]" ;
 
-EObjAcc.  Expr7 ::= Expr8 ObjAcc ;
+EObjAcc.  Expr7 ::= Expr7 ObjAcc ;
 
 ECast.     Expr6 ::= "(" TypeName ")" Expr7 ;
 

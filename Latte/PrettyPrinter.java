@@ -913,7 +913,7 @@ public class PrettyPrinter
     {
        Latte.Absyn.FieldLhs _fieldlhs = (Latte.Absyn.FieldLhs) foo;
        if (_i_ > 0) render(_L_PAREN);
-       pp(_fieldlhs.expr_, 0);
+       pp(_fieldlhs.expr_, 7);
        render(".");
        pp(_fieldlhs.ident_, 0);
        if (_i_ > 0) render(_R_PAREN);
@@ -1095,7 +1095,7 @@ public class PrettyPrinter
     {
        Latte.Absyn.EObjAcc _eobjacc = (Latte.Absyn.EObjAcc) foo;
        if (_i_ > 7) render(_L_PAREN);
-       pp(_eobjacc.expr_, 8);
+       pp(_eobjacc.expr_, 7);
        pp(_eobjacc.objacc_, 0);
        if (_i_ > 7) render(_R_PAREN);
     }

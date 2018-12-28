@@ -9,6 +9,7 @@ import Latte.Backend.Definitions.Register;
 import Latte.Backend.Instructions.*;
 import Latte.Definitions.FunctionDeclaration;
 import Latte.Definitions.MethodDeclaration;
+import Latte.Definitions.TypeDefinition;
 import Latte.Definitions.VariableDefinition;
 import Latte.Frontend.Environment;
 
@@ -74,6 +75,16 @@ public class Compile {
 
 
     public void generate() {
+        for (TypeDefinition type : env.declaredTypes.values()) {
+            if (type.isClassType()) {
+                type.getClassDefinition().createOffSetTable();
+            }
+
+            if (type.isInterfaceType()) {
+                type.getInterfaceDefinition().createOffSetTable();
+            }
+        }
+
         addInstructions(generateStringSection());
         addInstructions(generateSectionTextEntryInstructions());
 
