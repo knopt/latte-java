@@ -93,6 +93,10 @@ public class ClassTypeDefinition implements TypeDefinition, Arrayable {
         return fieldsOffsetTable.size() * WORD_SIZE + methodsOffsetTable.get(methodName);
     }
 
+    public int getClassSize() {
+        return fieldsOffsetTable.size() + methodsOffsetTable.size();
+    }
+
 
     @Override
     public boolean equals(Object o) {

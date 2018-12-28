@@ -10,6 +10,7 @@ import java.util.List;
 
 import static Latte.Frontend.TypeUtils.getType;
 import static Latte.Frontend.TypeUtils.validateTypes;
+import static Latte.PrettyPrinter.print;
 
 public class TypeCheckExpression {
 

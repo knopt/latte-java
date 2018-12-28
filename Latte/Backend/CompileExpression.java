@@ -29,7 +29,7 @@ public class CompileExpression {
                 (ignored) -> generateNull(destRegister),
                 (eApp) -> generateApp(eApp, destRegister, scope),
                 (str) -> generateStr(str, destRegister, scope),
-                (e) -> notImplemented(e),
+                (constr) -> generateEConstr(constr, destRegister, scope),
                 (arrConstr) -> generateArrConstr(arrConstr, destRegister, scope),
                 (arrAcc) -> generateArrAcc(arrAcc, destRegister, scope),
                 (neg) -> generateNeg(neg, destRegister, sourceRegister, scope),
@@ -499,6 +499,23 @@ public class CompileExpression {
 
         // length of an array is stored in first 8 bytes
         instructions.add(new MovInstruction(destRegister, MemoryReference.getRaw(Register.RAX)));
+
+        return instructions;
+    }
+
+    public static List<AssemblyInstruction> generateEConstr(EConstr constr, String destRegister, BackendScope scope) {
+        int size = scope.getType(constr.ident_).getClassDefinition().getClassSize();
+
+        List<AssemblyInstruction> instructions = new ArrayList<>();
+        instructions.add(new PushInstruction(Register.RDI));
+        instructions.add(new MovInstruction(Register.RDI, YieldUtils.number(size * WORD_SIZE)));
+        instructions.add(new CallInstruction(ExternalFunctions.MALLOC_SIZE));
+
+        if (!Register.RAX.equals(destRegister)) {
+            instructions.add(new MovInstruction(destRegister, Register.RAX));
+        }
+
+        instructions.add(new PopInstruction(Register.RDI));
 
         return instructions;
     }

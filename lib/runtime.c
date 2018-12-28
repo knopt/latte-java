@@ -64,3 +64,13 @@ int* _mallocArray(int size) {
 
     return arr;
 }
+
+int* _mallocSize(int size) {
+    if (size < 0) {
+        printf("can't malloc negative size");
+    }
+
+    int* arr = (int *) malloc(size * sizeof(long));
+
+    return arr;
+}

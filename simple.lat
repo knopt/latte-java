@@ -6,32 +6,10 @@ class Node {
 
 int main() {
   
-  int[] a = new int[5];
-
-  int x = 42;
-  int sum = 0;
-
-  a[0] = 1;
-  a[1] = 2;
-  a[2] = 3;
-  a[3] = 4;
-  a[4] = 5;
-
-  printString("array length:");
-  printInt(a.length);
-
-  for (int x : a) {
-    sum = sum + x;
-  }
-
-  printString("x 42? :");
-  printInt(x);
-
-  printString("sum: ");
-  printInt(sum);
-
+  Node n1 = new Node;
+ 
+  n1.value++;
+  
 
   return 0;
-
-
 }

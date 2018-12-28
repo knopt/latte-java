@@ -66,7 +66,7 @@ public class TypeUtils {
         }
 
         if (eVar != null) {
-            lhs.binding = Binding.VARIABLE_BINDING;
+            eVar.binding = Binding.VARIABLE_BINDING;
         }
 
         try {
