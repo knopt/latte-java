@@ -89,6 +89,10 @@ public class BackendScope {
         this.stackHeight = that.stackHeight;
     }
 
+    public Map<String, VariableCompilerInfo> getDeclaredVariables() {
+        return declaredVariables;
+    }
+
     public BackendScope withVariables(List<VariableCompilerInfo> variables) {
         // TODO: handle function parametes
 

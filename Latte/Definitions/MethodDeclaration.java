@@ -1,6 +1,8 @@
 package Latte.Definitions;
 
 import Latte.Absyn.MethodBody;
+import Latte.Backend.Instructions.Label;
+import Latte.Backend.LabelsGenerator;
 
 import java.util.List;
 import java.util.Objects;
@@ -12,6 +14,7 @@ public class MethodDeclaration implements CallableDeclaration {
     public MethodBody methodBody;
     public TypeDefinition callerType;
     public int numberOfVariables;
+    public Label label;
 
     public MethodDeclaration(String name, List<VariableDefinition> argumentList, MethodBody methodBody, TypeDefinition returnType, TypeDefinition callerType) {
         this.name = name;
@@ -40,7 +43,7 @@ public class MethodDeclaration implements CallableDeclaration {
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, argumentList, returnType, methodBody, callerType);
+        return Objects.hash(name, argumentList, returnType.getName(), methodBody, callerType.getName());
     }
 
     @Override
@@ -73,6 +76,10 @@ public class MethodDeclaration implements CallableDeclaration {
         }
 
         return argumentList.equals(mthd.getArgumentList());
+    }
+
+    public void assignLabel() {
+        this.label = LabelsGenerator.getNonceLabel("_" + callerType.getName() + "_" + getName());
     }
 
     @Override

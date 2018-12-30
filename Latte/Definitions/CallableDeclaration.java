@@ -22,4 +22,5 @@ public interface CallableDeclaration {
     public int getNumberOfVariables();
 
     public void setNumberOfVariables(int number);
+
 }

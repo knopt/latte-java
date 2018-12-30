@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static Latte.Backend.Instructions.ConstantUtils.THIS_KEYWORD;
 import static Latte.Backend.Instructions.ConstantUtils.WORD_SIZE;
 import static Latte.Backend.LabelsGenerator.getNonceLabel;
 import static Latte.Frontend.TypeUtils.getType;
@@ -23,9 +24,9 @@ public class CompileExpression {
         return expr.match(
                 (var) -> generateVar(var, destRegister, scope),
                 (eInt) -> generateInt(eInt, destRegister),
-                (e) -> generateTrue(destRegister),
-                (e) -> generateFalse(destRegister),
-                (e) -> notImplemented(e),
+                (eTrue) -> generateTrue(destRegister),
+                (eFalse) -> generateFalse(destRegister),
+                (eThis) -> generateThis(destRegister, scope),
                 (ignored) -> generateNull(destRegister),
                 (eApp) -> generateApp(eApp, destRegister, scope),
                 (str) -> generateStr(str, destRegister, scope),
@@ -44,10 +45,38 @@ public class CompileExpression {
         );
     }
 
-    public static List<AssemblyInstruction> generateApp(EApp eApp, String destRegister, BackendScope scope) {
+    private static List<AssemblyInstruction> generatePushBeforeFunction() {
+        List<AssemblyInstruction> instructions = new ArrayList<>();
+
+        instructions.add(new PushInstruction(Register.RDI));
+        instructions.add(new PushInstruction(Register.RSI));
+        instructions.add(new PushInstruction(Register.RDX));
+        instructions.add(new PushInstruction(Register.RCX));
+        instructions.add(new PushInstruction(Register.R8));
+        instructions.add(new PushInstruction(Register.R9));
+
+        return instructions;
+    }
+
+    private static List<AssemblyInstruction> generatePopAfterFunction() {
+        List<AssemblyInstruction> instructions = new ArrayList<>();
+
+        instructions.add(new PopInstruction(Register.R9));
+        instructions.add(new PopInstruction(Register.R8));
+        instructions.add(new PopInstruction(Register.RCX));
+        instructions.add(new PopInstruction(Register.RDX));
+        instructions.add(new PopInstruction(Register.RSI));
+        instructions.add(new PopInstruction(Register.RDI));
+
+        return instructions;
+    }
+    
+    public static List<AssemblyInstruction> generateFunctionApp(EApp eApp, String destRegister, BackendScope scope) {
         List<AssemblyInstruction> instructions = new ArrayList<>();
 
         String funcName = eApp.ident_;
+
+        instructions.addAll(generatePushBeforeFunction());
 
         int numberOfArgsPassedOnStack = max(0, (eApp.listexpr_.size() - 6));
         int numberOfTempsOnStack = scope.getNumberOfTempsOnStack();
@@ -59,58 +88,128 @@ public class CompileExpression {
             instructions.add(new SubInstruction(Register.RSP, YieldUtils.number(WORD_SIZE)));
         }
 
-        if (eApp.listexpr_.size() > 0) {
-            instructions.addAll(generateExpr(eApp.listexpr_.get(0), Register.RAX, Register.RAX, scope));
-            instructions.add(new MovInstruction(Register.RDI, Register.RAX));
-        }
-
-        if (eApp.listexpr_.size() > 1) {
-            instructions.addAll(generateExpr(eApp.listexpr_.get(1), Register.RAX, Register.RAX, scope));
-            instructions.add(new MovInstruction(Register.RSI, Register.RAX));
-        }
-
-        if (eApp.listexpr_.size() > 2) {
-            instructions.addAll(generateExpr(eApp.listexpr_.get(2), Register.RAX, Register.RAX, scope));
-            instructions.add(new MovInstruction(Register.RDX, Register.RAX));
-        }
-
-        if (eApp.listexpr_.size() > 3) {
-            instructions.addAll(generateExpr(eApp.listexpr_.get(3), Register.RAX, Register.RAX, scope));
-            instructions.add(new MovInstruction(Register.RCX, Register.RAX));
-        }
-
-        if (eApp.listexpr_.size() > 4) {
-            instructions.addAll(generateExpr(eApp.listexpr_.get(4), Register.RAX, Register.RAX, scope));
-            instructions.add(new MovInstruction(Register.R8, Register.RAX));
-        }
-
-        if (eApp.listexpr_.size() > 5) {
-            instructions.addAll(generateExpr(eApp.listexpr_.get(5), Register.RAX, Register.RAX, scope));
-            instructions.add(new MovInstruction(Register.R9, Register.RAX));
-        }
-
-        for (int i = eApp.listexpr_.size(); i > 6; i--) {
-            instructions.addAll(generateExpr(eApp.listexpr_.get(i-1), Register.RAX, Register.RAX, scope));
-            instructions.add(new PushInstruction(Register.RAX, scope));
-        }
-
-
+        instructions.addAll(generateFunctionArguments(eApp.listexpr_, scope));
         instructions.add(new CallInstruction(funcName));
 
-
         int offset = max(0, (eApp.listexpr_.size() - 6)) * WORD_SIZE;
-
-        if (hasToAlignStack) {
-            instructions.add(new AddInstruction(Register.RSP, YieldUtils.number(WORD_SIZE)));
-        }
 
         if (offset > 0) {
             instructions.add(new AddInstruction(Register.RSP, YieldUtils.number(offset)));
             scope.changeTempsOnStack(-offset);
         }
 
-        return instructions;
+        if (hasToAlignStack) {
+            instructions.add(new AddInstruction(Register.RSP, YieldUtils.number(WORD_SIZE)));
+        }
 
+        instructions.addAll(generatePopAfterFunction());
+
+        return instructions;
+    }
+
+    private static List<AssemblyInstruction> generateCallableArguments(List<Expr> exprs, BackendScope scope, boolean isMethod) {
+        List<AssemblyInstruction> instructions = new ArrayList<>();
+
+        int argsOffset = 0; // used for 'this' argument in methods
+
+        if (isMethod) {
+            argsOffset = -1;
+        }
+
+        if (!isMethod && exprs.size() > 0) {
+            instructions.addAll(generateExpr(exprs.get(0), Register.RAX, Register.RAX, scope));
+            instructions.add(new MovInstruction(Register.RDI, Register.RAX));
+        }
+
+        if (exprs.size() > 1 + argsOffset) {
+            instructions.addAll(generateExpr(exprs.get(1 + argsOffset), Register.RAX, Register.RAX, scope));
+            instructions.add(new MovInstruction(Register.RSI, Register.RAX));
+        }
+
+        if (exprs.size() > 2 + argsOffset) {
+            instructions.addAll(generateExpr(exprs.get(2 + argsOffset), Register.RAX, Register.RAX, scope));
+            instructions.add(new MovInstruction(Register.RDX, Register.RAX));
+        }
+
+        if (exprs.size() > 3 + argsOffset) {
+            instructions.addAll(generateExpr(exprs.get(3 + argsOffset), Register.RAX, Register.RAX, scope));
+            instructions.add(new MovInstruction(Register.RCX, Register.RAX));
+        }
+
+        if (exprs.size() > 4 + argsOffset) {
+            instructions.addAll(generateExpr(exprs.get(4 + argsOffset), Register.RAX, Register.RAX, scope));
+            instructions.add(new MovInstruction(Register.R8, Register.RAX));
+        }
+
+        if (exprs.size() > 5 + argsOffset) {
+            instructions.addAll(generateExpr(exprs.get(5 + argsOffset), Register.RAX, Register.RAX, scope));
+            instructions.add(new MovInstruction(Register.R9, Register.RAX));
+        }
+
+        for (int i = exprs.size(); i > (6 + argsOffset); i--) {
+            instructions.addAll(generateExpr(exprs.get(i-1), Register.RAX, Register.RAX, scope));
+            instructions.add(new PushInstruction(Register.RAX, scope));
+        }
+
+        return instructions;
+    }
+
+    private static List<AssemblyInstruction> generateFunctionArguments(List<Expr> exprs, BackendScope scope) {
+        return generateCallableArguments(exprs, scope, false);
+    }
+
+    private static List<AssemblyInstruction> generateMethodArguments(List<Expr> exprs, BackendScope scope) {
+        return generateCallableArguments(exprs, scope, true);
+    }
+
+    public static List<AssemblyInstruction> generateMethodApp(EApp eApp, String destRegister, BackendScope scope) {
+        List<AssemblyInstruction> instructions = new ArrayList<>();
+
+        instructions.addAll(generatePushBeforeFunction());
+
+        int numberOfArgsPassedOnStack = max(0, (eApp.listexpr_.size() - 5)); // -6 + 1 - dodajemy "this" jako pierwszy argument
+        int numberOfTempsOnStack = scope.getNumberOfTempsOnStack();
+
+        boolean hasToAlignStack = (numberOfArgsPassedOnStack + numberOfTempsOnStack) % 2 != 0;
+
+        if (hasToAlignStack) {
+            instructions.add(new Comment("aligning stack"));
+            instructions.add(new SubInstruction(Register.RSP, YieldUtils.number(WORD_SIZE)));
+        }
+
+        VariableCompilerInfo varInfo = scope.getVariable(THIS_KEYWORD);
+        int thisOffset = varInfo.getOffset() * WORD_SIZE;
+        instructions.add(new MovInstruction(Register.RDI, MemoryReference.getWithOffset(Register.RBP, thisOffset)));
+
+        instructions.addAll(generateMethodArguments(eApp.listexpr_, scope));
+
+
+        // TODO: handle interfaces
+        instructions.add(new CallInstruction(eApp.binding.getBindedClass().getClassDefinition().methods.get(eApp.ident_).label.getLabelName()));
+
+        // function args pushed on stack?
+        int offset = max(0, (eApp.listexpr_.size() - 5)) * WORD_SIZE;
+
+        if (offset > 0) {
+            instructions.add(new AddInstruction(Register.RSP, YieldUtils.number(offset)));
+            scope.changeTempsOnStack(-offset);
+        }
+
+        if (hasToAlignStack) {
+            instructions.add(new AddInstruction(Register.RSP, YieldUtils.number(WORD_SIZE)));
+        }
+
+        instructions.addAll(generatePopAfterFunction());
+
+        return instructions;
+    }
+
+    public static List<AssemblyInstruction> generateApp(EApp eApp, String destRegister, BackendScope scope) {
+        if (Binding.FUNCTION_BINDING.equals(eApp.binding)) {
+            return generateFunctionApp(eApp, destRegister, scope);
+        }
+
+        return generateMethodApp(eApp, destRegister, scope);
     }
 
     public static List<AssemblyInstruction> generateVar(EVar var, String destRegister, BackendScope scope) {
@@ -127,9 +226,8 @@ public class CompileExpression {
 
     public static List<AssemblyInstruction> generateFieldFromVar(EVar var, String destRegister, BackendScope scope) {
         List<AssemblyInstruction> instructions = new ArrayList<>();
-        // TODO: add 1 to max stack size to fit 'this'
 
-        int thisOffset = scope.getVariable("this").getOffset() * WORD_SIZE;
+        int thisOffset = scope.getVariable(THIS_KEYWORD).getOffset() * WORD_SIZE;
         int fieldOffset = var.binding.getBindedClass().getClassDefinition().getFieldOffset(var.ident_);
 
         instructions.add(new MovInstruction(Register.RAX, MemoryReference.getWithOffset(Register.RBP, thisOffset)));
@@ -457,7 +555,7 @@ public class CompileExpression {
 
         instructions.addAll(objAcc.objacc_.match(
                 (fieldAcc) -> generateFieldAcc(fieldAcc, objAcc.expr_.type, Register.RAX, scope),
-                (methAcc) -> generateMethAcc(methAcc, objAcc.expr_.type, Register.RAX, scope)
+                (methAcc) -> generateMthAcc(methAcc, objAcc.expr_.type, Register.RAX, scope)
         ));
 
         return instructions;
@@ -520,8 +618,50 @@ public class CompileExpression {
         return instructions;
     }
 
-    public static List<AssemblyInstruction> generateMethAcc(ObjMethAcc acc, TypeDefinition type, String destRegister, BackendScope scope) {
-        return notImplemented(null);
+    public static List<AssemblyInstruction> generateMthAcc(ObjMethAcc acc, TypeDefinition type, String destRegister, BackendScope scope) {
+        List<AssemblyInstruction> instructions = new ArrayList<>();
+
+        instructions.addAll(generatePushBeforeFunction());
+
+        int numberOfArgsPassedOnStack = max(0, (acc.listexpr_.size() - 5)); // -6 + 1 - dodajemy "this" jako pierwszy argument
+        int numberOfTempsOnStack = scope.getNumberOfTempsOnStack();
+
+        boolean hasToAlignStack = (numberOfArgsPassedOnStack + numberOfTempsOnStack) % 2 != 0;
+
+        if (hasToAlignStack) {
+            instructions.add(new Comment("aligning stack"));
+            instructions.add(new SubInstruction(Register.RSP, YieldUtils.number(WORD_SIZE)));
+        }
+
+        // object which method is called upon is in rax
+        instructions.add(new MovInstruction(Register.RDI, Register.RAX));
+
+        instructions.addAll(generateMethodArguments(acc.listexpr_, scope));
+        instructions.add(new CallInstruction(type.getClassDefinition().methods.get(acc.ident_).label.getLabelName()));
+
+        // function args pushed on stack?
+        int offset = max(0, (acc.listexpr_.size() - 5)) * WORD_SIZE;
+
+        if (offset > 0) {
+            instructions.add(new AddInstruction(Register.RSP, YieldUtils.number(offset)));
+            scope.changeTempsOnStack(-offset);
+        }
+
+        if (hasToAlignStack) {
+            instructions.add(new AddInstruction(Register.RSP, YieldUtils.number(WORD_SIZE)));
+        }
+
+        instructions.addAll(generatePopAfterFunction());
+
+        return instructions;
+    }
+
+    public static List<AssemblyInstruction> generateThis(String destRegister, BackendScope scope) {
+        VariableCompilerInfo varInfo = scope.getVariable(THIS_KEYWORD);
+
+        int offset = varInfo.getOffset() * WORD_SIZE;
+
+        return new ArrayList<>(Collections.singletonList(new MovInstruction(destRegister, MemoryReference.getWithOffset(Register.RBP, offset))));
     }
 
 

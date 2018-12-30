@@ -2,7 +2,6 @@ package Latte.Backend;
 
 import Latte.Absyn.*;
 import Latte.Backend.Definitions.BackendScope;
-import Latte.Backend.Definitions.Binding;
 import Latte.Backend.Definitions.Register;
 import Latte.Backend.Instructions.*;
 import Latte.Definitions.TypeDefinition;
@@ -14,6 +13,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static Latte.Backend.CompileExpression.generateExpr;
+import static Latte.Backend.Instructions.ConstantUtils.THIS_KEYWORD;
 import static Latte.Backend.Instructions.ConstantUtils.WORD_SIZE;
 import static Latte.Frontend.TypeUtils.getType;
 import static Latte.PrettyPrinter.print;
@@ -310,7 +310,7 @@ public class CompileStatement {
         List<AssemblyInstruction> instructions = new ArrayList<>();
         // TODO: add 1 to max stack size to fit 'this'
         // wartość do zapisania jest w RAX
-        int thisOffset = scope.getVariable("this").getOffset() * WORD_SIZE;
+        int thisOffset = scope.getVariable(THIS_KEYWORD).getOffset() * WORD_SIZE;
         int fieldOffset = lhs.binding.getBindedClass().getClassDefinition().getFieldOffset(lhs.ident_);
 
         instructions.add(new PushInstruction(Register.RCX));

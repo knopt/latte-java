@@ -25,7 +25,7 @@ public class VariableDefinition {
 
     @Override
     public int hashCode() {
-        return Objects.hash(variableName, type);
+        return Objects.hash(variableName, type.getName());
     }
 
     public String getVariableName() {

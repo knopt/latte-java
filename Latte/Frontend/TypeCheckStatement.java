@@ -128,7 +128,7 @@ public class TypeCheckStatement {
         TypeDefinition type = typeCheckExpr(lhs.expr_, scope, callable);
 
         if (!type.isClassType()) {
-            throw new TypeCheckException("Type " + type + " is not allowed to have any fields", lhs.line_num, lhs.col_num);
+            throw new TypeCheckException("Type " + type + " doesn't have any assignable fields", lhs.line_num, lhs.col_num);
         }
 
         lhs.binding = Binding.getFieldBinding(type);
@@ -285,9 +285,9 @@ public class TypeCheckStatement {
     }
 
     public static Boolean checkCallableReturns(BlockS block, CallableDeclaration callableDeclaration) {
-        if (BasicTypeDefinition.VOID.equals(callableDeclaration.getReturnType())) {
-            return true;
-        }
+//        if (BasicTypeDefinition.VOID.equals(callableDeclaration.getReturnType())) {
+//            return true;
+//        }
 
         if (block.liststmt_.stream().anyMatch(TypeCheckStatement::stmtReturns)) {
             return true;

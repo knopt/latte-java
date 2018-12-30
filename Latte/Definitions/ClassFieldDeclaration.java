@@ -22,7 +22,7 @@ public class ClassFieldDeclaration {
 
     @Override
     public int hashCode() {
-        return Objects.hash(fieldName, type);
+        return Objects.hash(fieldName, type.getName());
     }
 
     public String getFieldName() {

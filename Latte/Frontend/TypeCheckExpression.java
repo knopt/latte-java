@@ -1,6 +1,7 @@
 package Latte.Frontend;
 
 import Latte.Absyn.*;
+import Latte.Backend.Definitions.Binding;
 import Latte.Definitions.*;
 import Latte.Exceptions.IllegalTypeException;
 import Latte.Exceptions.TypeCheckException;
@@ -74,9 +75,10 @@ public class TypeCheckExpression {
     public static TypeDefinition typeCheckEApp(EApp eApp, FrontendScope scope, CallableDeclaration callableDeclaration) {
         TypeCheckException e;
 
+        eApp.binding = Binding.FUNCTION_BINDING;
+
         try {
             FunctionDeclaration func = scope.globalEnvironment.getFunction(eApp.ident_, eApp.line_num, eApp.line_num);
-
             validateCallablesArgumentsMatch(func, eApp.listexpr_, scope, callableDeclaration, eApp.line_num, eApp.col_num);
             return func.getReturnType();
         } catch (TypeCheckException ex) {
@@ -85,6 +87,7 @@ public class TypeCheckExpression {
 
         if (callableDeclaration.isMethod()) {
             CallableDeclaration callable;
+            eApp.binding = Binding.getMethodBinding(callableDeclaration.getCallerType());
             if (callableDeclaration.getCallerType().isClassType()) {
                 callable = callableDeclaration.getCallerType().getClassDefinition().getCallableDeclaration(eApp.ident_, eApp.line_num, eApp.col_num);
             } else {

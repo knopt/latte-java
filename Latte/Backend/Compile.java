@@ -7,10 +7,7 @@ import Latte.Backend.Definitions.BackendScope;
 import Latte.Backend.Definitions.ExternalFunctions;
 import Latte.Backend.Definitions.Register;
 import Latte.Backend.Instructions.*;
-import Latte.Definitions.FunctionDeclaration;
-import Latte.Definitions.MethodDeclaration;
-import Latte.Definitions.TypeDefinition;
-import Latte.Definitions.VariableDefinition;
+import Latte.Definitions.*;
 import Latte.Frontend.Environment;
 
 import java.util.ArrayList;
@@ -18,6 +15,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import static Latte.Backend.Instructions.ConstantUtils.THIS_KEYWORD;
 import static Latte.Backend.Instructions.ConstantUtils.WORD_SIZE;
 
 public class Compile {
@@ -73,11 +71,14 @@ public class Compile {
         return instructions;
     }
 
-
     public void generate() {
         for (TypeDefinition type : env.declaredTypes.values()) {
             if (type.isClassType()) {
                 type.getClassDefinition().createOffSetTable();
+
+                for (MethodDeclaration mth : type.getClassDefinition().methods.values()) {
+                    mth.assignLabel();
+                }
             }
 
             if (type.isInterfaceType()) {
@@ -88,11 +89,20 @@ public class Compile {
         addInstructions(generateStringSection());
         addInstructions(generateSectionTextEntryInstructions());
 
+        for (TypeDefinition type : env.declaredTypes.values()) {
+            if (type.isClassType()) {
+                for (MethodDeclaration mth : type.getClassDefinition().methods.values()) {
+                    generateMethod(mth);
+                }
+            }
+        }
+
         for (FunctionDeclaration func : env.declaredFunctions.values()) {
             if (!func.isExternal()) {
                 generateFunction(func);
             }
         }
+
     }
 
     public void assignLabelsToStrings(Environment env) {
@@ -114,7 +124,7 @@ public class Compile {
         addInstructions(new Label(func.getName()));
         addInstructions(generateProlog(func.getNumberOfVariables()));
 
-        generatePushEntryArgumentsToStack(func, scope);
+        addInstructions(generatePushFunctionEntryArgumentsToStack(func, scope));
 
         BackendScope scopeWithArgs = new BackendScope(scope);
 
@@ -124,29 +134,55 @@ public class Compile {
         );
     }
 
-//    public void generateMethod(MethodDeclaration mth) {
-//        BackendScope scope = new BackendScope(this.env);
-//
-//        addInstructions(new Comment("code for method" + mth.getName()));
-//        addInstructions(new Label("_" + mth.callerType.getName() + "_" + mth.getName()));
-//        addInstructions(generateProlog(mth.getNumberOfVariables() + 1));
-//
-//        generatePushEntryArgumentsToStack(func, scope);
-//
-//        BackendScope scopeWithArgs = new BackendScope(scope);
-//
-//        func.getMethodBody().match(
-//                null,
-//                (body) -> generateBody(body, scopeWithArgs)
-//        );
-//    }
+    public void generateMethod(MethodDeclaration mth) {
+        BackendScope scope = new BackendScope(this.env);
 
-    public void generatePushEntryArgumentsToStack(FunctionDeclaration func, BackendScope scope) {
+        addInstructions(new Comment("code for method" + mth.getName()));
+        addInstructions(mth.label);
+        addInstructions(generateProlog(mth.getNumberOfVariables() + 1));
+
+        addInstructions(generatePushMethodEntryArgumentsToStack(mth, scope));
+
+        BackendScope scopeWithArgs = new BackendScope(scope);
+
+        mth.getMethodBody().match(
+                null,
+                (body) -> generateBody(body, scopeWithArgs)
+        );
+    }
+
+    public List<AssemblyInstruction> generatePushFunctionEntryArgumentsToStack(FunctionDeclaration func, BackendScope scope) {
+        return generatePushCallableEntryArgumentsToStack(func.getArgumentList(), scope, null);
+    }
+
+    public List<AssemblyInstruction> generatePushMethodEntryArgumentsToStack(MethodDeclaration mth, BackendScope scope) {
         List<AssemblyInstruction> instructions = new ArrayList<>();
 
-        List<VariableDefinition> args = func.getArgumentList();
+        String register = Register.RDI;
+        scope.declareVariable(THIS_KEYWORD, mth.getCallerType());
+        int offset = scope.getVariable(THIS_KEYWORD).getOffset() * WORD_SIZE;
+        instructions.add(new MovInstruction(MemoryReference.getWithOffset(Register.RBP, offset), register));
 
-        if (args.size() > 0) {
+        instructions.addAll(generatePushCallableEntryArgumentsToStack(mth.getArgumentList(), scope, mth.getCallerType()));
+
+        return instructions;
+    }
+
+    public List<AssemblyInstruction> generatePushCallableEntryArgumentsToStack(List<VariableDefinition> args, BackendScope scope, TypeDefinition methodsCallerType) {
+        List<AssemblyInstruction> instructions = new ArrayList<>();
+
+        int argsOffset = 0;
+
+        boolean isMethod = methodsCallerType != null;
+
+        if (isMethod) {
+            argsOffset = -1;
+            scope.declareVariable(THIS_KEYWORD, methodsCallerType);
+            int offset = scope.getVariable(THIS_KEYWORD).getOffset() * WORD_SIZE;
+            instructions.add(new MovInstruction(MemoryReference.getWithOffset(Register.RBP, offset), Register.RDI));
+        }
+
+        if (!isMethod && args.size() > 0) {
             int pos = 0;
             String register = Register.RDI;
             scope.declareVariable(args.get(pos).getVariableName(), args.get(pos).getType());
@@ -154,52 +190,52 @@ public class Compile {
             instructions.add(new MovInstruction(MemoryReference.getWithOffset(Register.RBP, offset), register));
         }
 
-        if (args.size() > 1) {
-            int pos = 1;
+        if (args.size() > 1 + argsOffset) {
+            int pos = 1 + argsOffset;
             String register = Register.RSI;
             scope.declareVariable(args.get(pos).getVariableName(), args.get(pos).getType());
             int offset = scope.getVariable(args.get(pos).getVariableName()).getOffset() * WORD_SIZE;
             instructions.add(new MovInstruction(MemoryReference.getWithOffset(Register.RBP, offset), register));
         }
 
-        if (args.size() > 2) {
-            int pos = 2;
+        if (args.size() > 2 + argsOffset) {
+            int pos = 2 + argsOffset;
             String register = Register.RDX;
             scope.declareVariable(args.get(pos).getVariableName(), args.get(pos).getType());
             int offset = scope.getVariable(args.get(pos).getVariableName()).getOffset() * WORD_SIZE;
             instructions.add(new MovInstruction(MemoryReference.getWithOffset(Register.RBP, offset), register));
         }
 
-        if (args.size() > 3) {
-            int pos = 3;
+        if (args.size() > 3 + argsOffset) {
+            int pos = 3 + argsOffset;
             String register = Register.RCX;
             scope.declareVariable(args.get(pos).getVariableName(), args.get(pos).getType());
             int offset = scope.getVariable(args.get(pos).getVariableName()).getOffset() * WORD_SIZE;
             instructions.add(new MovInstruction(MemoryReference.getWithOffset(Register.RBP, offset), register));
         }
 
-        if (args.size() > 4) {
-            int pos = 4;
+        if (args.size() > 4 + argsOffset) {
+            int pos = 4 + argsOffset;
             String register = Register.R8;
             scope.declareVariable(args.get(pos).getVariableName(), args.get(pos).getType());
             int offset = scope.getVariable(args.get(pos).getVariableName()).getOffset() * WORD_SIZE;
             instructions.add(new MovInstruction(MemoryReference.getWithOffset(Register.RBP, offset), register));
         }
 
-        if (args.size() > 5) {
-            int pos = 5;
+        if (args.size() > 5 + argsOffset) {
+            int pos = 5 + argsOffset;
             String register = Register.R9;
             scope.declareVariable(args.get(pos).getVariableName(), args.get(pos).getType());
             int offset = scope.getVariable(args.get(pos).getVariableName()).getOffset() * WORD_SIZE;
             instructions.add(new MovInstruction(MemoryReference.getWithOffset(Register.RBP, offset), register));
         }
 
-        for (int i = 6; i < args.size(); i++) {
+        for (int i = 6 + argsOffset; i < args.size(); i++) {
             int offset = i - 4; // below rbp and return address
             scope.declareVariable(args.get(i).getVariableName(), args.get(i).getType(), offset, false);
         }
 
-        addInstructions(instructions);
+        return instructions;
     }
 
     public List<AssemblyInstruction> generateProlog(int numberOfVariables) {

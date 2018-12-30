@@ -360,7 +360,16 @@ public class TypeCheck {
     }
 
     public static Boolean typeCheckCallable(MBody mBody, CallableDeclaration callableDeclaration) {
-        mBody.block_.match((block) -> checkCallableReturns(block, callableDeclaration));
+        try {
+            mBody.block_.match((block) -> checkCallableReturns(block, callableDeclaration));
+        } catch (Exception e) {
+            if (callableDeclaration.getReturnType().equals(BasicTypeDefinition.VOID)) {
+                mBody.block_.match((blockS) -> { blockS.liststmt_.addLast(new VRet()); return null;});
+            } else {
+                throw e;
+            }
+        }
+
         mBody.block_.match((block) -> typeCheckCallablesBlock(block, callableDeclaration));
 
         return true;

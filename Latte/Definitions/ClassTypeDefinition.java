@@ -11,7 +11,7 @@ import static Latte.Backend.Instructions.ConstantUtils.WORD_SIZE;
 public class ClassTypeDefinition implements TypeDefinition, Arrayable {
     public String className;
     public Map<String, ClassFieldDeclaration> fields;
-    public Map<String, CallableDeclaration> methods;
+    public Map<String, MethodDeclaration> methods;
     public InterfaceTypeDefinition implementedInterface;
     private Map<String, Integer> fieldsOffsetTable;
     private Map<String, Integer> methodsOffsetTable;
