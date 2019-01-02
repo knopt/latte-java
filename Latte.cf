@@ -80,7 +80,7 @@ SExp.      Stmt ::= Expr  ";" ;
 -- LHS & RHS -----------------------------------------------
 
 VariableRawLhs.     Lhs ::= Ident ;
-ArrElemLhs.         Lhs ::= Expr7 "[" Expr "]" ;
+ArrElemLhs.         Lhs ::= Expr9 "[" Expr "]" ;
 FieldLhs.           Lhs ::= Expr7 "." Ident ;
 
 -- Types ---------------------------------------------------

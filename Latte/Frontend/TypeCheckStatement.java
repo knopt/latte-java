@@ -94,7 +94,7 @@ public class TypeCheckStatement {
         if (BasicTypeDefinition.VOID.equals(lhs)) {
             throw new TypeCheckException("Void type is not assignable", ass.line_num, ass.col_num);
         }
-
+        
         TypeDefinition exprType = typeCheckExpr(ass.expr_, scope, callableDeclaration);
 
         TypeUtils.validateTypes(lhs, exprType, ass.line_num, ass.col_num);
@@ -117,7 +117,7 @@ public class TypeCheckStatement {
             throw new InternalStateException("Expected array type in lhs. Should have been caught earlier");
         }
 
-        TypeDefinition indexExprType = typeCheckExpr(elem.expr_1, scope, callableDeclaration);
+        TypeDefinition indexExprType = typeCheckExpr(elem.expr_2, scope, callableDeclaration);
 
         TypeUtils.validateTypes(BasicTypeDefinition.INT, indexExprType, elem.line_num, elem.col_num);
 

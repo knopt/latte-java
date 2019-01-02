@@ -20,15 +20,19 @@
 
 //}
 
-int[] f() {
+int[] f(int[] a) {
   
-  return new int[5];
+  return a;
 }
 
 
 int main() {
   
-  (f())[3] = 10;
+  int[] a = new int[5]; 
+
+  f(a)[3] = 10;
+
+  printInt(a[3]);
 
   return 0;
 }

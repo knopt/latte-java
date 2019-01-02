@@ -903,7 +903,7 @@ public class PrettyPrinter
     {
        Latte.Absyn.ArrElemLhs _arrelemlhs = (Latte.Absyn.ArrElemLhs) foo;
        if (_i_ > 0) render(_L_PAREN);
-       pp(_arrelemlhs.expr_1, 7);
+       pp(_arrelemlhs.expr_1, 9);
        render("[");
        pp(_arrelemlhs.expr_2, 0);
        render("]");
