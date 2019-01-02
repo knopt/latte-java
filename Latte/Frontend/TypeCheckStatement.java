@@ -111,13 +111,13 @@ public class TypeCheckStatement {
     }
 
     public static TypeDefinition getALhsType(ArrElemLhs elem, FrontendScope scope, CallableDeclaration callableDeclaration) {
-        TypeDefinition typeDefinition = scope.getVariable(elem.ident_, elem.line_num, elem.col_num).getType();
+        TypeDefinition typeDefinition = typeCheckExpr(elem.expr_1, scope, callableDeclaration);
 
         if (!typeDefinition.isArrayType()) {
             throw new InternalStateException("Expected array type in lhs. Should have been caught earlier");
         }
 
-        TypeDefinition indexExprType = typeCheckExpr(elem.expr_, scope, callableDeclaration);
+        TypeDefinition indexExprType = typeCheckExpr(elem.expr_1, scope, callableDeclaration);
 
         TypeUtils.validateTypes(BasicTypeDefinition.INT, indexExprType, elem.line_num, elem.col_num);
 

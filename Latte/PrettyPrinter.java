@@ -903,9 +903,9 @@ public class PrettyPrinter
     {
        Latte.Absyn.ArrElemLhs _arrelemlhs = (Latte.Absyn.ArrElemLhs) foo;
        if (_i_ > 0) render(_L_PAREN);
-       pp(_arrelemlhs.ident_, 0);
+       pp(_arrelemlhs.expr_1, 7);
        render("[");
-       pp(_arrelemlhs.expr_, 0);
+       pp(_arrelemlhs.expr_2, 0);
        render("]");
        if (_i_ > 0) render(_R_PAREN);
     }
@@ -1689,8 +1689,8 @@ public class PrettyPrinter
        Latte.Absyn.ArrElemLhs _arrelemlhs = (Latte.Absyn.ArrElemLhs) foo;
        render("(");
        render("ArrElemLhs");
-       sh(_arrelemlhs.ident_);
-       sh(_arrelemlhs.expr_);
+       sh(_arrelemlhs.expr_1);
+       sh(_arrelemlhs.expr_2);
        render(")");
     }
     if (foo instanceof Latte.Absyn.FieldLhs)

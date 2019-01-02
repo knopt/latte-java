@@ -70,16 +70,17 @@ public class CompileStatement {
     }
 
     public static List<AssemblyInstruction> generateArrIncr(ArrElemLhs arrElem, BackendScope scope) {
-        int varOffset = scope.getVariable(arrElem.ident_).getOffset() * WORD_SIZE;
         List<AssemblyInstruction> instructions = new ArrayList<>();
 
         instructions.add(new PushInstruction(Register.RCX, scope));
 
-
-        instructions.addAll(generateExpr(arrElem.expr_, Register.RAX, Register.RAX, scope));
+        instructions.addAll(generateExpr(arrElem.expr_2, Register.RAX, Register.RAX, scope));
         instructions.add(new AddInstruction(Register.RAX, YieldUtils.number(1)));
         instructions.add(new MulInstruction(Register.RAX, YieldUtils.number(WORD_SIZE)));
-        instructions.add(new AddInstruction(Register.RAX, MemoryReference.getWithOffset(Register.RBP, varOffset)));
+        instructions.add(new MovInstruction(Register.RCX, Register.RAX));
+        instructions.addAll(generateExpr(arrElem.expr_1, Register.RAX, Register.RAX, scope));
+
+        instructions.add(new AddInstruction(Register.RAX, Register.RCX));
 
         instructions.add(new MovInstruction(Register.RCX, MemoryReference.getRaw(Register.RAX)));
         instructions.add(new AddInstruction(Register.RCX, YieldUtils.number(1)));
@@ -103,16 +104,17 @@ public class CompileStatement {
     }
 
     public static List<AssemblyInstruction> generateArrDecr(ArrElemLhs arrElem, BackendScope scope) {
-        int varOffset = scope.getVariable(arrElem.ident_).getOffset() * WORD_SIZE;
         List<AssemblyInstruction> instructions = new ArrayList<>();
 
         instructions.add(new PushInstruction(Register.RCX, scope));
 
-
-        instructions.addAll(generateExpr(arrElem.expr_, Register.RAX, Register.RAX, scope));
+        instructions.addAll(generateExpr(arrElem.expr_2, Register.RAX, Register.RAX, scope));
         instructions.add(new AddInstruction(Register.RAX, YieldUtils.number(1)));
         instructions.add(new MulInstruction(Register.RAX, YieldUtils.number(WORD_SIZE)));
-        instructions.add(new AddInstruction(Register.RAX, MemoryReference.getWithOffset(Register.RBP, varOffset)));
+        instructions.add(new MovInstruction(Register.RCX, Register.RAX));
+        instructions.addAll(generateExpr(arrElem.expr_1, Register.RAX, Register.RAX, scope));
+
+        instructions.add(new AddInstruction(Register.RAX, Register.RCX));
 
         instructions.add(new MovInstruction(Register.RCX, MemoryReference.getRaw(Register.RAX)));
         instructions.add(new SubInstruction(Register.RCX, YieldUtils.number(1)));
@@ -339,23 +341,27 @@ public class CompileStatement {
     }
 
     public static List<AssemblyInstruction> generateVariableArrayAss(ArrElemLhs arrElem, TypeDefinition rhsType, String registerOfValue, BackendScope scope) {
-        int varOffset = scope.getVariable(arrElem.ident_).getOffset() * WORD_SIZE;
         List<AssemblyInstruction> instructions = new ArrayList<>();
 
         instructions.add(new PushInstruction(Register.RCX, scope));
+        instructions.add(new PushInstruction(Register.RDX, scope));
 
         if (!registerOfValue.equals(Register.RCX)) {
             instructions.add(new MovInstruction(Register.RCX, registerOfValue));
         }
 
-        instructions.addAll(generateExpr(arrElem.expr_, Register.RAX, Register.RAX, scope));
-        instructions.add(new AddInstruction(Register.RAX, YieldUtils.number(1)));
-        instructions.add(new MulInstruction(Register.RAX, YieldUtils.number(WORD_SIZE)));
-        instructions.add(new AddInstruction(Register.RAX, MemoryReference.getWithOffset(Register.RBP, varOffset)));
+        instructions.addAll(generateExpr(arrElem.expr_2, Register.RAX, Register.RAX, scope));
+        instructions.add(new MovInstruction(Register.RDX, Register.RAX));
+        instructions.add(new AddInstruction(Register.RDX, YieldUtils.number(1)));
+        instructions.add(new MulInstruction(Register.RDX, YieldUtils.number(WORD_SIZE)));
+        instructions.addAll(generateExpr(arrElem.expr_1, Register.RAX, Register.RAX, scope));
+        instructions.add(new AddInstruction(Register.RAX, Register.RDX));
 
-        TypeDefinition innerArrayType = scope.getVariable(arrElem.ident_).getType().getArrayTypeDefinition().getInnerTypeDefinition();
+        instructions.add(new PopInstruction(Register.RDX, scope));
 
-        if (innerArrayType.isInterfaceType() && arrElem.expr_.type.isClassType()) {
+        TypeDefinition innerArrayType = arrElem.expr_1.type.getArrayTypeDefinition().getInnerTypeDefinition();
+
+        if (innerArrayType.isInterfaceType() && arrElem.expr_2.type.isClassType()) {
             //TODO: implement interface assignment from class
         }
 
@@ -431,8 +437,8 @@ public class CompileStatement {
         scope.declareVariable(forArr.ident_, getType(forArr.typename_, scope.getGlobalEnvironment(), -1, -1));
         int offset = scope.getVariable(forArr.ident_).getOffset() * WORD_SIZE;
 
-        instructions.add(new PushInstruction(Register.RDX));
-        instructions.add(new PushInstruction(Register.RCX));
+        instructions.add(new PushInstruction(Register.RDX, scope));
+        instructions.add(new PushInstruction(Register.RCX, scope));
 
         instructions.addAll(generateExpr(forArr.expr_, Register.RAX, Register.RAX, scope)); // get array beginning
         instructions.add(new MovInstruction(Register.RCX, Register.RAX));
@@ -455,8 +461,8 @@ public class CompileStatement {
         instructions.add(new JumpInstruction(start, JumpInstruction.Type.ALWAYS));
         instructions.add(end);
 
-        instructions.add(new PopInstruction(Register.RCX));
-        instructions.add(new PopInstruction(Register.RDX));
+        instructions.add(new PopInstruction(Register.RCX, scope));
+        instructions.add(new PopInstruction(Register.RDX, scope));
 
         return instructions;
     }

@@ -473,7 +473,7 @@ if (leftLoc != null) {
   ((Latte.Absyn.VariableRawLhs)RESULT).col_num = -1;
   ((Latte.Absyn.VariableRawLhs)RESULT).offset = -1;
 } :} 
-  | _IDENT_:p_1 _SYMB_10:p_2 Expr:p_3 _SYMB_11:p_4  {: RESULT = new Latte.Absyn.ArrElemLhs(p_1,p_3);
+  | Expr7:p_1 _SYMB_10:p_2 Expr:p_3 _SYMB_11:p_4  {: RESULT = new Latte.Absyn.ArrElemLhs(p_1,p_3);
 java_cup.runtime.ComplexSymbolFactory.Location leftLoc = getLeftLocation(p_1xleft,p_3xleft);
 if (leftLoc != null) {
   ((Latte.Absyn.ArrElemLhs)RESULT).line_num = leftLoc.getLine();
