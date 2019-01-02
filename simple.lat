@@ -1,24 +1,40 @@
-//class Node {
-//  int value;
-//  Node next;
+class Node {
+  int value;
+  Node next;
 
-//  void setNext(Node n) {
-//    self.next = n;
-//  }
+  void setNext(Node n) {
+    self.next = n;
+  }
 
-//  void setValue(int n) {
-//    self.value = n;
-//  }
+  void setValue(int n) {
+    self.value = n;
+  }
 
-//  Node getNext() {
-//    return self.next;
-//  }
+  Node getNext() {
+    return self.next;
+  }
 
-//  int getValue() {
-//    return self.value;
-//  }
+  int getValue() {
+    return self.value;
+  }
 
-//}
+  void incrValue() {
+    value++;
+  }
+
+  void incrThisValue() {
+    self.value++;
+  }
+
+  void decrValue() {
+    value--;
+  }
+
+  void decrThisValue() {
+    self.value--;
+  }
+
+}
 
 int[] f(int[] a) {
   
@@ -28,11 +44,25 @@ int[] f(int[] a) {
 
 int main() {
   
-  int[] a = new int[5]; 
 
-  f(a)[3] = 10;
+  Node n = new Node;
 
-  printInt(a[3]);
+  n.value = 0;
+
+  n.incrValue();
+  n.incrThisValue();
+
+  printInt(n.value);
+
+  n.incrValue();
+  n.incrThisValue();
+
+  printInt(n.value);
+
+  n.decrValue();
+  n.decrThisValue();
+
+  printInt(n.value);
 
   return 0;
 }

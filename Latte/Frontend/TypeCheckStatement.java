@@ -94,7 +94,7 @@ public class TypeCheckStatement {
         if (BasicTypeDefinition.VOID.equals(lhs)) {
             throw new TypeCheckException("Void type is not assignable", ass.line_num, ass.col_num);
         }
-        
+
         TypeDefinition exprType = typeCheckExpr(ass.expr_, scope, callableDeclaration);
 
         TypeUtils.validateTypes(lhs, exprType, ass.line_num, ass.col_num);

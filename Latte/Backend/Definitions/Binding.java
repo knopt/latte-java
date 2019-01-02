@@ -14,16 +14,16 @@ public class Binding {
     public static Binding FUNCTION_BINDING = new Binding(FUNCTION_BINDING_NAME, null);
 
 
-    private String bindingType;
+    private String typeOfBinding;
     private TypeDefinition bindedClass;
 
-    public Binding(String bindingType, TypeDefinition bindedClass) {
-        this.bindingType = bindingType;
+    public Binding(String typeOfBinding, TypeDefinition bindedClass) {
+        this.typeOfBinding = typeOfBinding;
         this.bindedClass = bindedClass;
     }
 
-    public String getBindingType() {
-        return bindingType;
+    public String getTypeOfBinding() {
+        return typeOfBinding;
     }
 
     public TypeDefinition getBindedClass() {
@@ -38,7 +38,7 @@ public class Binding {
     }
 
     public boolean isField() {
-        return bindingType.equals(FIELD_BINDING_NAME);
+        return typeOfBinding.equals(FIELD_BINDING_NAME);
     }
 
     @Override
@@ -46,12 +46,12 @@ public class Binding {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Binding binding = (Binding) o;
-        return Objects.equals(bindingType, binding.bindingType) &&
+        return Objects.equals(typeOfBinding, binding.typeOfBinding) &&
                 Objects.equals(bindedClass, binding.bindedClass);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(bindingType, bindedClass);
+        return Objects.hash(typeOfBinding, bindedClass);
     }
 }
