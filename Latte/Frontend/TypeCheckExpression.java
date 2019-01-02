@@ -206,7 +206,7 @@ public class TypeCheckExpression {
 
         validateTypes(exprType1, exprType2, rel.line_num, rel.col_num);
 
-        List<BasicTypeDefinition> types = Arrays.asList(BasicTypeDefinition.INT, BasicTypeDefinition.INT);
+        List<BasicTypeDefinition> types = Arrays.asList(BasicTypeDefinition.INT, BasicTypeDefinition.BOOLEAN);
 
 
         rel.relop_.match(

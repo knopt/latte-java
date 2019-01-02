@@ -636,7 +636,13 @@ public class CompileExpression {
         // object which method is called upon is in rax
         instructions.add(new MovInstruction(Register.RDI, Register.RAX));
 
+        if (type.isInterfaceType()) {
+            // TODO: put to rdi runtime class of object, not the whole interface
+        }
+
         instructions.addAll(generateMethodArguments(acc.listexpr_, scope));
+
+        //TODO: change to support interfaces, take offset no from typedef, but from runtime object
         instructions.add(new CallInstruction(type.getClassDefinition().methods.get(acc.ident_).label.getLabelName()));
 
         // function args pushed on stack?

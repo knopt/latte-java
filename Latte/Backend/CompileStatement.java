@@ -271,29 +271,43 @@ public class CompileStatement {
         instructions.addAll(generateExpr(ass.expr_, Register.RAX, Register.RAX, scope));
 
         instructions.addAll(ass.lhs_.match(
-                (var) -> generateVariableAss(var, Register.RAX, scope),
-                (arr) -> generateVariableArrayAss(arr, Register.RAX, scope),
-                (field) -> generateFieldAss(field, Register.RAX, scope)
+                (var) -> generateVariableAss(var, ass.expr_.type, Register.RAX, scope),
+                (arr) -> generateVariableArrayAss(arr, ass.expr_.type, Register.RAX, scope),
+                (field) -> generateFieldAss(field, ass.expr_.type, Register.RAX, scope)
         ));
 
         return instructions;
     }
 
-    public static List<AssemblyInstruction> generateVariableAss(VariableRawLhs var, String sourceRegister, BackendScope scope) {
+    public static List<AssemblyInstruction> generateVariableAss(VariableRawLhs var, TypeDefinition rhsType, String sourceRegister, BackendScope scope) {
         if (var.binding.isField()) {
             return generateFieldAssFromVar(var, sourceRegister, scope);
         }
 
         int varOffset = scope.getVariable(var.ident_).getOffset() * WORD_SIZE;
 
+        List<AssemblyInstruction> instructions = new ArrayList<>();
+
+        if (scope.getVariable(var.ident_).getType().isInterfaceType() && rhsType.isClassType()) {
+            // TODO: implement interfaces assignment
+        }
+
+
+
         AssemblyInstruction instruction = new MovInstruction(MemoryReference.getWithOffset(Register.RBP, varOffset), sourceRegister);
 
         return new ArrayList<>(Collections.singletonList(instruction));
     }
 
-    public static List<AssemblyInstruction> generateFieldAss(FieldLhs fieldLhs, String sourceRegister, BackendScope scope) {
+    public static List<AssemblyInstruction> generateFieldAss(FieldLhs fieldLhs, TypeDefinition rhsType, String sourceRegister, BackendScope scope) {
         List<AssemblyInstruction> instructions = new ArrayList<>();
         int offset = fieldLhs.expr_.type.getClassDefinition().getFieldOffset(fieldLhs.ident_);
+
+        TypeDefinition fieldType = fieldLhs.expr_.type.getClassDefinition().getFieldDeclaration(fieldLhs.ident_, -1, -1).getType();
+
+        if (fieldType.isInterfaceType() && rhsType.isClassType()) {
+            // TODO: imeplemnt interfaces from class assignment
+        }
 
         instructions.add(new PushInstruction(Register.RCX));
 
@@ -324,7 +338,7 @@ public class CompileStatement {
         return instructions;
     }
 
-    public static List<AssemblyInstruction> generateVariableArrayAss(ArrElemLhs arrElem, String registerOfValue, BackendScope scope) {
+    public static List<AssemblyInstruction> generateVariableArrayAss(ArrElemLhs arrElem, TypeDefinition rhsType, String registerOfValue, BackendScope scope) {
         int varOffset = scope.getVariable(arrElem.ident_).getOffset() * WORD_SIZE;
         List<AssemblyInstruction> instructions = new ArrayList<>();
 
@@ -338,6 +352,12 @@ public class CompileStatement {
         instructions.add(new AddInstruction(Register.RAX, YieldUtils.number(1)));
         instructions.add(new MulInstruction(Register.RAX, YieldUtils.number(WORD_SIZE)));
         instructions.add(new AddInstruction(Register.RAX, MemoryReference.getWithOffset(Register.RBP, varOffset)));
+
+        TypeDefinition innerArrayType = scope.getVariable(arrElem.ident_).getType().getArrayTypeDefinition().getInnerTypeDefinition();
+
+        if (innerArrayType.isInterfaceType() && arrElem.expr_.type.isClassType()) {
+            //TODO: implement interface assignment from class
+        }
 
         instructions.add(new MovInstruction(MemoryReference.getRaw(Register.RAX), Register.RCX));
 
@@ -359,6 +379,10 @@ public class CompileStatement {
 
     public static List<AssemblyInstruction> generateInit(Init init, TypeDefinition type, BackendScope scope) {
         List<AssemblyInstruction> instructions = generateExpr(init.expr_, Register.RAX, Register.RAX, scope);
+
+        if (type.isInterfaceType() && init.expr_.type.isClassType()) {
+            // TODO: generate interface assignment from class type
+        }
 
         scope.declareVariable(init.ident_, type);
         int offset = scope.getVariable(init.ident_).getOffset() * WORD_SIZE;

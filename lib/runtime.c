@@ -18,9 +18,6 @@ char* readString() {
 
 
     if ((read = getline(&line, &len, stdin)) != -1) {
-        if (read > 0) {
-            fprintf(stderr, "\n  read %zd chars from stdin, allocated %zd bytes for line : %s\n", read, len, line);
-        }
     }
 
     return line;
