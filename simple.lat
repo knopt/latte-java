@@ -1,68 +1,15 @@
-class Node {
-  int value;
-  Node next;
-
-  void setNext(Node n) {
-    self.next = n;
-  }
-
-  void setValue(int n) {
-    self.value = n;
-  }
-
-  Node getNext() {
-    return self.next;
-  }
-
-  int getValue() {
-    return self.value;
-  }
-
-  void incrValue() {
-    value++;
-  }
-
-  void incrThisValue() {
-    self.value++;
-  }
-
-  void decrValue() {
-    value--;
-  }
-
-  void decrThisValue() {
-    self.value--;
-  }
-
-}
-
-int[] f(int[] a) {
-  
-  return a;
-}
-
 
 int main() {
-  
 
-  Node n = new Node;
+  string s1 = "ala";
+  string s2;
 
-  n.value = 0;
 
-  n.incrValue();
-  n.incrThisValue();
+  string s3 = s2 + s1;
 
-  printInt(n.value);
-
-  n.incrValue();
-  n.incrThisValue();
-
-  printInt(n.value);
-
-  n.decrValue();
-  n.decrThisValue();
-
-  printInt(n.value);
+  printString(s1);
+  printString(s2);
+  printString(s3);
 
   return 0;
 }

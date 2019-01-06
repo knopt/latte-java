@@ -36,12 +36,20 @@ void error() {
     exit(1);
 }
 
+
 char* _addStrings(char* s1, char* s2) {
       char * s3 = (char *) malloc(1 + strlen(s1)+ strlen(s2));
       strcpy(s3, s1);
       strcat(s3, s2);
 
       return s3;
+}
+
+char* _emptyString() {
+    char* str = (char *) malloc(sizeof(char));
+    str[0] = '\0';
+
+    return str;
 }
 
 int* _mallocArray(int size) {

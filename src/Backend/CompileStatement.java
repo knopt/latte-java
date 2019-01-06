@@ -2,8 +2,10 @@ package src.Backend;
 
 import src.Absyn.*;
 import src.Backend.Definitions.BackendScope;
+import src.Backend.Definitions.ExternalFunctions;
 import src.Backend.Definitions.Register;
 import src.Backend.Instructions.*;
+import src.Definitions.BasicTypeDefinition;
 import src.Definitions.TypeDefinition;
 import src.Exceptions.CompilerException;
 
@@ -351,13 +353,13 @@ public class CompileStatement {
             // TODO: imeplemnt interfaces from class assignment
         }
 
-        instructions.add(new PushInstruction(Register.RCX));
+        instructions.add(new PushInstruction(Register.RCX, scope));
 
         instructions.add(new MovInstruction(Register.RCX, Register.RAX));
         instructions.addAll(generateExpr(fieldLhs.expr_, Register.RAX, Register.RAX, scope));
         instructions.add(new MovInstruction(MemoryReference.getWithOffset(Register.RAX, offset), Register.RCX));
 
-        instructions.add(new PopInstruction(Register.RCX));
+        instructions.add(new PopInstruction(Register.RCX, scope));
 
         return instructions;
     }
@@ -369,13 +371,13 @@ public class CompileStatement {
         int thisOffset = scope.getVariable(THIS_KEYWORD).getOffset() * WORD_SIZE;
         int fieldOffset = lhs.binding.getBindedClass().getClassDefinition().getFieldOffset(lhs.ident_);
 
-        instructions.add(new PushInstruction(Register.RCX));
+        instructions.add(new PushInstruction(Register.RCX, scope));
 
         instructions.add(new MovInstruction(Register.RCX, MemoryReference.getWithOffset(Register.RBP, thisOffset)));
         instructions.add(new AddInstruction(Register.RCX, YieldUtils.number(fieldOffset)));
         instructions.add(new MovInstruction(MemoryReference.getRaw(Register.RCX), Register.RAX));
 
-        instructions.add(new PopInstruction(Register.RCX));
+        instructions.add(new PopInstruction(Register.RCX, scope));
 
         return instructions;
     }
@@ -417,7 +419,12 @@ public class CompileStatement {
 
         scope.declareVariable(noInit.ident_, type);
         int offset = scope.getVariable(noInit.ident_).getOffset() * WORD_SIZE;
-        instructions.add(new MovInstruction(Register.RAX, YieldUtils.number(0)));
+
+        if (BasicTypeDefinition.STRING.equals(type)) {
+            instructions.add(new CallInstruction(ExternalFunctions.EMPTY_STRING));
+        } else {
+            instructions.add(new MovInstruction(Register.RAX, YieldUtils.number(0)));
+        }
         instructions.add(new MovInstruction(MemoryReference.getWithOffset(Register.RBP, offset), Register.RAX));
 
         return instructions;
