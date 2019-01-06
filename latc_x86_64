@@ -1,0 +1,9 @@
+#!/bin/sh
+
+NOEXTFILE="${1%%.*}"
+
+java -cp ".:lib/java-cup-11b-runtime.jar:.:lib/commons-lang3-3.8.1.jar" src.Generate <$1 >$NOEXTFILE.s
+nasm -f elf64 -F dwarf -g $NOEXTFILE.s
+gcc -o lib/runtime.o -c lib/runtime.c
+gcc -o $NOEXTFILE $NOEXTFILE.o lib/runtime.o
+rm $NOEXTFILE.o

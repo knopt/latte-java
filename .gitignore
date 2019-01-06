@@ -9,26 +9,26 @@ simple.o
 simple.asm
 
 # Compiled class file
-Latte/**/*.class
-Latte/**/*.bak
+src/**/*.class
+src/**/*.bak
 
 # Log file
-Latte/**/*.log
+src/**/*.log
 
 # BlueJ files
-Latte/**/*.ctxt
+src/**/*.ctxt
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
 # Package Files #
-Latte/**/*.jar
-Latte/**/*.war
-Latte/**/*.nar
-Latte/**/*.ear
-Latte/**/*.zip
-Latte/**/*.tar.gz
-Latte/**/*.rar
+src/**/*.jar
+src/**/*.war
+src/**/*.nar
+src/**/*.ear
+src/**/*.zip
+src/**/*.tar.gz
+src/**/*.rar
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*

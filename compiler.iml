@@ -15,10 +15,10 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="data" level="project" />
     <orderEntry type="module" module-name="calc" />
-    <orderEntry type="module-library" scope="RUNTIME">
+    <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/java-cup-11b-runtime.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/commons-lang3-3.8.1.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -27,7 +27,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/commons-lang3-3.8.1.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/java-cup-11b.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
