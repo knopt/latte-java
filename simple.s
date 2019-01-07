@@ -1,5 +1,4 @@
 section .rodata
-   str_0 db "ala", 0
 section .text
    align 16
    extern printInt
@@ -8,6 +7,9 @@ section .text
    extern printString
    extern readInt
    extern error
+   global readInt2
+   global readInt4
+   global readInt3
    extern _addStrings
    extern _mallocArray
    extern _mallocSize
@@ -18,25 +20,64 @@ main:
    mov rbp, rsp
    sub rsp, 32
 ; 
-;  declaration string s1 = "ala";
+;  declaration int i, j, k;
 
-   mov rax, str_0
+   mov rax, 0
    mov [rbp - 8], rax
-; 
-;  declaration string s2;
-
-   call _emptyString
+   mov rax, 0
    mov [rbp - 16], rax
+   mov rax, 0
+   mov [rbp - 24], rax
 ; 
-;  declaration string s3 = s2 + s1;
+; assignment i = readInt2 ();
 
    push rdi
    push rsi
-   mov rax, [rbp - 16]
-   mov rdi, rax
+   push rdx
+   push rcx
+   push r8
+   push r9
+   call readInt2
+   pop r9
+   pop r8
+   pop rcx
+   pop rdx
+   pop rsi
+   pop rdi
+   mov [rbp - 8], rax
+; 
+; assignment j = readInt3 (i);
+
+   push rdi
+   push rsi
+   push rdx
+   push rcx
+   push r8
+   push r9
    mov rax, [rbp - 8]
-   mov rsi, rax
-   call _addStrings
+   mov rdi, rax
+   call readInt3
+   pop r9
+   pop r8
+   pop rcx
+   pop rdx
+   pop rsi
+   pop rdi
+   mov [rbp - 16], rax
+; 
+; assignment k = readInt4 ();
+
+   push rdi
+   push rsi
+   push rdx
+   push rcx
+   push r8
+   push r9
+   call readInt4
+   pop r9
+   pop r8
+   pop rcx
+   pop rdx
    pop rsi
    pop rdi
    mov [rbp - 24], rax
@@ -48,7 +89,7 @@ main:
    push r9
    mov rax, [rbp - 8]
    mov rdi, rax
-   call printString
+   call printInt
    pop r9
    pop r8
    pop rcx
@@ -63,7 +104,7 @@ main:
    push r9
    mov rax, [rbp - 16]
    mov rdi, rax
-   call printString
+   call printInt
    pop r9
    pop r8
    pop rcx
@@ -78,7 +119,7 @@ main:
    push r9
    mov rax, [rbp - 24]
    mov rdi, rax
-   call printString
+   call printInt
    pop r9
    pop r8
    pop rcx
@@ -88,6 +129,81 @@ main:
 ; 
 ; return from function
    mov rax, 0
+   mov rsp, rbp
+   pop rbp
+   ret
+; code for function readInt2
+readInt2:
+   push rbp
+   mov rbp, rsp
+   sub rsp, 0
+; 
+; return from function
+   push rdi
+   push rsi
+   push rdx
+   push rcx
+   push r8
+   push r9
+   call readInt
+   pop r9
+   pop r8
+   pop rcx
+   pop rdx
+   pop rsi
+   pop rdi
+   mov rsp, rbp
+   pop rbp
+   ret
+; code for function readInt4
+readInt4:
+   push rbp
+   mov rbp, rsp
+   sub rsp, 16
+; 
+;  declaration int a;
+
+   mov rax, 0
+   mov [rbp - 8], rax
+; 
+; return from function
+   push rdi
+   push rsi
+   push rdx
+   push rcx
+   push r8
+   push r9
+   call readInt
+   pop r9
+   pop r8
+   pop rcx
+   pop rdx
+   pop rsi
+   pop rdi
+   mov rsp, rbp
+   pop rbp
+   ret
+; code for function readInt3
+readInt3:
+   push rbp
+   mov rbp, rsp
+   sub rsp, 16
+   mov [rbp - 8], rdi
+; 
+; return from function
+   push rdi
+   push rsi
+   push rdx
+   push rcx
+   push r8
+   push r9
+   call readInt
+   pop r9
+   pop r8
+   pop rcx
+   pop rdx
+   pop rsi
+   pop rdi
    mov rsp, rbp
    pop rbp
    ret

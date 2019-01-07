@@ -45,28 +45,28 @@ public class CompileExpression {
         );
     }
 
-    private static List<AssemblyInstruction> generatePushBeforeFunction() {
+    private static List<AssemblyInstruction> generatePushBeforeFunction(BackendScope scope) {
         List<AssemblyInstruction> instructions = new ArrayList<>();
 
-        instructions.add(new PushInstruction(Register.RDI));
-        instructions.add(new PushInstruction(Register.RSI));
-        instructions.add(new PushInstruction(Register.RDX));
-        instructions.add(new PushInstruction(Register.RCX));
-        instructions.add(new PushInstruction(Register.R8));
-        instructions.add(new PushInstruction(Register.R9));
+        instructions.add(new PushInstruction(Register.RDI, scope));
+        instructions.add(new PushInstruction(Register.RSI, scope));
+        instructions.add(new PushInstruction(Register.RDX, scope));
+        instructions.add(new PushInstruction(Register.RCX, scope));
+        instructions.add(new PushInstruction(Register.R8, scope));
+        instructions.add(new PushInstruction(Register.R9, scope));
 
         return instructions;
     }
 
-    private static List<AssemblyInstruction> generatePopAfterFunction() {
+    private static List<AssemblyInstruction> generatePopAfterFunction(BackendScope scope) {
         List<AssemblyInstruction> instructions = new ArrayList<>();
 
-        instructions.add(new PopInstruction(Register.R9));
-        instructions.add(new PopInstruction(Register.R8));
-        instructions.add(new PopInstruction(Register.RCX));
-        instructions.add(new PopInstruction(Register.RDX));
-        instructions.add(new PopInstruction(Register.RSI));
-        instructions.add(new PopInstruction(Register.RDI));
+        instructions.add(new PopInstruction(Register.R9, scope));
+        instructions.add(new PopInstruction(Register.R8, scope));
+        instructions.add(new PopInstruction(Register.RCX, scope));
+        instructions.add(new PopInstruction(Register.RDX, scope));
+        instructions.add(new PopInstruction(Register.RSI, scope));
+        instructions.add(new PopInstruction(Register.RDI, scope));
 
         return instructions;
     }
@@ -76,7 +76,7 @@ public class CompileExpression {
 
         String funcName = eApp.ident_;
 
-        instructions.addAll(generatePushBeforeFunction());
+        instructions.addAll(generatePushBeforeFunction(scope));
 
         int numberOfArgsPassedOnStack = max(0, (eApp.listexpr_.size() - 6));
         int numberOfTempsOnStack = scope.getNumberOfTempsOnStack();
@@ -102,7 +102,7 @@ public class CompileExpression {
             instructions.add(new AddInstruction(Register.RSP, YieldUtils.number(WORD_SIZE)));
         }
 
-        instructions.addAll(generatePopAfterFunction());
+        instructions.addAll(generatePopAfterFunction(scope));
 
         return instructions;
     }
@@ -165,7 +165,7 @@ public class CompileExpression {
     public static List<AssemblyInstruction> generateMethodApp(EApp eApp, String destRegister, BackendScope scope) {
         List<AssemblyInstruction> instructions = new ArrayList<>();
 
-        instructions.addAll(generatePushBeforeFunction());
+        instructions.addAll(generatePushBeforeFunction(scope));
 
         int numberOfArgsPassedOnStack = max(0, (eApp.listexpr_.size() - 5)); // - 6 + 1 - dodajemy "this" jako pierwszy argument
         int numberOfTempsOnStack = scope.getNumberOfTempsOnStack();
@@ -199,7 +199,7 @@ public class CompileExpression {
             instructions.add(new AddInstruction(Register.RSP, YieldUtils.number(WORD_SIZE)));
         }
 
-        instructions.addAll(generatePopAfterFunction());
+        instructions.addAll(generatePopAfterFunction(scope));
 
         return instructions;
     }
@@ -512,11 +512,47 @@ public class CompileExpression {
         List<AssemblyInstruction> instructions = new ArrayList<>();
 
         instructions.addAll(generateExpr(constr.expr_, Register.RAX, Register.RAX, scope));
-        instructions.add(new MovInstruction(Register.RDI, Register.RAX));
 
         instructions.add(new PushInstruction(Register.RDI, scope));
+        instructions.add(new MovInstruction(Register.RDI, Register.RAX));
+
+        instructions.addAll(generatePushBeforeFunction(scope));
         instructions.add(new CallInstruction(ExternalFunctions.MALLOC_ARRAY));
+        instructions.addAll(generatePopAfterFunction(scope));
+
         instructions.add(new PopInstruction(Register.RDI, scope));
+
+        if (BasicTypeDefinition.STRING.equals(getType(constr.typename_, scope.getGlobalEnvironment(), -1, -1))) {
+            instructions.add(new PushInstruction(Register.RDI, scope));
+            instructions.add(new PushInstruction(Register.RDX, scope));
+            instructions.add(new PushInstruction(Register.RCX, scope));
+
+            instructions.add(new MovInstruction(Register.RDX, Register.RAX));
+            instructions.add(new MovInstruction(Register.RDI, MemoryReference.getRaw(Register.RAX)));
+            instructions.add(new MovInstruction(Register.RCX, Register.RAX));
+
+            Label start = LabelsGenerator.getNonceLabel("str_arr_init");
+            Label end = LabelsGenerator.getNonceLabel("str_arr_init_end");
+            instructions.add(start);
+            instructions.add(new CompareInstruction(Register.RDI, YieldUtils.number(0)));
+            instructions.add(new JumpInstruction(end, JumpInstruction.Type.EQU));
+            instructions.add(new AddInstruction(Register.RCX, YieldUtils.number(WORD_SIZE)));
+
+            instructions.addAll(generatePushBeforeFunction(scope));
+            instructions.add(new CallInstruction(ExternalFunctions.EMPTY_STRING));
+            instructions.addAll(generatePopAfterFunction(scope));
+
+            instructions.add(new MovInstruction(MemoryReference.getRaw(Register.RCX), Register.RAX));
+            instructions.add(new SubInstruction(Register.RDI, YieldUtils.number(1)));
+            instructions.add(new JumpInstruction(start, JumpInstruction.Type.ALWAYS));
+            instructions.add(end);
+            // resotre RAX
+            instructions.add(new MovInstruction(Register.RAX, Register.RDX));
+
+            instructions.add(new PopInstruction(Register.RCX, scope));
+            instructions.add(new PopInstruction(Register.RDX, scope));
+            instructions.add(new PopInstruction(Register.RDI, scope));
+        }
 
         if (!destRegister.equals(Register.RAX)) {
             instructions.add(new MovInstruction(destRegister, Register.RAX));
@@ -607,7 +643,10 @@ public class CompileExpression {
         List<AssemblyInstruction> instructions = new ArrayList<>();
         instructions.add(new PushInstruction(Register.RDI, scope));
         instructions.add(new MovInstruction(Register.RDI, YieldUtils.number(size * WORD_SIZE)));
+
+        instructions.addAll(generatePushBeforeFunction(scope));
         instructions.add(new CallInstruction(ExternalFunctions.MALLOC_SIZE));
+        instructions.addAll(generatePopAfterFunction(scope));
 
         if (!Register.RAX.equals(destRegister)) {
             instructions.add(new MovInstruction(destRegister, Register.RAX));
@@ -621,7 +660,7 @@ public class CompileExpression {
     public static List<AssemblyInstruction> generateMthAcc(ObjMethAcc acc, TypeDefinition type, String destRegister, BackendScope scope) {
         List<AssemblyInstruction> instructions = new ArrayList<>();
 
-        instructions.addAll(generatePushBeforeFunction());
+        instructions.addAll(generatePushBeforeFunction(scope));
 
         int numberOfArgsPassedOnStack = max(0, (acc.listexpr_.size() - 5)); // - 6 + 1 - dodajemy "this" jako pierwszy argument
         int numberOfTempsOnStack = scope.getNumberOfTempsOnStack();
@@ -657,7 +696,7 @@ public class CompileExpression {
             instructions.add(new AddInstruction(Register.RSP, YieldUtils.number(WORD_SIZE)));
         }
 
-        instructions.addAll(generatePopAfterFunction());
+        instructions.addAll(generatePopAfterFunction(scope));
 
         return instructions;
     }

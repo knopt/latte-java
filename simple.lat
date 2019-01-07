@@ -1,15 +1,28 @@
+int readInt2() {
+  return readInt();
+}
+
+int readInt3(int ignored) {
+  return readInt();
+}
+
+int readInt4() {
+  int a;
+
+  return readInt();
+}
 
 int main() {
 
-  string s1 = "ala";
-  string s2;
+  int i, j, k;
 
+  i = readInt2();
+  j = readInt3(i);
+  k = readInt4();
 
-  string s3 = s2 + s1;
-
-  printString(s1);
-  printString(s2);
-  printString(s3);
+  printInt(i);
+  printInt(j);
+  printInt(k);
 
   return 0;
 }

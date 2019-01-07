@@ -8,12 +8,12 @@ void printInt(int i) {
 }
 
 void printString(char* str) {
-    printf("%s\n", str);
+    printf("%s", str);
 }
 
 char* readString() {
-    char *line = NULL;  /* forces getline to allocate with malloc */
-    size_t len = 0;     /* ignored when line = NULL */
+    char *line = NULL;
+    size_t len = 0;
     ssize_t read;
 
 
