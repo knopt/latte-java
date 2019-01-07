@@ -1,0 +1,12 @@
+Tomasz Knopik 359778
+
+Uruchomienie kompilatora:
+```
+make
+./latc_x86_64 input.lat
+```
+
+Polecenie `make` kompiluje pliki javy.
+Polecenie latc_x86_64 kompiluje plik input.lat do pliku assemblera x86_64 input.s, kompiluje plik lib/runtime.c, tworzy wykonywalny plik input ze zlinkownym plikiem lib/runtime.o
+
+Kompilator używa bnfc oraz g 
