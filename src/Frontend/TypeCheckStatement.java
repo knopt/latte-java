@@ -294,7 +294,7 @@ public class TypeCheckStatement {
             return true;
         }
 
-        throw new TypeCheckException("Missing return statement", block.line_num, block.col_num);
+        throw new TypeCheckException("Missing return statement or exists path without return", block.line_num, block.col_num);
 
     }
 }
