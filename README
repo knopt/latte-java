@@ -1,6 +1,6 @@
 Tomasz Knopik 359778
 
-Kompilator do assemblera x86_64.
+Kompilator do assemblera x86_64. Napisany w Javie, przy użyciu bnfc.
 
 Uruchomienie kompilatora:
 ```
@@ -11,7 +11,7 @@ make
 Polecenie `make` kompiluje pliki javy.
 Polecenie latc_x86_64 kompiluje plik input.lat do pliku assemblera x86_64 input.s, kompiluje plik lib/runtime.c, tworzy wykonywalny plik input ze zlinkownym plikiem lib/runtime.o
 
-Używane zależności zewnętrzne to bnfc (załączony w katalogu lib, lecz nie używany przy make ani latc_x86_64, potrzebny przy zmianie gramatyki), JLex, java-cup, java-cup-runtime (wymagane przez bnfc), commons-lang (podstawowa biblioteka javowa do escapeowania znaków specjalnych ze stringów).
+Używane zależności zewnętrzne to  JLex, java-cup, java-cup-runtime (wymagane przez klasy generowane przez bnfc), commons-lang (podstawowa biblioteka javowa do escapeowania znaków specjalnych ze stringów).
 
 Katalog src zawiera wszystkie pliki źródłowe. 
 Podkatalog src/Absyn zawiera wygenerowane przez bnfc (oraz częściowo zmodyfikowane przeze mnie) klasy drzewa AST.
