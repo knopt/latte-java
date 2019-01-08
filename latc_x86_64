@@ -8,3 +8,5 @@ nasm -f elf64 -F dwarf -g $NOEXTFILE.s
 gcc -o $DIR_PATH/lib/runtime.o -c $DIR_PATH/lib/runtime.c
 gcc -o $NOEXTFILE $NOEXTFILE.o $DIR_PATH/lib/runtime.o
 rm $NOEXTFILE.o
+
+exit 0

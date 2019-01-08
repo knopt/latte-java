@@ -62,6 +62,10 @@ public class TypeCheckStatement {
                 (typeNameS) -> getType(typeNameS, scope.globalEnvironment)
         );
 
+        if (BasicTypeDefinition.VOID.equals(type)) {
+            throw new TypeCheckException("Variable can't be of type VOID", decl.line_num, decl.col_num);
+        }
+
         for (Item item : decl.listitem_) {
             item.match(
                     (noInit) -> typeCheckNoInit(noInit, type, scope),
