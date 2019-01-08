@@ -9,8 +9,8 @@ public class TypeMismatchException extends TypeCheckException {
     public int lineNumber;
     public int columnNumber;
 
-    public TypeMismatchException(TypeDefinition left, TypeDefinition right, int lineNumber, int columnNumber) {
-        super("Type mismatch. Expected " + left + ", got " + right, lineNumber, columnNumber);
+    public TypeMismatchException(TypeDefinition expected, TypeDefinition actual, int lineNumber, int columnNumber) {
+        super("Type mismatch. Expected " + expected + ", got " + actual, lineNumber, columnNumber);
     }
 
     public TypeMismatchException(List<BasicTypeDefinition> lefts, TypeDefinition right, int lineNumber, int columnNumber) {

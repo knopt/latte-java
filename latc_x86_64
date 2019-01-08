@@ -3,7 +3,7 @@
 NOEXTFILE="${1%%.*}"
 DIR_PATH=$(dirname $0)
 
-java -cp "$DIR_PATH/lib/java-cup-11b-runtime.jar:$DIR_PATH/lib/commons-lang3-3.8.1.jar:$DIR_PATH" src.Generate <$1 >$NOEXTFILE.s
+java -cp "$DIR_PATH/lib/java-cup-11b-runtime.jar:$DIR_PATH/lib/commons-lang3-3.8.1.jar:$DIR_PATH" src.Generate <$1 >$NOEXTFILE.s || exit 1
 nasm -f elf64 -F dwarf -g $NOEXTFILE.s
 gcc -o $DIR_PATH/lib/runtime.o -c $DIR_PATH/lib/runtime.c
 gcc -o $NOEXTFILE $NOEXTFILE.o $DIR_PATH/lib/runtime.o

@@ -42,7 +42,7 @@ public class Generate {
             program = t.parse();
         } catch (Throwable e) {
             System.err.println("ERROR");
-            System.err.println("Syntax error at " + t.l.line_num());
+            System.err.println("Syntax error at line " + t.l.line_num());
             System.exit(1);
             return;
         }

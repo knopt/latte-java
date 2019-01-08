@@ -155,13 +155,13 @@ public class TypeCheckStatement {
     public static Boolean typeCheckRet(Ret ret, FrontendScope scope, CallableDeclaration callableDeclaration) {
         TypeDefinition retType = typeCheckExpr(ret.expr_, scope, callableDeclaration);
 
-        TypeUtils.validateTypes(retType, callableDeclaration.getReturnType(), ret.line_num, ret.col_num);
+        TypeUtils.validateTypes(callableDeclaration.getReturnType(), retType, ret.line_num, ret.col_num);
 
         return true;
     }
 
     public static Boolean typeCheckVRet(VRet vret, CallableDeclaration callableDeclaration) {
-        TypeUtils.validateTypes(BasicTypeDefinition.VOID, callableDeclaration.getReturnType(), vret.line_num, vret.col_num);
+        TypeUtils.validateTypes(callableDeclaration.getReturnType(), BasicTypeDefinition.VOID, vret.line_num, vret.col_num);
 
         return true;
     }

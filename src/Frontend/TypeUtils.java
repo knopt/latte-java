@@ -106,12 +106,12 @@ public class TypeUtils {
         return getVariableType(null ,null, varName, scope, callableDeclaration, lineNum, colNum);
     }
 
-    public static TypeDefinition validateTypes(TypeDefinition type1, TypeDefinition type2, int lineNum, int colNum) {
-        if (TypeCheckStatement.typesMatch(type1, type2)) {
-            return type1;
+    public static TypeDefinition validateTypes(TypeDefinition expected, TypeDefinition actual, int lineNum, int colNum) {
+        if (TypeCheckStatement.typesMatch(expected, actual)) {
+            return expected;
         }
 
-        throw new TypeMismatchException(type1, type2, lineNum, colNum);
+        throw new TypeMismatchException(expected, actual, lineNum, colNum);
     }
 
     public static TypeDefinition validateTypes(List<BasicTypeDefinition> types, TypeDefinition type1, int lineNum, int colNum) {

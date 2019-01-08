@@ -12,9 +12,7 @@ public class BasicTypeDefinition implements TypeDefinition, Arrayable {
 
     @Override
     public String toString() {
-        return "BasicTypeDefinition{" +
-                "typeName=" + typeName +
-                '}';
+        return typeName.toString();
     }
 
     public BasicTypeDefinition(BasicTypeName tn) {
