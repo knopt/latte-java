@@ -285,9 +285,6 @@ public class TypeCheckStatement {
     }
 
     public static Boolean checkCallableReturns(BlockS block, CallableDeclaration callableDeclaration) {
-//        if (BasicTypeDefinition.VOID.equals(callableDeclaration.getReturnType())) {
-//            return true;
-//        }
 
         if (block.liststmt_.stream().anyMatch(TypeCheckStatement::stmtReturns)) {
             return true;
