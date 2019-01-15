@@ -11,7 +11,6 @@ import java.util.List;
 
 import static src.Frontend.TypeUtils.getType;
 import static src.Frontend.TypeUtils.validateTypes;
-import static src.PrettyPrinter.print;
 
 public class TypeCheckExpression {
 

@@ -12,11 +12,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static java.lang.Math.max;
 import static src.Backend.Instructions.ConstantUtils.THIS_KEYWORD;
 import static src.Backend.Instructions.ConstantUtils.WORD_SIZE;
 import static src.Backend.LabelsGenerator.getNonceLabel;
 import static src.Frontend.TypeUtils.getType;
-import static java.lang.Math.max;
 
 public class CompileExpression {
 

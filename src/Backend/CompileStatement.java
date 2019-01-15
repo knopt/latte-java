@@ -203,7 +203,7 @@ public class CompileStatement {
         List<AssemblyInstruction> instructions = new ArrayList<>();
 
         instructions.add(new Comment(""));
-        instructions.add(new Comment(" declaration " + print(decl)));
+        instructions.add(new Comment(" declaration"));
 
         TypeDefinition type = decl.type_.match(
                 (arrayType) -> getType(arrayType, scope.getGlobalEnvironment()),

@@ -7,7 +7,10 @@ import src.Backend.Definitions.BackendScope;
 import src.Backend.Definitions.ExternalFunctions;
 import src.Backend.Definitions.Register;
 import src.Backend.Instructions.*;
-import src.Definitions.*;
+import src.Definitions.FunctionDeclaration;
+import src.Definitions.MethodDeclaration;
+import src.Definitions.TypeDefinition;
+import src.Definitions.VariableDefinition;
 import src.Frontend.Environment;
 
 import java.util.ArrayList;

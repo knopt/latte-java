@@ -1,12 +1,13 @@
 package src;
 
-import src.Absyn.*;
-
-import java.io.*;
-
+import src.Absyn.Program;
 import src.Backend.Compile;
-import src.Exceptions.TypeCheckException;
 import src.Frontend.Environment;
+
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 
 import static src.Frontend.TypeCheck.check;
 

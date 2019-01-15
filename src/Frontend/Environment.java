@@ -8,7 +8,10 @@ import src.Definitions.TypeDefinition;
 import src.Exceptions.InternalStateException;
 import src.Exceptions.TypeCheckException;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Environment {
     public static List<TypeDefinition> basicTypes = Arrays.asList(
