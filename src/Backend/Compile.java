@@ -259,7 +259,7 @@ public class Compile {
         BlockS block = body.block_.match((blockS) -> blockS);
 
         for (Stmt stmt : block.liststmt_) {
-            addInstructions(CompileStatement.generateStmt(stmt, scope));
+            addInstructions(CompileStatement.generateStmt(stmt, scope).getInstructions());
         }
 
         return true;

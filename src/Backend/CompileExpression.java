@@ -9,7 +9,6 @@ import src.Exceptions.CompilerException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import static java.lang.Math.max;
@@ -20,7 +19,7 @@ import static src.Frontend.TypeUtils.getType;
 
 public class CompileExpression {
 
-    public static List<AssemblyInstruction> generateExpr(Expr expr, String destRegister, String sourceRegister, BackendScope scope) {
+    public static Instructions generateExpr(Expr expr, String destRegister, String sourceRegister, BackendScope scope) {
         return expr.match(
                 (var) -> generateVar(var, destRegister, scope),
                 (eInt) -> generateInt(eInt, destRegister),
@@ -45,8 +44,8 @@ public class CompileExpression {
         );
     }
 
-    private static List<AssemblyInstruction> generatePushBeforeFunction(BackendScope scope) {
-        List<AssemblyInstruction> instructions = new ArrayList<>();
+    private static Instructions generatePushBeforeFunction(BackendScope scope) {
+        Instructions instructions = new Instructions();
 
         instructions.add(new PushInstruction(Register.RDI, scope));
         instructions.add(new PushInstruction(Register.RSI, scope));
@@ -58,8 +57,8 @@ public class CompileExpression {
         return instructions;
     }
 
-    private static List<AssemblyInstruction> generatePopAfterFunction(BackendScope scope) {
-        List<AssemblyInstruction> instructions = new ArrayList<>();
+    private static Instructions generatePopAfterFunction(BackendScope scope) {
+        Instructions instructions = new Instructions();
 
         instructions.add(new PopInstruction(Register.R9, scope));
         instructions.add(new PopInstruction(Register.R8, scope));
@@ -71,8 +70,8 @@ public class CompileExpression {
         return instructions;
     }
     
-    public static List<AssemblyInstruction> generateFunctionApp(EApp eApp, String destRegister, BackendScope scope) {
-        List<AssemblyInstruction> instructions = new ArrayList<>();
+    public static Instructions generateFunctionApp(EApp eApp, String destRegister, BackendScope scope) {
+        Instructions instructions = new Instructions();
 
         String funcName = eApp.ident_;
 
@@ -107,8 +106,8 @@ public class CompileExpression {
         return instructions;
     }
 
-    private static List<AssemblyInstruction> generateCallableArguments(List<Expr> exprs, BackendScope scope, boolean isMethod) {
-        List<AssemblyInstruction> instructions = new ArrayList<>();
+    private static Instructions generateCallableArguments(List<Expr> exprs, BackendScope scope, boolean isMethod) {
+        Instructions instructions = new Instructions();
 
         int argsOffset = 0; // used for 'this' argument in methods
 
@@ -154,16 +153,16 @@ public class CompileExpression {
         return instructions;
     }
 
-    private static List<AssemblyInstruction> generateFunctionArguments(List<Expr> exprs, BackendScope scope) {
+    private static Instructions generateFunctionArguments(List<Expr> exprs, BackendScope scope) {
         return generateCallableArguments(exprs, scope, false);
     }
 
-    private static List<AssemblyInstruction> generateMethodArguments(List<Expr> exprs, BackendScope scope) {
+    private static Instructions generateMethodArguments(List<Expr> exprs, BackendScope scope) {
         return generateCallableArguments(exprs, scope, true);
     }
 
-    public static List<AssemblyInstruction> generateMethodApp(EApp eApp, String destRegister, BackendScope scope) {
-        List<AssemblyInstruction> instructions = new ArrayList<>();
+    public static Instructions generateMethodApp(EApp eApp, String destRegister, BackendScope scope) {
+        Instructions instructions = new Instructions();
 
         instructions.addAll(generatePushBeforeFunction(scope));
 
@@ -204,7 +203,7 @@ public class CompileExpression {
         return instructions;
     }
 
-    public static List<AssemblyInstruction> generateApp(EApp eApp, String destRegister, BackendScope scope) {
+    public static Instructions generateApp(EApp eApp, String destRegister, BackendScope scope) {
         if (Binding.FUNCTION_BINDING.equals(eApp.binding)) {
             return generateFunctionApp(eApp, destRegister, scope);
         }
@@ -212,7 +211,7 @@ public class CompileExpression {
         return generateMethodApp(eApp, destRegister, scope);
     }
 
-    public static List<AssemblyInstruction> generateVar(EVar var, String destRegister, BackendScope scope) {
+    public static Instructions generateVar(EVar var, String destRegister, BackendScope scope) {
         if (!Binding.VARIABLE_BINDING.equals(var.binding)) {
             return generateFieldFromVar(var, destRegister, scope);
         }
@@ -221,11 +220,14 @@ public class CompileExpression {
 
         int offset = varInfo.getOffset() * WORD_SIZE;
 
-        return new ArrayList<>(Collections.singletonList(new MovInstruction(destRegister, MemoryReference.getWithOffset(Register.RBP, offset))));
+        Instructions instructions = new Instructions();
+        instructions.add(new MovInstruction(destRegister, MemoryReference.getWithOffset(Register.RBP, offset)));
+
+        return instructions;
     }
 
-    public static List<AssemblyInstruction> generateFieldFromVar(EVar var, String destRegister, BackendScope scope) {
-        List<AssemblyInstruction> instructions = new ArrayList<>();
+    public static Instructions generateFieldFromVar(EVar var, String destRegister, BackendScope scope) {
+        Instructions instructions = new Instructions();
 
         int thisOffset = scope.getVariable(THIS_KEYWORD).getOffset() * WORD_SIZE;
         int fieldOffset = var.binding.getBindedClass().getClassDefinition().getFieldOffset(var.ident_);
@@ -237,23 +239,26 @@ public class CompileExpression {
         return instructions;
     }
 
-    public static List<AssemblyInstruction> generateInt(ELitInt eInt, String destRegister) {
-        MovInstruction mov = new MovInstruction(destRegister, YieldUtils.number(eInt.integer_));
-        return new ArrayList<>(Collections.singletonList(mov));
+    public static Instructions generateInt(ELitInt eInt, String destRegister) {
+        Instructions instructions = new Instructions();
+        instructions.add(new MovInstruction(destRegister, YieldUtils.number(eInt.integer_)));
+        return instructions;
     }
 
-    public static List<AssemblyInstruction> generateTrue(String destRegister) {
-        MovInstruction mov = new MovInstruction(destRegister, YieldUtils.number(1));
-        return new ArrayList<>(Collections.singletonList(mov));
+    public static Instructions generateTrue(String destRegister) {
+        Instructions instructions = new Instructions();
+        instructions.add(new MovInstruction(destRegister, YieldUtils.number(1)));
+        return instructions;
     }
 
-    public static List<AssemblyInstruction> generateFalse(String destRegister) {
-        MovInstruction mov = new MovInstruction(destRegister, YieldUtils.number(0));
-        return new ArrayList<>(Collections.singletonList(mov));
+    public static Instructions generateFalse(String destRegister) {
+        Instructions instructions = new Instructions();
+        instructions.add(new MovInstruction(destRegister, YieldUtils.number(0)));
+        return instructions;
     }
 
-    public static List<AssemblyInstruction> generateNeg(Neg neg, String destRegister, String sourceRegister, BackendScope scope) {
-        List<AssemblyInstruction> assemblyInstructions = generateExpr(neg.expr_, destRegister, sourceRegister, scope);
+    public static Instructions generateNeg(Neg neg, String destRegister, String sourceRegister, BackendScope scope) {
+        Instructions assemblyInstructions = generateExpr(neg.expr_, destRegister, sourceRegister, scope);
         NegInstruction negInstr = new NegInstruction(destRegister);
 
         assemblyInstructions.add(negInstr);
@@ -261,8 +266,8 @@ public class CompileExpression {
         return assemblyInstructions;
     }
 
-    public static List<AssemblyInstruction> generateNot(Not not, String destRegister, String sourceRegister, BackendScope scope) {
-        List<AssemblyInstruction> assemblyInstructions = generateExpr(not.expr_, destRegister, sourceRegister, scope);
+    public static Instructions generateNot(Not not, String destRegister, String sourceRegister, BackendScope scope) {
+        Instructions assemblyInstructions = generateExpr(not.expr_, destRegister, sourceRegister, scope);
 
         CompareInstruction cmpInstr = new CompareInstruction(sourceRegister, YieldUtils.number(0));
         MovInstruction movInstruction = new MovInstruction(sourceRegister, YieldUtils.number(0));
@@ -273,12 +278,12 @@ public class CompileExpression {
         return assemblyInstructions;
     }
 
-    public static List<AssemblyInstruction> generateAdd(EAdd add, String destRegister, String sourceRegister, BackendScope scope) {
+    public static Instructions generateAdd(EAdd add, String destRegister, String sourceRegister, BackendScope scope) {
         if (BasicTypeDefinition.STRING.equals(add.type)) {
             return generateStringAdd(add, destRegister, scope);
         }
 
-        List<AssemblyInstruction> instructions = new ArrayList<>();
+        Instructions instructions = new Instructions();
 
         instructions.add(new PushInstruction(Register.RCX, scope));
 
@@ -288,7 +293,7 @@ public class CompileExpression {
         instructions.addAll(generateExpr(add.expr_1, destRegister, sourceRegister, scope));
         instructions.add(new PopInstruction(Register.RCX, scope));
 
-        List<AssemblyInstruction> oppInstr = add.addop_.match(
+        Instructions oppInstr = add.addop_.match(
                 (ignored) -> getPlusInstruction(Register.RAX, Register.RCX, scope),
                 (ignored) -> getMinusInstruction(Register.RAX, Register.RCX, scope)
         );
@@ -300,9 +305,9 @@ public class CompileExpression {
         return instructions;
     }
 
-    public static List<AssemblyInstruction> generateStringAdd(EAdd add, String destRegister, BackendScope scope) {
+    public static Instructions generateStringAdd(EAdd add, String destRegister, BackendScope scope) {
         // here it has to be string + as there's no - in strings
-        List<AssemblyInstruction> instructions = new ArrayList<>();
+        Instructions instructions = new Instructions();
 
         instructions.add(new PushInstruction(Register.RDI, scope));
         instructions.add(new PushInstruction(Register.RSI, scope));
@@ -326,22 +331,26 @@ public class CompileExpression {
 
     }
 
-    public static List<AssemblyInstruction> getMinusInstruction(String destRegister, String sourceRegister, BackendScope scope) {
-        return new ArrayList<>(Collections.singletonList(new SubInstruction(destRegister, sourceRegister)));
+    public static Instructions getMinusInstruction(String destRegister, String sourceRegister, BackendScope scope) {
+        Instructions instructions = new Instructions();
+        instructions.add(new SubInstruction(destRegister, sourceRegister));
+        return instructions;
     }
 
-    public static List<AssemblyInstruction> getPlusInstruction(String destRegister, String sourceRegister, BackendScope scope) {
-        return new ArrayList<>(Collections.singletonList(new AddInstruction(destRegister, sourceRegister)));
+    public static Instructions getPlusInstruction(String destRegister, String sourceRegister, BackendScope scope) {
+        Instructions instructions = new Instructions();
+        instructions.add(new AddInstruction(destRegister, sourceRegister));
+        return instructions;
 
     }
 
-    public static List<AssemblyInstruction> generateMul(EMul mul, String destRegister, String sourceRegister, BackendScope scope) {
-        List<AssemblyInstruction> instructions = new ArrayList<>();
+    public static Instructions generateMul(EMul mul, String destRegister, String sourceRegister, BackendScope scope) {
+        Instructions instructions = new Instructions();
 
         instructions.add(new PushInstruction(Register.RCX, scope));
 
-        List<AssemblyInstruction> instructions1 = generateExpr(mul.expr_1, destRegister, sourceRegister, scope);
-        List<AssemblyInstruction> instructions2 = generateExpr(mul.expr_2, destRegister, sourceRegister, scope);
+        Instructions instructions1 = generateExpr(mul.expr_1, destRegister, sourceRegister, scope);
+        Instructions instructions2 = generateExpr(mul.expr_2, destRegister, sourceRegister, scope);
 
         instructions.addAll(instructions2);
         instructions.add(new PushInstruction(Register.RAX, scope));
@@ -349,7 +358,7 @@ public class CompileExpression {
         instructions.addAll(instructions1);
         instructions.add(new PopInstruction(Register.RCX, scope));
 
-        List<AssemblyInstruction> oppInstr = mul.mulop_.match(
+        Instructions oppInstr = mul.mulop_.match(
                 (ignored) -> generateMultiplyInstructions(Register.RAX, Register.RCX, scope),
                 (ignored) -> generateDivideInstructions(Register.RAX, Register.RCX, scope),
                 (ignored) -> generateModInstruction(Register.RAX, Register.RCX, scope)
@@ -362,12 +371,14 @@ public class CompileExpression {
         return instructions;
     }
 
-    public static List<AssemblyInstruction> generateMultiplyInstructions(String destRegister, String sourceRegister, BackendScope scope) {
-        return new ArrayList<>(Collections.singletonList(new MulInstruction(destRegister, sourceRegister)));
+    public static Instructions generateMultiplyInstructions(String destRegister, String sourceRegister, BackendScope scope) {
+        Instructions instructions = new Instructions();
+        instructions.add(new MulInstruction(destRegister, sourceRegister));
+        return instructions;
     }
 
-    public static List<AssemblyInstruction> generateDivideInstructions(String destRegister, String sourceRegister, BackendScope scope) {
-        List<AssemblyInstruction> instructions = new ArrayList<>();
+    public static Instructions generateDivideInstructions(String destRegister, String sourceRegister, BackendScope scope) {
+        Instructions instructions = new Instructions();
 
 
         instructions.add(new PushInstruction(Register.RDX, scope));
@@ -388,8 +399,8 @@ public class CompileExpression {
         return instructions;
     }
 
-    public static List<AssemblyInstruction> generateModInstruction(String destRegister, String sourceRegister, BackendScope scope) {
-        List<AssemblyInstruction> instructions = new ArrayList<>();
+    public static Instructions generateModInstruction(String destRegister, String sourceRegister, BackendScope scope) {
+        Instructions instructions = new Instructions();
 
 
         instructions.add(new PushInstruction(Register.RDX, scope));
@@ -408,8 +419,8 @@ public class CompileExpression {
         return instructions;
     }
 
-    public static List<AssemblyInstruction> generateLazyOr(EOr eOr, String destRegister, String sourceRegister, BackendScope scope) {
-        List<AssemblyInstruction> expr1Instructions = generateExpr(eOr.expr_1, destRegister, sourceRegister, scope);
+    public static Instructions generateLazyOr(EOr eOr, String destRegister, String sourceRegister, BackendScope scope) {
+        Instructions expr1Instructions = generateExpr(eOr.expr_1, destRegister, sourceRegister, scope);
 
         Label endLabel = getNonceLabel("_or_end");
 
@@ -418,7 +429,7 @@ public class CompileExpression {
         expr1Instructions.add(new JumpInstruction(endLabel, JumpInstruction.Type.EQU));
 
         // sets to RAX rhs of or, so OR value is the same as value of expr_2
-        List<AssemblyInstruction> expr2Instructions = generateExpr(eOr.expr_2, destRegister, sourceRegister, scope);
+        Instructions expr2Instructions = generateExpr(eOr.expr_2, destRegister, sourceRegister, scope);
 
         expr1Instructions.addAll(expr2Instructions);
         expr1Instructions.add(endLabel);
@@ -427,8 +438,8 @@ public class CompileExpression {
         return expr1Instructions;
     }
 
-    public static List<AssemblyInstruction> generateLazyAnd(EAnd eAnd, String destRegister, String sourceRegister, BackendScope scope) {
-        List<AssemblyInstruction> expr1Instructions = generateExpr(eAnd.expr_1, destRegister, sourceRegister, scope);
+    public static Instructions generateLazyAnd(EAnd eAnd, String destRegister, String sourceRegister, BackendScope scope) {
+        Instructions expr1Instructions = generateExpr(eAnd.expr_1, destRegister, sourceRegister, scope);
 
         Label endLabel = getNonceLabel("_and_end");
 
@@ -437,7 +448,7 @@ public class CompileExpression {
         expr1Instructions.add(new JumpInstruction(endLabel, JumpInstruction.Type.EQU));
 
         // lhs was 1, so setting RAX value to rhs value is enough to have correct overall AND result
-        List<AssemblyInstruction> expr2Instructions = generateExpr(eAnd.expr_2, destRegister, sourceRegister, scope);
+        Instructions expr2Instructions = generateExpr(eAnd.expr_2, destRegister, sourceRegister, scope);
 
         expr1Instructions.addAll(expr2Instructions);
         expr1Instructions.add(endLabel);
@@ -445,8 +456,8 @@ public class CompileExpression {
         return expr1Instructions;
     }
 
-    public static List<AssemblyInstruction> generateRel(ERel rel, String destRegister, String sourceRegister, BackendScope scope) {
-        List<AssemblyInstruction> instructions = new ArrayList<>();
+    public static Instructions generateRel(ERel rel, String destRegister, String sourceRegister, BackendScope scope) {
+        Instructions instructions = new Instructions();
 
         instructions.add(new PushInstruction(Register.RCX, scope));
 
@@ -478,8 +489,8 @@ public class CompileExpression {
         return instructions;
     }
 
-    public static List<AssemblyInstruction> generateCast(ECast cast, String destRegister, String sourceRegister, BackendScope scope) {
-        List<AssemblyInstruction> exprInstructions = generateExpr(cast.expr_, destRegister, sourceRegister, scope);
+    public static Instructions generateCast(ECast cast, String destRegister, String sourceRegister, BackendScope scope) {
+        Instructions exprInstructions = generateExpr(cast.expr_, destRegister, sourceRegister, scope);
 
         TypeDefinition castedToType = getType(cast.typename_, scope.getGlobalEnvironment(), cast.line_num, cast.col_num);
 
@@ -491,8 +502,8 @@ public class CompileExpression {
         return notImplemented(cast);
     }
 
-    public static List<AssemblyInstruction> generateStr(EString str, String destRegister, BackendScope scope) {
-        List<AssemblyInstruction> instructions = new ArrayList<>();
+    public static Instructions generateStr(EString str, String destRegister, BackendScope scope) {
+        Instructions instructions = new Instructions();
         Label l = scope.getGlobalEnvironment().getStringLabel(str.string_);
 
         instructions.add(new MovInstruction(destRegister, l.getLabelName()));
@@ -500,16 +511,16 @@ public class CompileExpression {
         return instructions;
     }
 
-    public static List<AssemblyInstruction> generateNull(String destRegister) {
-        List<AssemblyInstruction> instructions = new ArrayList<>();
+    public static Instructions generateNull(String destRegister) {
+        Instructions instructions = new Instructions();
 
         instructions.add(new XorInstruction(destRegister, destRegister));
 
         return instructions;
     }
 
-    public static List<AssemblyInstruction> generateArrConstr(EArrConstr constr, String destRegister, BackendScope scope) {
-        List<AssemblyInstruction> instructions = new ArrayList<>();
+    public static Instructions generateArrConstr(EArrConstr constr, String destRegister, BackendScope scope) {
+        Instructions instructions = new Instructions();
 
         instructions.addAll(generateExpr(constr.expr_, Register.RAX, Register.RAX, scope));
 
@@ -562,8 +573,8 @@ public class CompileExpression {
 
     }
 
-    public static List<AssemblyInstruction> generateArrAcc(ENDArrAcc acc, String destRegister, BackendScope scope) {
-        List<AssemblyInstruction> instructions = new ArrayList<>();
+    public static Instructions generateArrAcc(ENDArrAcc acc, String destRegister, BackendScope scope) {
+        Instructions instructions = new Instructions();
 
         instructions.add(new PushInstruction(Register.RCX, scope));
 
@@ -584,20 +595,22 @@ public class CompileExpression {
         return instructions;
     }
 
-    public static List<AssemblyInstruction> generateObjAcc(EObjAcc objAcc, String destRegister, BackendScope scope) {
-        List<AssemblyInstruction> instructions = new ArrayList<>();
+    public static Instructions generateObjAcc(EObjAcc objAcc, String destRegister, BackendScope scope) {
+        Instructions instructions = new Instructions();
 
         instructions.addAll(generateExpr(objAcc.expr_, Register.RAX, Register.RAX, scope));
 
-        instructions.addAll(objAcc.objacc_.match(
+        Instructions accInstructions = objAcc.objacc_.match(
                 (fieldAcc) -> generateFieldAcc(fieldAcc, objAcc.expr_.type, Register.RAX, scope),
                 (methAcc) -> generateMthAcc(methAcc, objAcc.expr_.type, Register.RAX, scope)
-        ));
+        );
+
+        instructions.addAll(accInstructions);
 
         return instructions;
     }
 
-    public static List<AssemblyInstruction> generateFieldAcc(ObjFieldAcc acc, TypeDefinition type, String destRegister, BackendScope scope) {
+    public static Instructions generateFieldAcc(ObjFieldAcc acc, TypeDefinition type, String destRegister, BackendScope scope) {
         // object in RAX, just take the field
 
         if (type.isArrayType()) {
@@ -608,16 +621,16 @@ public class CompileExpression {
             return generateClassFieldAcc(acc, type, destRegister, scope);
         }
 
-        return new ArrayList<>();
+        return new Instructions();
     }
 
-    public static List<AssemblyInstruction> generateClassFieldAcc(ObjFieldAcc acc, TypeDefinition type, String destRegister, BackendScope scope) {
+    public static Instructions generateClassFieldAcc(ObjFieldAcc acc, TypeDefinition type, String destRegister, BackendScope scope) {
         // base object's address already in RAX
         return generateClassFieldAcc(acc.ident_, type, destRegister, scope);
     }
 
-    public static List<AssemblyInstruction> generateClassFieldAcc(String fieldName, TypeDefinition type, String destRegister, BackendScope scope) {
-        List<AssemblyInstruction> instructions = new ArrayList<>();
+    public static Instructions generateClassFieldAcc(String fieldName, TypeDefinition type, String destRegister, BackendScope scope) {
+        Instructions instructions = new Instructions();
         int offset = type.getClassDefinition().getFieldOffset(fieldName);
 
         instructions.add(new MovInstruction(Register.RAX, MemoryReference.getWithOffset(Register.RAX, offset)));
@@ -625,11 +638,11 @@ public class CompileExpression {
         return instructions;
     }
 
-    public static List<AssemblyInstruction> generateArrayFieldAcc(ObjFieldAcc acc, TypeDefinition type, String destRegister, BackendScope scope) {
+    public static Instructions generateArrayFieldAcc(ObjFieldAcc acc, TypeDefinition type, String destRegister, BackendScope scope) {
         // expression result in RAX
         // it has to be length field acc, checked in typecheck
 
-        List<AssemblyInstruction> instructions = new ArrayList<>();
+        Instructions instructions = new Instructions();
 
         // length of an array is stored in first 8 bytes
         instructions.add(new MovInstruction(destRegister, MemoryReference.getRaw(Register.RAX)));
@@ -637,10 +650,10 @@ public class CompileExpression {
         return instructions;
     }
 
-    public static List<AssemblyInstruction> generateEConstr(EConstr constr, String destRegister, BackendScope scope) {
+    public static Instructions generateEConstr(EConstr constr, String destRegister, BackendScope scope) {
         int size = scope.getType(constr.ident_).getClassDefinition().getClassSize();
 
-        List<AssemblyInstruction> instructions = new ArrayList<>();
+        Instructions instructions = new Instructions();
         instructions.add(new PushInstruction(Register.RDI, scope));
         instructions.add(new MovInstruction(Register.RDI, YieldUtils.number(size * WORD_SIZE)));
 
@@ -657,8 +670,8 @@ public class CompileExpression {
         return instructions;
     }
 
-    public static List<AssemblyInstruction> generateMthAcc(ObjMethAcc acc, TypeDefinition type, String destRegister, BackendScope scope) {
-        List<AssemblyInstruction> instructions = new ArrayList<>();
+    public static Instructions generateMthAcc(ObjMethAcc acc, TypeDefinition type, String destRegister, BackendScope scope) {
+        Instructions instructions = new Instructions();
 
         instructions.addAll(generatePushBeforeFunction(scope));
 
@@ -701,16 +714,18 @@ public class CompileExpression {
         return instructions;
     }
 
-    public static List<AssemblyInstruction> generateThis(String destRegister, BackendScope scope) {
+    public static Instructions generateThis(String destRegister, BackendScope scope) {
         VariableCompilerInfo varInfo = scope.getVariable(THIS_KEYWORD);
 
         int offset = varInfo.getOffset() * WORD_SIZE;
 
-        return new ArrayList<>(Collections.singletonList(new MovInstruction(destRegister, MemoryReference.getWithOffset(Register.RBP, offset))));
+        Instructions instructions = new Instructions();
+        instructions.add(new MovInstruction(destRegister, MemoryReference.getWithOffset(Register.RBP, offset)));
+        return instructions;
     }
 
 
-    public static List<AssemblyInstruction> notImplemented(Expr expr) {
+    public static Instructions notImplemented(Expr expr) {
         throw new CompilerException("Compiling expression " + expr.getClass() + " not implemented yet");
     }
 

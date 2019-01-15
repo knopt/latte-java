@@ -3,6 +3,7 @@ package src.Backend;
 import src.Absyn.*;
 import src.Backend.Definitions.BackendScope;
 import src.Backend.Definitions.ExternalFunctions;
+import src.Backend.Definitions.Instructions;
 import src.Backend.Definitions.Register;
 import src.Backend.Instructions.*;
 import src.Definitions.BasicTypeDefinition;
@@ -22,10 +23,10 @@ import static src.PrettyPrinter.print;
 
 public class CompileStatement {
 
-    public static List<AssemblyInstruction> generateStmt(Stmt stmt, BackendScope scope) {
-        List<AssemblyInstruction> instructions = new ArrayList<>();
+    public static Instructions generateStmt(Stmt stmt, BackendScope scope) {
+        Instructions instructions = new Instructions();
         instructions.addAll(stmt.match(
-                (empty) -> new ArrayList<>(),
+                (empty) -> new Instructions(),
                 (bStmt) -> generateBStmt(bStmt, scope),
                 (decl) -> generateDecl(decl, scope),
                 (ass) -> generateAss(ass, scope),
@@ -43,7 +44,7 @@ public class CompileStatement {
         return instructions;
     }
 
-    public static List<AssemblyInstruction> generateDecr(Decr decr, BackendScope scope) {
+    public static Instructions generateDecr(Decr decr, BackendScope scope) {
         return decr.lhs_.match(
                 (var) -> generateVarDecr(var, scope),
                 (arr) -> generateArrDecr(arr, scope),
@@ -51,7 +52,7 @@ public class CompileStatement {
         );
     }
 
-    public static List<AssemblyInstruction> generateIncr(Incr incr, BackendScope scope) {
+    public static Instructions generateIncr(Incr incr, BackendScope scope) {
         return incr.lhs_.match(
                 (var) -> generateVarIncr(var, scope),
                 (arr) -> generateArrIncr(arr, scope),
@@ -59,8 +60,8 @@ public class CompileStatement {
         );
     }
 
-    public static List<AssemblyInstruction> generateVarIncr(VariableRawLhs var, BackendScope scope) {
-        List<AssemblyInstruction> instructions = new ArrayList<>();
+    public static Instructions generateVarIncr(VariableRawLhs var, BackendScope scope) {
+        Instructions instructions = new Instructions();
 
         if (var.binding.isField()) {
             return generateFieldIncrFromVar(var.ident_, var.binding.getBindedClass(), scope);
@@ -75,8 +76,8 @@ public class CompileStatement {
         return instructions;
     }
 
-    public static List<AssemblyInstruction> generateArrIncr(ArrElemLhs arrElem, BackendScope scope) {
-        List<AssemblyInstruction> instructions = new ArrayList<>();
+    public static Instructions generateArrIncr(ArrElemLhs arrElem, BackendScope scope) {
+        Instructions instructions = new Instructions();
 
         instructions.add(new PushInstruction(Register.RCX, scope));
 
@@ -97,8 +98,8 @@ public class CompileStatement {
         return instructions;
     }
 
-    public static List<AssemblyInstruction> generateVarDecr(VariableRawLhs var, BackendScope scope) {
-        List<AssemblyInstruction> instructions = new ArrayList<>();
+    public static Instructions generateVarDecr(VariableRawLhs var, BackendScope scope) {
+        Instructions instructions = new Instructions();
 
         if (var.binding.isField()) {
             return generateFieldDecrFromVar(var.ident_, var.binding.getBindedClass(), scope);
@@ -113,8 +114,8 @@ public class CompileStatement {
         return instructions;
     }
 
-    public static List<AssemblyInstruction> generateArrDecr(ArrElemLhs arrElem, BackendScope scope) {
-        List<AssemblyInstruction> instructions = new ArrayList<>();
+    public static Instructions generateArrDecr(ArrElemLhs arrElem, BackendScope scope) {
+        Instructions instructions = new Instructions();
 
         instructions.add(new PushInstruction(Register.RCX, scope));
 
@@ -135,8 +136,8 @@ public class CompileStatement {
         return instructions;
     }
 
-    public static List<AssemblyInstruction> generateFieldDecr(FieldLhs fieldLhs, BackendScope scope) {
-        List<AssemblyInstruction> instructions = new ArrayList<>();
+    public static Instructions generateFieldDecr(FieldLhs fieldLhs, BackendScope scope) {
+        Instructions instructions = new Instructions();
         int offset = fieldLhs.expr_.type.getClassDefinition().getFieldOffset(fieldLhs.ident_);
 
         instructions.add(new PushInstruction(Register.RCX, scope));
@@ -151,8 +152,8 @@ public class CompileStatement {
         return instructions;
     }
 
-    public static List<AssemblyInstruction> generateFieldIncr(FieldLhs fieldLhs, BackendScope scope) {
-        List<AssemblyInstruction> instructions = new ArrayList<>();
+    public static Instructions generateFieldIncr(FieldLhs fieldLhs, BackendScope scope) {
+        Instructions instructions = new Instructions();
         int offset = fieldLhs.expr_.type.getClassDefinition().getFieldOffset(fieldLhs.ident_);
 
         instructions.add(new PushInstruction(Register.RCX, scope));
@@ -167,8 +168,8 @@ public class CompileStatement {
         return instructions;
     }
 
-    public static List<AssemblyInstruction> generateFieldChangeFromVar(String fieldName, TypeDefinition lhsType, BackendScope scope, boolean incr) {
-        List<AssemblyInstruction> instructions = new ArrayList<>();
+    public static Instructions generateFieldChangeFromVar(String fieldName, TypeDefinition lhsType, BackendScope scope, boolean incr) {
+        Instructions instructions = new Instructions();
 
         int thisOffset = scope.getVariable(THIS_KEYWORD).getOffset() * WORD_SIZE;
         int fieldOffset = lhsType.getClassDefinition().getFieldOffset(fieldName);
@@ -191,16 +192,16 @@ public class CompileStatement {
         return instructions;
     }
 
-    public static List<AssemblyInstruction> generateFieldIncrFromVar(String fieldName, TypeDefinition lhsType, BackendScope scope) {
+    public static Instructions generateFieldIncrFromVar(String fieldName, TypeDefinition lhsType, BackendScope scope) {
         return generateFieldChangeFromVar(fieldName, lhsType, scope, true);
     }
 
-    public static List<AssemblyInstruction> generateFieldDecrFromVar(String fieldName, TypeDefinition lhsType, BackendScope scope) {
+    public static Instructions generateFieldDecrFromVar(String fieldName, TypeDefinition lhsType, BackendScope scope) {
         return generateFieldChangeFromVar(fieldName, lhsType, scope, false);
     }
 
-    public static List<AssemblyInstruction> generateDecl(Decl decl, BackendScope scope) {
-        List<AssemblyInstruction> instructions = new ArrayList<>();
+    public static Instructions generateDecl(Decl decl, BackendScope scope) {
+        Instructions instructions = new Instructions();
 
         instructions.add(new Comment(""));
         instructions.add(new Comment(" declaration"));
@@ -212,21 +213,23 @@ public class CompileStatement {
 
 
         for (Item item : decl.listitem_) {
-            instructions.addAll(item.match(
+            Instructions declInstructions = item.match(
                     (noInit) -> generateNoInit(noInit, type, scope),
                     (init) -> generateInit(init, type, scope)
-            ));
+            );
+
+            instructions.addAll(declInstructions);
         }
 
         return instructions;
     }
 
-    public static List<AssemblyInstruction> generateStmtExpr(SExp exp, BackendScope scope) {
+    public static Instructions generateStmtExpr(SExp exp, BackendScope scope) {
         return generateExpr(exp.expr_, Register.RAX, Register.RAX, scope);
     }
 
-    public static List<AssemblyInstruction> generateWhile(While sWhile, BackendScope scope) {
-        List<AssemblyInstruction> instructions = new ArrayList<>();
+    public static Instructions generateWhile(While sWhile, BackendScope scope) {
+        Instructions instructions = new Instructions();
 
         Label start = LabelsGenerator.getNonceLabel("_start_while");
         Label end = LabelsGenerator.getNonceLabel("_end_start");
@@ -243,8 +246,8 @@ public class CompileStatement {
         return instructions;
     }
 
-    public static List<AssemblyInstruction> generateCond(Cond cond, BackendScope scope) {
-        List<AssemblyInstruction> instructions = generateExpr(cond.expr_, Register.RAX, Register.RAX, scope);
+    public static Instructions generateCond(Cond cond, BackendScope scope) {
+        Instructions instructions = generateExpr(cond.expr_, Register.RAX, Register.RAX, scope);
 
         Label afterLabel = LabelsGenerator.getNonceLabel("_end_if");
 
@@ -257,8 +260,8 @@ public class CompileStatement {
         return instructions;
     }
 
-    public static List<AssemblyInstruction> generateCondElse(CondElse cond, BackendScope scope) {
-        List<AssemblyInstruction> instructions = generateExpr(cond.expr_, Register.RAX, Register.RAX, scope);
+    public static Instructions generateCondElse(CondElse cond, BackendScope scope) {
+        Instructions instructions = generateExpr(cond.expr_, Register.RAX, Register.RAX, scope);
 
         Label afterLabel = LabelsGenerator.getNonceLabel("_end_if");
         Label elseLabel = LabelsGenerator.getNonceLabel("_else");
@@ -277,17 +280,19 @@ public class CompileStatement {
     }
 
 
-    public static List<AssemblyInstruction> generateBStmt(BStmt bStmt, BackendScope oldScope) {
+    public static Instructions generateBStmt(BStmt bStmt, BackendScope oldScope) {
         BackendScope scope = new BackendScope(oldScope);
 
-        List<AssemblyInstruction> instructions = new ArrayList<>();
+        Instructions instructions = new Instructions();
 
         instructions.add(new Comment(""));
         instructions.add(new Comment("block"));
 
-        instructions.addAll(bStmt.block_.match(
+        Instructions blockInstructions = bStmt.block_.match(
                 (blockS) -> generateBlockS(blockS, scope)
-        ));
+        );
+
+        instructions.addAll(blockInstructions);
 
         instructions.add(new Comment(""));
         instructions.add(new Comment("end block"));
@@ -296,8 +301,8 @@ public class CompileStatement {
 
     }
 
-    public static List<AssemblyInstruction> generateBlockS(BlockS block, BackendScope scope) {
-        List<AssemblyInstruction> instructions = new ArrayList<>();
+    public static Instructions generateBlockS(BlockS block, BackendScope scope) {
+        Instructions instructions = new Instructions();
 
         for (Stmt stmt : block.liststmt_) {
             instructions.addAll(generateStmt(stmt, scope));
@@ -306,31 +311,33 @@ public class CompileStatement {
         return instructions;
     }
 
-    public static List<AssemblyInstruction> generateAss(Ass ass, BackendScope scope) {
-        List<AssemblyInstruction> instructions = new ArrayList<>();
+    public static Instructions generateAss(Ass ass, BackendScope scope) {
+        Instructions instructions = new Instructions();
 
         instructions.add(new Comment(""));
         instructions.add(new Comment("assignment " + print(ass)));
 
         instructions.addAll(generateExpr(ass.expr_, Register.RAX, Register.RAX, scope));
 
-        instructions.addAll(ass.lhs_.match(
+        Instructions lhsInstructions = ass.lhs_.match(
                 (var) -> generateVariableAss(var, ass.expr_.type, Register.RAX, scope),
                 (arr) -> generateVariableArrayAss(arr, ass.expr_.type, Register.RAX, scope),
                 (field) -> generateFieldAss(field, ass.expr_.type, Register.RAX, scope)
-        ));
+        );
+
+        instructions.addAll(lhsInstructions);
 
         return instructions;
     }
 
-    public static List<AssemblyInstruction> generateVariableAss(VariableRawLhs var, TypeDefinition rhsType, String sourceRegister, BackendScope scope) {
+    public static Instructions generateVariableAss(VariableRawLhs var, TypeDefinition rhsType, String sourceRegister, BackendScope scope) {
         if (var.binding.isField()) {
             return generateFieldAssFromVar(var, sourceRegister, scope);
         }
 
         int varOffset = scope.getVariable(var.ident_).getOffset() * WORD_SIZE;
 
-        List<AssemblyInstruction> instructions = new ArrayList<>();
+        Instructions instructions = new Instructions();
 
         if (scope.getVariable(var.ident_).getType().isInterfaceType() && rhsType.isClassType()) {
             // TODO: implement interfaces assignment
@@ -338,13 +345,13 @@ public class CompileStatement {
 
 
 
-        AssemblyInstruction instruction = new MovInstruction(MemoryReference.getWithOffset(Register.RBP, varOffset), sourceRegister);
+        instructions.add(new MovInstruction(MemoryReference.getWithOffset(Register.RBP, varOffset), sourceRegister));
 
-        return new ArrayList<>(Collections.singletonList(instruction));
+        return instructions;
     }
 
-    public static List<AssemblyInstruction> generateFieldAss(FieldLhs fieldLhs, TypeDefinition rhsType, String sourceRegister, BackendScope scope) {
-        List<AssemblyInstruction> instructions = new ArrayList<>();
+    public static Instructions generateFieldAss(FieldLhs fieldLhs, TypeDefinition rhsType, String sourceRegister, BackendScope scope) {
+        Instructions instructions = new Instructions();
         int offset = fieldLhs.expr_.type.getClassDefinition().getFieldOffset(fieldLhs.ident_);
 
         TypeDefinition fieldType = fieldLhs.expr_.type.getClassDefinition().getFieldDeclaration(fieldLhs.ident_, -1, -1).getType();
@@ -364,8 +371,8 @@ public class CompileStatement {
         return instructions;
     }
 
-    public static List<AssemblyInstruction> generateFieldAssFromVar(VariableRawLhs lhs, String sourceRegister, BackendScope scope) {
-        List<AssemblyInstruction> instructions = new ArrayList<>();
+    public static Instructions generateFieldAssFromVar(VariableRawLhs lhs, String sourceRegister, BackendScope scope) {
+        Instructions instructions = new Instructions();
         // TODO: add 1 to max stack size to fit 'this'
         // wartość do zapisania jest w RAX
         int thisOffset = scope.getVariable(THIS_KEYWORD).getOffset() * WORD_SIZE;
@@ -382,8 +389,8 @@ public class CompileStatement {
         return instructions;
     }
 
-    public static List<AssemblyInstruction> generateVariableArrayAss(ArrElemLhs arrElem, TypeDefinition rhsType, String registerOfValue, BackendScope scope) {
-        List<AssemblyInstruction> instructions = new ArrayList<>();
+    public static Instructions generateVariableArrayAss(ArrElemLhs arrElem, TypeDefinition rhsType, String registerOfValue, BackendScope scope) {
+        Instructions instructions = new Instructions();
 
         instructions.add(new PushInstruction(Register.RCX, scope));
         instructions.add(new PushInstruction(Register.RDX, scope));
@@ -414,8 +421,8 @@ public class CompileStatement {
         return instructions;
     }
 
-    public static List<AssemblyInstruction> generateNoInit(NoInit noInit, TypeDefinition type, BackendScope scope) {
-        List<AssemblyInstruction> instructions = new ArrayList<>();
+    public static Instructions generateNoInit(NoInit noInit, TypeDefinition type, BackendScope scope) {
+        Instructions instructions = new Instructions();
 
         scope.declareVariable(noInit.ident_, type);
         int offset = scope.getVariable(noInit.ident_).getOffset() * WORD_SIZE;
@@ -430,8 +437,8 @@ public class CompileStatement {
         return instructions;
     }
 
-    public static List<AssemblyInstruction> generateInit(Init init, TypeDefinition type, BackendScope scope) {
-        List<AssemblyInstruction> instructions = generateExpr(init.expr_, Register.RAX, Register.RAX, scope);
+    public static Instructions generateInit(Init init, TypeDefinition type, BackendScope scope) {
+        Instructions instructions = generateExpr(init.expr_, Register.RAX, Register.RAX, scope);
 
         if (type.isInterfaceType() && init.expr_.type.isClassType()) {
             // TODO: generate interface assignment from class type
@@ -445,8 +452,8 @@ public class CompileStatement {
         return instructions;
     }
 
-    private static List<AssemblyInstruction> generateEpilog() {
-        List<AssemblyInstruction> instructions = new ArrayList<>();
+    private static Instructions generateEpilog() {
+        Instructions instructions = new Instructions();
 
         instructions.add(new MovInstruction(Register.RSP, Register.RBP));
         instructions.add(new PopInstruction(Register.RBP));
@@ -456,8 +463,10 @@ public class CompileStatement {
         return instructions;
     }
 
-    public static List<AssemblyInstruction> generateReturn(Ret ret, BackendScope scope) {
-        List<AssemblyInstruction> instructions = new ArrayList<>(Arrays.asList(new Comment(""), new Comment("return from function")));
+    public static Instructions generateReturn(Ret ret, BackendScope scope) {
+        Instructions instructions = new Instructions();
+        instructions.add(new Comment(""));
+        instructions.add(new Comment("return from function"));
         instructions.addAll(generateExpr(ret.expr_, Register.RAX, Register.RAX, scope));
 
         instructions.addAll(generateEpilog());
@@ -465,18 +474,20 @@ public class CompileStatement {
         return instructions;
     }
 
-    public static List<AssemblyInstruction> generateVReturn(VRet ret) {
-        List<AssemblyInstruction> instructions = new ArrayList<>(Arrays.asList(new Comment(""), new Comment("void return from function")));
+    public static Instructions generateVReturn(VRet ret) {
+        Instructions instructions = new Instructions();
+        instructions.add(new Comment(""));
+        instructions.add(new Comment("void return from function"));
 
         instructions.addAll(generateEpilog());
 
         return instructions;
     }
 
-    public static List<AssemblyInstruction> generateForArr(ForArr forArr, BackendScope oldScope) {
+    public static Instructions generateForArr(ForArr forArr, BackendScope oldScope) {
         BackendScope scope = new BackendScope(oldScope);
 
-        List<AssemblyInstruction> instructions = new ArrayList<>();
+        Instructions instructions = new Instructions();
 
         Label start = LabelsGenerator.getNonceLabel("_start_for_arr");
         Label end = LabelsGenerator.getNonceLabel("_end_for_arr");
@@ -514,7 +525,7 @@ public class CompileStatement {
         return instructions;
     }
 
-    public static List<AssemblyInstruction> notImplemented(Stmt stmt) {
+    public static Instructions notImplemented(Stmt stmt) {
         throw new CompilerException("Compiling statement " + stmt.getClass() + " not implemented yet");
     }
 

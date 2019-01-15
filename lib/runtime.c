@@ -8,7 +8,7 @@ void printInt(int i) {
 }
 
 void printString(char* str) {
-    printf("%s", str);
+    printf("%s\n", str);
 }
 
 char* readString() {

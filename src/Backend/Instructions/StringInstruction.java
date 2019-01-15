@@ -1,8 +1,5 @@
 package src.Backend.Instructions;
 
-
-import org.apache.commons.lang3.StringEscapeUtils;
-
 public class StringInstruction implements AssemblyInstruction {
     private String stringLabel;
     private String stringLiteral;
