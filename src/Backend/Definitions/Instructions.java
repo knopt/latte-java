@@ -40,4 +40,8 @@ public class Instructions {
     public void addRegisters(Set<String> regs) {
         this.usedRegisters.addAll(regs);
     }
+
+    public void addRegister(String reg) {
+        this.usedRegisters.add(reg);
+    }
 }

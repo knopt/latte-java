@@ -10,11 +10,7 @@ import src.Definitions.BasicTypeDefinition;
 import src.Definitions.TypeDefinition;
 import src.Exceptions.CompilerException;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
+import static src.Backend.CompileExpression.callUnsafeRegs;
 import static src.Backend.CompileExpression.generateExpr;
 import static src.Backend.Instructions.ConstantUtils.THIS_KEYWORD;
 import static src.Backend.Instructions.ConstantUtils.WORD_SIZE;
@@ -79,13 +75,25 @@ public class CompileStatement {
     public static Instructions generateArrIncr(ArrElemLhs arrElem, BackendScope scope) {
         Instructions instructions = new Instructions();
 
-        instructions.add(new PushInstruction(Register.RCX, scope));
+        Instructions exprInstr2 = generateExpr(arrElem.expr_2, Register.RAX, Register.RAX, scope);
 
-        instructions.addAll(generateExpr(arrElem.expr_2, Register.RAX, Register.RAX, scope));
+        instructions.addAll(exprInstr2);
+
         instructions.add(new AddInstruction(Register.RAX, YieldUtils.number(1)));
         instructions.add(new MulInstruction(Register.RAX, YieldUtils.number(WORD_SIZE)));
         instructions.add(new MovInstruction(Register.RCX, Register.RAX));
-        instructions.addAll(generateExpr(arrElem.expr_1, Register.RAX, Register.RAX, scope));
+
+        Instructions exprInstr1 = generateExpr(arrElem.expr_1, Register.RAX, Register.RAX, scope);
+
+        if (exprInstr1.usedRegisters.contains(Register.RCX)) {
+            instructions.add(new PushInstruction(Register.RCX));
+        }
+
+        instructions.addAll(exprInstr1);
+
+        if (exprInstr1.usedRegisters.contains(Register.RCX)) {
+            instructions.add(new PopInstruction(Register.RCX));
+        }
 
         instructions.add(new AddInstruction(Register.RAX, Register.RCX));
 
@@ -93,7 +101,9 @@ public class CompileStatement {
         instructions.add(new AddInstruction(Register.RCX, YieldUtils.number(1)));
         instructions.add(new MovInstruction(MemoryReference.getRaw(Register.RAX), Register.RCX));
 
-        instructions.add(new PopInstruction(Register.RCX, scope));
+        instructions.addRegisters(exprInstr1.usedRegisters);
+        instructions.addRegisters(exprInstr2.usedRegisters);
+        instructions.addRegister(Register.RCX);
 
         return instructions;
     }
@@ -117,13 +127,24 @@ public class CompileStatement {
     public static Instructions generateArrDecr(ArrElemLhs arrElem, BackendScope scope) {
         Instructions instructions = new Instructions();
 
-        instructions.add(new PushInstruction(Register.RCX, scope));
+        Instructions exprInstr2 = generateExpr(arrElem.expr_2, Register.RAX, Register.RAX, scope);
+        instructions.addAll(exprInstr2);
 
-        instructions.addAll(generateExpr(arrElem.expr_2, Register.RAX, Register.RAX, scope));
         instructions.add(new AddInstruction(Register.RAX, YieldUtils.number(1)));
         instructions.add(new MulInstruction(Register.RAX, YieldUtils.number(WORD_SIZE)));
         instructions.add(new MovInstruction(Register.RCX, Register.RAX));
-        instructions.addAll(generateExpr(arrElem.expr_1, Register.RAX, Register.RAX, scope));
+
+        Instructions exprInstr1 = generateExpr(arrElem.expr_1, Register.RAX, Register.RAX, scope);
+
+        if (exprInstr1.usedRegisters.contains(Register.RCX)) {
+            instructions.add(new PushInstruction(Register.RCX));
+        }
+
+        instructions.addAll(exprInstr1);
+
+        if (exprInstr1.usedRegisters.contains(Register.RCX)) {
+            instructions.add(new PopInstruction(Register.RCX));
+        }
 
         instructions.add(new AddInstruction(Register.RAX, Register.RCX));
 
@@ -131,7 +152,9 @@ public class CompileStatement {
         instructions.add(new SubInstruction(Register.RCX, YieldUtils.number(1)));
         instructions.add(new MovInstruction(MemoryReference.getRaw(Register.RAX), Register.RCX));
 
-        instructions.add(new PopInstruction(Register.RCX, scope));
+        instructions.addRegister(Register.RCX);
+        instructions.addRegisters(exprInstr1.usedRegisters);
+        instructions.addRegisters(exprInstr2.usedRegisters);
 
         return instructions;
     }
@@ -140,14 +163,15 @@ public class CompileStatement {
         Instructions instructions = new Instructions();
         int offset = fieldLhs.expr_.type.getClassDefinition().getFieldOffset(fieldLhs.ident_);
 
-        instructions.add(new PushInstruction(Register.RCX, scope));
+        Instructions exprInstructions = generateExpr(fieldLhs.expr_, Register.RAX, Register.RAX, scope);
+        instructions.addAll(exprInstructions);
 
-        instructions.addAll(generateExpr(fieldLhs.expr_, Register.RAX, Register.RAX, scope));
         instructions.add(new MovInstruction(Register.RCX, MemoryReference.getWithOffset(Register.RAX, offset)));
         instructions.add(new SubInstruction(Register.RCX, YieldUtils.number(1)));
         instructions.add(new MovInstruction(MemoryReference.getWithOffset(Register.RAX, offset), Register.RCX));
 
-        instructions.add(new PopInstruction(Register.RCX, scope));
+        instructions.addRegisters(exprInstructions.usedRegisters);
+        instructions.addRegister(Register.RCX);
 
         return instructions;
     }
@@ -156,14 +180,16 @@ public class CompileStatement {
         Instructions instructions = new Instructions();
         int offset = fieldLhs.expr_.type.getClassDefinition().getFieldOffset(fieldLhs.ident_);
 
-        instructions.add(new PushInstruction(Register.RCX, scope));
+        Instructions exprInstructions = generateExpr(fieldLhs.expr_, Register.RAX, Register.RAX, scope);
 
-        instructions.addAll(generateExpr(fieldLhs.expr_, Register.RAX, Register.RAX, scope));
+        instructions.addAll(exprInstructions);
+
         instructions.add(new MovInstruction(Register.RCX, MemoryReference.getWithOffset(Register.RAX, offset)));
         instructions.add(new AddInstruction(Register.RCX, YieldUtils.number(1)));
         instructions.add(new MovInstruction(MemoryReference.getWithOffset(Register.RAX, offset), Register.RCX));
 
-        instructions.add(new PopInstruction(Register.RCX, scope));
+        instructions.addRegisters(exprInstructions.usedRegisters);
+        instructions.addRegister(Register.RCX);
 
         return instructions;
     }
@@ -173,8 +199,6 @@ public class CompileStatement {
 
         int thisOffset = scope.getVariable(THIS_KEYWORD).getOffset() * WORD_SIZE;
         int fieldOffset = lhsType.getClassDefinition().getFieldOffset(fieldName);
-
-        instructions.add(new PushInstruction(Register.RCX, scope));
 
         instructions.add(new MovInstruction(Register.RCX, MemoryReference.getWithOffset(Register.RBP, thisOffset)));
         instructions.add(new AddInstruction(Register.RCX, YieldUtils.number(fieldOffset)));
@@ -187,7 +211,8 @@ public class CompileStatement {
         }
 
         instructions.add(new MovInstruction(MemoryReference.getRaw(Register.RCX), Register.RAX));
-        instructions.add(new PopInstruction(Register.RCX, scope));
+
+        instructions.addRegister(Register.RCX);
 
         return instructions;
     }
@@ -219,6 +244,7 @@ public class CompileStatement {
             );
 
             instructions.addAll(declInstructions);
+            instructions.addRegisters(declInstructions.usedRegisters);
         }
 
         return instructions;
@@ -235,13 +261,20 @@ public class CompileStatement {
         Label end = LabelsGenerator.getNonceLabel("_end_start");
 
         instructions.add(start);
-        instructions.addAll(generateExpr(sWhile.expr_, Register.RAX, Register.RAX, scope));
+
+        Instructions exprInstr = generateExpr(sWhile.expr_, Register.RAX, Register.RAX, scope);
+        instructions.addAll(exprInstr);
+
         instructions.add(new CompareInstruction(Register.RAX, YieldUtils.number(1)));
         instructions.add(new JumpInstruction(end, JumpInstruction.Type.NE));
 
-        instructions.addAll(generateStmt(sWhile.stmt_, scope));
+        Instructions stmtInstr = generateStmt(sWhile.stmt_, scope);
+        instructions.addAll(stmtInstr);
         instructions.add(new JumpInstruction(start, JumpInstruction.Type.ALWAYS));
         instructions.add(end);
+
+        instructions.addRegisters(exprInstr.usedRegisters);
+        instructions.addRegisters(stmtInstr.usedRegisters);
 
         return instructions;
     }
@@ -254,8 +287,11 @@ public class CompileStatement {
         instructions.add(new CompareInstruction(Register.RAX, YieldUtils.number(1)));
         instructions.add(new JumpInstruction(afterLabel, JumpInstruction.Type.NE));
 
-        instructions.addAll(generateStmt(cond.stmt_, scope));
+        Instructions stmtInstructions = generateStmt(cond.stmt_, scope);
+        instructions.addAll(stmtInstructions);
         instructions.add(afterLabel);
+
+        instructions.addRegisters(stmtInstructions.usedRegisters);
 
         return instructions;
     }
@@ -269,12 +305,18 @@ public class CompileStatement {
         instructions.add(new CompareInstruction(Register.RAX, YieldUtils.number(1)));
         instructions.add(new JumpInstruction(elseLabel, JumpInstruction.Type.NE));
 
-        instructions.addAll(generateStmt(cond.stmt_1, scope));
+        Instructions stmtInstructions1 = generateStmt(cond.stmt_1, scope);
+        instructions.addAll(stmtInstructions1);
         instructions.add(new JumpInstruction(afterLabel, JumpInstruction.Type.ALWAYS));
 
         instructions.add(elseLabel);
-        instructions.addAll(generateStmt(cond.stmt_2, scope));
+
+        Instructions stmtInstructions2 = generateStmt(cond.stmt_2, scope);
+        instructions.addAll(stmtInstructions2);
         instructions.add(afterLabel);
+
+        instructions.addRegisters(stmtInstructions1.usedRegisters);
+        instructions.addRegisters(stmtInstructions2.usedRegisters);
 
         return instructions;
     }
@@ -293,6 +335,7 @@ public class CompileStatement {
         );
 
         instructions.addAll(blockInstructions);
+        instructions.addRegisters(blockInstructions.usedRegisters);
 
         instructions.add(new Comment(""));
         instructions.add(new Comment("end block"));
@@ -305,7 +348,9 @@ public class CompileStatement {
         Instructions instructions = new Instructions();
 
         for (Stmt stmt : block.liststmt_) {
-            instructions.addAll(generateStmt(stmt, scope));
+            Instructions genStmtInstr = generateStmt(stmt, scope);
+            instructions.addAll(genStmtInstr);
+            instructions.addRegisters(genStmtInstr.usedRegisters);
         }
 
         return instructions;
@@ -317,7 +362,8 @@ public class CompileStatement {
         instructions.add(new Comment(""));
         instructions.add(new Comment("assignment " + print(ass)));
 
-        instructions.addAll(generateExpr(ass.expr_, Register.RAX, Register.RAX, scope));
+        Instructions exprInstr = generateExpr(ass.expr_, Register.RAX, Register.RAX, scope);
+        instructions.addAll(exprInstr);
 
         Instructions lhsInstructions = ass.lhs_.match(
                 (var) -> generateVariableAss(var, ass.expr_.type, Register.RAX, scope),
@@ -326,6 +372,8 @@ public class CompileStatement {
         );
 
         instructions.addAll(lhsInstructions);
+        instructions.addRegisters(exprInstr.usedRegisters);
+        instructions.addRegisters(lhsInstructions.usedRegisters);
 
         return instructions;
     }
@@ -360,13 +408,21 @@ public class CompileStatement {
             // TODO: imeplemnt interfaces from class assignment
         }
 
-        instructions.add(new PushInstruction(Register.RCX, scope));
-
         instructions.add(new MovInstruction(Register.RCX, Register.RAX));
-        instructions.addAll(generateExpr(fieldLhs.expr_, Register.RAX, Register.RAX, scope));
-        instructions.add(new MovInstruction(MemoryReference.getWithOffset(Register.RAX, offset), Register.RCX));
 
-        instructions.add(new PopInstruction(Register.RCX, scope));
+        Instructions exprInstr = generateExpr(fieldLhs.expr_, Register.RAX, Register.RAX, scope);
+
+        if (exprInstr.usedRegisters.contains(Register.RCX)) {
+            instructions.add(new PushInstruction(Register.RCX));
+        }
+        instructions.addAll(exprInstr);
+        if (exprInstr.usedRegisters.contains(Register.RCX)) {
+            instructions.add(new PopInstruction(Register.RCX));
+        }
+
+        instructions.add(new MovInstruction(MemoryReference.getWithOffset(Register.RAX, offset), Register.RCX));
+        instructions.addRegisters(exprInstr.usedRegisters);
+        instructions.addRegister(Register.RCX);
 
         return instructions;
     }
@@ -378,13 +434,12 @@ public class CompileStatement {
         int thisOffset = scope.getVariable(THIS_KEYWORD).getOffset() * WORD_SIZE;
         int fieldOffset = lhs.binding.getBindedClass().getClassDefinition().getFieldOffset(lhs.ident_);
 
-        instructions.add(new PushInstruction(Register.RCX, scope));
 
         instructions.add(new MovInstruction(Register.RCX, MemoryReference.getWithOffset(Register.RBP, thisOffset)));
         instructions.add(new AddInstruction(Register.RCX, YieldUtils.number(fieldOffset)));
         instructions.add(new MovInstruction(MemoryReference.getRaw(Register.RCX), Register.RAX));
 
-        instructions.add(new PopInstruction(Register.RCX, scope));
+        instructions.addRegister(Register.RCX);
 
         return instructions;
     }
@@ -392,21 +447,41 @@ public class CompileStatement {
     public static Instructions generateVariableArrayAss(ArrElemLhs arrElem, TypeDefinition rhsType, String registerOfValue, BackendScope scope) {
         Instructions instructions = new Instructions();
 
-        instructions.add(new PushInstruction(Register.RCX, scope));
-        instructions.add(new PushInstruction(Register.RDX, scope));
-
         if (!registerOfValue.equals(Register.RCX)) {
             instructions.add(new MovInstruction(Register.RCX, registerOfValue));
         }
 
-        instructions.addAll(generateExpr(arrElem.expr_2, Register.RAX, Register.RAX, scope));
+        Instructions exprInstr2 = generateExpr(arrElem.expr_2, Register.RAX, Register.RAX, scope);
+
+        if (exprInstr2.usedRegisters.contains(Register.RCX)) {
+            instructions.add(new PushInstruction(Register.RCX));
+        }
+        instructions.addAll(exprInstr2);
+        if (exprInstr2.usedRegisters.contains(Register.RCX)) {
+            instructions.add(new PopInstruction(Register.RCX));
+        }
+
         instructions.add(new MovInstruction(Register.RDX, Register.RAX));
         instructions.add(new AddInstruction(Register.RDX, YieldUtils.number(1)));
         instructions.add(new MulInstruction(Register.RDX, YieldUtils.number(WORD_SIZE)));
-        instructions.addAll(generateExpr(arrElem.expr_1, Register.RAX, Register.RAX, scope));
-        instructions.add(new AddInstruction(Register.RAX, Register.RDX));
 
-        instructions.add(new PopInstruction(Register.RDX, scope));
+        Instructions exprInstr1 = generateExpr(arrElem.expr_1, Register.RAX, Register.RAX, scope);
+
+        if (exprInstr1.usedRegisters.contains(Register.RCX)) {
+            instructions.add(new PushInstruction(Register.RCX));
+        }
+        if (exprInstr1.usedRegisters.contains(Register.RDX)) {
+            instructions.add(new PushInstruction(Register.RDX));
+        }
+        instructions.addAll(exprInstr1);
+        if (exprInstr1.usedRegisters.contains(Register.RDX)) {
+            instructions.add(new PopInstruction(Register.RDX));
+        }
+        if (exprInstr1.usedRegisters.contains(Register.RCX)) {
+            instructions.add(new PopInstruction(Register.RCX));
+        }
+
+        instructions.add(new AddInstruction(Register.RAX, Register.RDX));
 
         TypeDefinition innerArrayType = arrElem.expr_1.type.getArrayTypeDefinition().getInnerTypeDefinition();
 
@@ -416,7 +491,10 @@ public class CompileStatement {
 
         instructions.add(new MovInstruction(MemoryReference.getRaw(Register.RAX), Register.RCX));
 
-        instructions.add(new PopInstruction(Register.RCX, scope));
+        instructions.addRegisters(exprInstr1.usedRegisters);
+        instructions.addRegisters(exprInstr2.usedRegisters);
+        instructions.addRegister(Register.RCX);
+        instructions.addRegister(Register.RDX);
 
         return instructions;
     }
@@ -429,6 +507,7 @@ public class CompileStatement {
 
         if (BasicTypeDefinition.STRING.equals(type)) {
             instructions.add(new CallInstruction(ExternalFunctions.EMPTY_STRING));
+            instructions.addRegisters(callUnsafeRegs());
         } else {
             instructions.add(new MovInstruction(Register.RAX, YieldUtils.number(0)));
         }
@@ -467,7 +546,10 @@ public class CompileStatement {
         Instructions instructions = new Instructions();
         instructions.add(new Comment(""));
         instructions.add(new Comment("return from function"));
-        instructions.addAll(generateExpr(ret.expr_, Register.RAX, Register.RAX, scope));
+
+        Instructions exprInstr = generateExpr(ret.expr_, Register.RAX, Register.RAX, scope);
+        instructions.addAll(exprInstr);
+        instructions.addRegisters(exprInstr.usedRegisters);
 
         instructions.addAll(generateEpilog());
 
@@ -495,10 +577,12 @@ public class CompileStatement {
         scope.declareVariable(forArr.ident_, getType(forArr.typename_, scope.getGlobalEnvironment(), -1, -1));
         int offset = scope.getVariable(forArr.ident_).getOffset() * WORD_SIZE;
 
-        instructions.add(new PushInstruction(Register.RDX, scope));
-        instructions.add(new PushInstruction(Register.RCX, scope));
+        instructions.addRegister(Register.RDX);
+        instructions.addRegister(Register.RCX);
 
-        instructions.addAll(generateExpr(forArr.expr_, Register.RAX, Register.RAX, scope)); // get array beginning
+        Instructions exprInstr = generateExpr(forArr.expr_, Register.RAX, Register.RAX, scope);
+
+        instructions.addAll(exprInstr); // get array beginning
         instructions.add(new MovInstruction(Register.RCX, Register.RAX));
         instructions.add(new MovInstruction(Register.RDX, MemoryReference.getRaw(Register.RCX)));
 
@@ -512,15 +596,27 @@ public class CompileStatement {
         instructions.add(new MovInstruction(Register.RAX, MemoryReference.getRaw(Register.RAX)));
         instructions.add(new MovInstruction(MemoryReference.getWithOffset(Register.RBP, offset), Register.RAX));
 
-        instructions.addAll(generateStmt(forArr.stmt_, scope));
+        Instructions stmtInstr = generateStmt(forArr.stmt_, scope);
+
+        if (stmtInstr.usedRegisters.contains(Register.RCX)) {
+            instructions.add(new PushInstruction(Register.RCX));
+        }
+        if (stmtInstr.usedRegisters.contains(Register.RDX)) {
+            instructions.add(new PushInstruction(Register.RDX));
+        }
+        instructions.addAll(stmtInstr);
+        if (stmtInstr.usedRegisters.contains(Register.RDX)) {
+            instructions.add(new PopInstruction(Register.RDX));
+        }
+        if (stmtInstr.usedRegisters.contains(Register.RCX)) {
+            instructions.add(new PopInstruction(Register.RCX));
+        }
 
         instructions.add(new SubInstruction(Register.RDX, YieldUtils.number(1)));
 
         instructions.add(new JumpInstruction(start, JumpInstruction.Type.ALWAYS));
         instructions.add(end);
 
-        instructions.add(new PopInstruction(Register.RCX, scope));
-        instructions.add(new PopInstruction(Register.RDX, scope));
 
         return instructions;
     }
