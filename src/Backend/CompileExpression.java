@@ -1,5 +1,6 @@
 package src.Backend;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import src.Absyn.*;
 import src.Backend.Definitions.*;
 import src.Backend.Instructions.*;
@@ -13,11 +14,16 @@ import static src.Backend.Instructions.ConstantUtils.THIS_KEYWORD;
 import static src.Backend.Instructions.ConstantUtils.WORD_SIZE;
 import static src.Backend.LabelsGenerator.getNonceLabel;
 import static src.Frontend.TypeUtils.getType;
+import static src.PrettyPrinter.print;
 
 public class CompileExpression {
 
     public static Instructions generateExpr(Expr expr, String destRegister, String sourceRegister, BackendScope scope) {
-        return expr.match(
+        Instructions instructions = new Instructions();
+
+        instructions.add(new Comment("Expression " + StringEscapeUtils.escapeJava(print(expr))));
+
+        Instructions exprInstr = expr.match(
                 (var) -> generateVar(var, destRegister, scope),
                 (eInt) -> generateInt(eInt, destRegister),
                 (eTrue) -> generateTrue(destRegister),
@@ -39,6 +45,12 @@ public class CompileExpression {
                 (objAcc) -> generateObjAcc(objAcc, destRegister, scope),
                 (cast) -> generateCast(cast, destRegister, sourceRegister, scope)
         );
+
+        instructions.addAll(exprInstr);
+        instructions.add(new Comment("end of expr " + StringEscapeUtils.escapeJava(print(expr))));
+        instructions.addRegisters(exprInstr.usedRegisters);
+
+        return instructions;
     }
 
     public static Set<String> callUnsafeRegs() {
@@ -817,12 +829,14 @@ public class CompileExpression {
         instructions.add(new MovInstruction(Register.RDI, YieldUtils.number(size * WORD_SIZE)));
 
         instructions.add(new CallInstruction(ExternalFunctions.MALLOC_SIZE));
+        // class address in RDI
         instructions.add(new MovInstruction(Register.RDI, Register.RAX));
 
         for (String methodName : classType.methods.keySet()) {
             int methodOffset = classType.getMethodOffset(methodName);
             MethodDeclaration method = classType.methods.get(methodName);
-            instructions.add(new MovInstruction(MemoryReference.getWithOffset(Register.RDI, methodOffset), method.label.getLabelName()));
+            instructions.add(new LeaInstruction(Register.RAX, "[rel " + method.label.getLabelName() + "]"));
+            instructions.add(new MovInstruction(MemoryReference.getWithOffset(Register.RDI, methodOffset), Register.RAX));
         }
 
         for (String fieldName : classType.fields.keySet()) {
@@ -848,6 +862,8 @@ public class CompileExpression {
                 instructions.add(new MovInstruction(MemoryReference.getWithOffset(Register.RDI, fieldOffset), Register.RAX));
             }
         }
+
+        instructions.add(new MovInstruction(Register.RAX, Register.RDI));
 
         if (!Register.RAX.equals(destRegister)) {
             instructions.add(new MovInstruction(destRegister, Register.RAX));
@@ -879,6 +895,7 @@ public class CompileExpression {
         if (type.isInterfaceType()) {
             instructions.add(new PushInstruction(Register.R12));
             instructions.add(new MovInstruction(Register.R12, Register.RDI));
+            // wrzuc prawidlowe this jako 1 argument metody
             instructions.add(new MovInstruction(Register.RDI, MemoryReference.getRaw(Register.RDI)));
         }
 
@@ -888,7 +905,7 @@ public class CompileExpression {
 
         if (type.isInterfaceType()) {
             InterfaceTypeDefinition interfaceType = type.getInterfaceDefinition();
-            int methodOffset = interfaceType.getMethodOffset(acc.ident_);
+            int methodOffset = interfaceType.getMethodOffset(acc.ident_) + WORD_SIZE; // + WORDSIZE bo 1 element interfacu to this
             instructions.add(new MovInstruction(Register.R12, MemoryReference.getWithOffset(Register.R12, methodOffset)));
             instructions.add(new CallInstruction(Register.R12));
             instructions.add(new PopInstruction(Register.R12));

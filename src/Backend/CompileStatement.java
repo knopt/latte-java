@@ -1,5 +1,6 @@
 package src.Backend;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import src.Absyn.*;
 import src.Backend.Definitions.BackendScope;
 import src.Backend.Definitions.ExternalFunctions;
@@ -21,7 +22,9 @@ public class CompileStatement {
     public static Instructions generateStmt(Stmt stmt, BackendScope scope) {
         Instructions instructions = new Instructions();
 
-        instructions.addAll(stmt.match(
+        instructions.add(new Comment("Statement " + StringEscapeUtils.escapeJava(print(stmt))));
+
+        Instructions stmtInstr = stmt.match(
                 (empty) -> new Instructions(),
                 (bStmt) -> generateBStmt(bStmt, scope),
                 (decl) -> generateDecl(decl, scope),
@@ -35,7 +38,12 @@ public class CompileStatement {
                 (sWhile) -> generateWhile(sWhile, scope),
                 (sExp) -> generateStmtExpr(sExp, scope),
                 (forArr) -> generateForArr(forArr, scope)
-        ));
+        );
+        instructions.addAll(stmtInstr);
+
+        instructions.add(new Comment("end of Statement " + StringEscapeUtils.escapeJava(print(stmt))));
+
+        instructions.addRegisters(stmtInstr.usedRegisters);
 
         return instructions;
     }
@@ -595,11 +603,15 @@ public class CompileStatement {
         }
 
         for (String methodName : interfaceType.methodsOffsetTable.keySet()) {
-            int classMethodOffset = methodType.getMethodOffset(methodName);
-            int interfaceMethodOffset = interfaceType.getMethodOffset(methodName);
+            int rhsMethodOffset = methodType.getMethodOffset(methodName);
+            int interfaceMethodOffset = interfaceType.getMethodOffset(methodName) + WORD_SIZE;
+
+            if (((TypeDefinition) methodType).isInterfaceType()) {
+                rhsMethodOffset += WORD_SIZE;
+            }
 
             instructions.add(new MovInstruction(Register.RDI, Register.RCX));
-            instructions.add(new AddInstruction(Register.RDI, YieldUtils.number(classMethodOffset)));
+            instructions.add(new AddInstruction(Register.RDI, YieldUtils.number(rhsMethodOffset)));
             instructions.add(new MovInstruction(Register.RAX, MemoryReference.getRaw(Register.RDI)));
             instructions.add(new MovInstruction(Register.RDI, Register.RDX));
             instructions.add(new AddInstruction(Register.RDI, YieldUtils.number(interfaceMethodOffset)));
@@ -631,7 +643,7 @@ public class CompileStatement {
             instructions.add(new MovInstruction(Register.RDI, interfaceType.methodsOffsetTable.size() + 1));
             // +1 bo w interfacie trzymamy jeszcze referencje to rzeczywistego obiektu
             instructions.add(new CallInstruction(ExternalFunctions.MALLOC_SIZE));
-            instructions.add(new MovInstruction(Register.RCX, Register.RCX));
+            instructions.add(new MovInstruction(Register.RCX, Register.RAX));
             // rhs w RAX
             instructions.add(new PopInstruction(Register.RAX, scope));
 
