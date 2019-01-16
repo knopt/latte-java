@@ -1,7 +1,5 @@
 package src.Backend;
 
-import com.sun.org.apache.regexp.internal.RE;
-import org.apache.commons.lang3.StringEscapeUtils;
 import src.Absyn.*;
 import src.Backend.Definitions.BackendScope;
 import src.Backend.Definitions.ExternalFunctions;

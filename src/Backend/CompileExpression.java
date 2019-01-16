@@ -172,6 +172,10 @@ public class CompileExpression {
             incrementalUsedRegistersSet.addAll(exprInstructions0.usedRegisters);
         }
 
+        if (isMethod && incrementalUsedRegistersSet.contains(Register.RDI)) {
+            rdiDestroyed = true;
+        }
+
 
         if (!isMethod && exprs.size() > 0) {
             instructions.addAll(exprInstructions0);
@@ -181,6 +185,10 @@ public class CompileExpression {
             } else {
                 instructions.add(new MovInstruction(Register.RDI, Register.RAX));
             }
+        }
+
+        if (isMethod && rdiDestroyed) {
+            instructions.add(new PushInstruction(Register.RDI, scope));
         }
 
         if (exprs.size() > 1 + argsOffset) {
@@ -246,6 +254,9 @@ public class CompileExpression {
     }
 
     public static Instructions generateMethodApp(EApp eApp, String destRegister, BackendScope scope) {
+        // Nie trzeba tutaj obslugiwac interfaceow, poniewaz wolanie przez
+        // methoda() a nie expr.metoda(), odwoluje się do elementu klasy
+
         Instructions instructions = new Instructions();
 
 
@@ -266,8 +277,6 @@ public class CompileExpression {
         Instructions genMethAppInstr = generateMethodArguments(eApp.listexpr_, scope);
         instructions.addAll(genMethAppInstr);
 
-
-        // TODO: handle interfaces
         instructions.add(new CallInstruction(eApp.binding.getBindedClass().getClassDefinition().methods.get(eApp.ident_).label.getLabelName()));
 
         // function args pushed on stack?
@@ -851,6 +860,7 @@ public class CompileExpression {
     }
 
     public static Instructions generateMthAcc(ObjMethAcc acc, TypeDefinition type, String destRegister, BackendScope scope) {
+        // w RAX obiekt na ktorym wolamy
         Instructions instructions = new Instructions();
 
         int numberOfArgsPassedOnStack = max(0, (acc.listexpr_.size() - 5)); // - 6 + 1 - dodajemy "this" jako pierwszy argument
@@ -867,14 +877,24 @@ public class CompileExpression {
         instructions.add(new MovInstruction(Register.RDI, Register.RAX));
 
         if (type.isInterfaceType()) {
-            // TODO: put to rdi runtime class of object, not the whole interface
+            instructions.add(new PushInstruction(Register.R12));
+            instructions.add(new MovInstruction(Register.R12, Register.RDI));
+            instructions.add(new MovInstruction(Register.RDI, MemoryReference.getRaw(Register.RDI)));
         }
 
         Instructions genMethArgsInstr = generateMethodArguments(acc.listexpr_, scope);
+
         instructions.addAll(genMethArgsInstr);
 
-        //TODO: change to support interfaces, take offset no from typedef, but from runtime object
-        instructions.add(new CallInstruction(type.getClassDefinition().methods.get(acc.ident_).label.getLabelName()));
+        if (type.isInterfaceType()) {
+            InterfaceTypeDefinition interfaceType = type.getInterfaceDefinition();
+            int methodOffset = interfaceType.getMethodOffset(acc.ident_);
+            instructions.add(new MovInstruction(Register.R12, MemoryReference.getWithOffset(Register.R12, methodOffset)));
+            instructions.add(new CallInstruction(Register.R12));
+            instructions.add(new PopInstruction(Register.R12));
+        } else {
+            instructions.add(new CallInstruction(type.getClassDefinition().methods.get(acc.ident_).label.getLabelName()));
+        }
 
         // function args pushed on stack?
         int offset = max(0, (acc.listexpr_.size() - 5)) * WORD_SIZE;

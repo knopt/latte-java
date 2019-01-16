@@ -216,13 +216,12 @@ public class TypeCheck {
     public static Boolean gatherTypeDefinitions(ClassDecl classDecl) {
         TypeDefinition typeDef = classDecl.classheader_.match(
                 TypeCheck::gatherTypeDefinitions,
-                null
-
+                (ignored) -> null
         );
 
         Implements impl = classDecl.classheader_.match(
                 classDec -> classDec.implements_,
-                null
+                (ignored) -> null
         );
 
         if (typeDef == null || impl == null) {

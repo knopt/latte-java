@@ -16,6 +16,7 @@ public class InterfaceTypeDefinition implements TypeDefinition, Arrayable, Metho
     public InterfaceTypeDefinition(String className) {
         this.className = className;
         this.methods = new HashMap<>();
+        this.methodsOffsetTable = new HashMap<>();
     }
 
     @Override

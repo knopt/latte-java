@@ -54,7 +54,8 @@ public class Generate {
             env = check(program);
         } catch (Exception e) {
             System.err.println("ERROR");
-            System.err.println(e.getMessage());
+            System.err.println("TypeCheck error");
+            e.printStackTrace();
             System.exit(1);
             return;
         }
