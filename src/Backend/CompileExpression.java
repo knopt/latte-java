@@ -485,7 +485,6 @@ public class CompileExpression {
         if (expr1destroysRcx) {
             instructions.add(new PushInstruction(Register.RCX));
         }
-
         instructions.addAll(instructions1);
 
         if (expr1destroysRcx) {

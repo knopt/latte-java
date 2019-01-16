@@ -20,13 +20,24 @@ char* readString() {
     if ((read = getline(&line, &len, stdin)) != -1) {
     }
 
+    line[read-1] = '\0';
+
     return line;
 }
 
 long readInt() {
+    char *line = NULL;
+
+    size_t len = 0;
+    ssize_t read;
+
+
+    if ((read = getline(&line, &len, stdin)) != -1) {
+    }
+
     long i = 0;
 
-    scanf("%ld", &i);
+    i = strtol(line, NULL, 10);
 
     return i;
 }
