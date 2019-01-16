@@ -205,16 +205,13 @@ public class TypeCheckExpression {
 
         validateTypes(exprType1, exprType2, rel.line_num, rel.col_num);
 
-        List<BasicTypeDefinition> types = Arrays.asList(BasicTypeDefinition.INT, BasicTypeDefinition.BOOLEAN);
-
-
         rel.relop_.match(
                 (ignored) -> validateTypes(BasicTypeDefinition.INT, exprType1, rel.line_num, rel.col_num),
                 (ignored) -> validateTypes(BasicTypeDefinition.INT, exprType1, rel.line_num, rel.col_num),
                 (ignored) -> validateTypes(BasicTypeDefinition.INT, exprType1, rel.line_num, rel.col_num),
                 (ignored) -> validateTypes(BasicTypeDefinition.INT, exprType1, rel.line_num, rel.col_num),
                 (ignored) -> null,
-                (ignored) -> validateTypes(types, exprType1, rel.line_num, rel.col_num)
+                (ignored) -> null
         );
 
         return BasicTypeDefinition.BOOLEAN;
