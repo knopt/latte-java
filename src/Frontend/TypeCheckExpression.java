@@ -213,7 +213,7 @@ public class TypeCheckExpression {
                 (ignored) -> validateTypes(BasicTypeDefinition.INT, exprType1, rel.line_num, rel.col_num),
                 (ignored) -> validateTypes(BasicTypeDefinition.INT, exprType1, rel.line_num, rel.col_num),
                 (ignored) -> validateTypes(BasicTypeDefinition.INT, exprType1, rel.line_num, rel.col_num),
-                (ignored) -> validateTypes(types, exprType1, rel.line_num, rel.col_num),
+                (ignored) -> null,
                 (ignored) -> validateTypes(types, exprType1, rel.line_num, rel.col_num)
         );
 
