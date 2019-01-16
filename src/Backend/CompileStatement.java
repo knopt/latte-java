@@ -1,5 +1,6 @@
 package src.Backend;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import src.Absyn.*;
 import src.Backend.Definitions.BackendScope;
 import src.Backend.Definitions.ExternalFunctions;
@@ -21,6 +22,8 @@ public class CompileStatement {
 
     public static Instructions generateStmt(Stmt stmt, BackendScope scope) {
         Instructions instructions = new Instructions();
+//        instructions.add(new Comment("statement " + StringEscapeUtils.escapeJava(print(stmt))));
+//        instructions.add(new Comment(""));
         instructions.addAll(stmt.match(
                 (empty) -> new Instructions(),
                 (bStmt) -> generateBStmt(bStmt, scope),

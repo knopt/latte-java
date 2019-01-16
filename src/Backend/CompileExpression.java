@@ -14,6 +14,7 @@ import static src.Backend.Instructions.ConstantUtils.THIS_KEYWORD;
 import static src.Backend.Instructions.ConstantUtils.WORD_SIZE;
 import static src.Backend.LabelsGenerator.getNonceLabel;
 import static src.Frontend.TypeUtils.getType;
+import static src.PrettyPrinter.print;
 
 public class CompileExpression {
 
@@ -110,6 +111,7 @@ public class CompileExpression {
             instructions.add(new AddInstruction(Register.RSP, YieldUtils.number(WORD_SIZE)));
         }
 
+        instructions.addRegisters(callUnsafeRegs());
         instructions.addRegisters(genFunArgInsr.usedRegisters);
 
         return instructions;
@@ -309,6 +311,7 @@ public class CompileExpression {
         }
 
         instructions.addRegisters(genMethAppInstr.usedRegisters);
+        instructions.addRegisters(callUnsafeRegs());
         instructions.addRegister(Register.RDI);
 
         return instructions;
@@ -598,7 +601,7 @@ public class CompileExpression {
         Instructions expr1Instructions = generateExpr(rel.expr_1, destRegister, sourceRegister, scope);
 
         instructions.addAll(expr2Instructions);
-        instructions.add(new MovInstruction(Register.RAX, Register.RCX));
+        instructions.add(new MovInstruction(Register.RCX, Register.RAX));
 
         boolean expr1destroysRcx = expr1Instructions.usedRegisters.contains(Register.RCX);
 
@@ -731,7 +734,7 @@ public class CompileExpression {
         instructions.addRegister(Register.RCX);
 
         instructions.addAll(expr1instructions);
-        instructions.add(new MovInstruction(Register.RAX, Register.RCX));
+        instructions.add(new MovInstruction(Register.RCX, Register.RAX));
 
         boolean expr2destroysRcx = expr2instructions.usedRegisters.contains(Register.RCX);
 
@@ -754,6 +757,7 @@ public class CompileExpression {
 
         instructions.addRegisters(expr1instructions.usedRegisters);
         instructions.addRegisters(expr2instructions.usedRegisters);
+        instructions.addRegister(Register.RCX);
 
         return instructions;
     }
@@ -874,6 +878,7 @@ public class CompileExpression {
         }
 
         instructions.addRegisters(genMethArgsInstr.usedRegisters);
+        instructions.addRegisters(callUnsafeRegs());
         instructions.addRegister(Register.RDI);
 
         return instructions;
