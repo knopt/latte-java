@@ -3,8 +3,7 @@ package src.Backend;
 import src.Absyn.*;
 import src.Backend.Definitions.*;
 import src.Backend.Instructions.*;
-import src.Definitions.BasicTypeDefinition;
-import src.Definitions.TypeDefinition;
+import src.Definitions.*;
 import src.Exceptions.CompilerException;
 
 import java.util.*;
@@ -14,7 +13,6 @@ import static src.Backend.Instructions.ConstantUtils.THIS_KEYWORD;
 import static src.Backend.Instructions.ConstantUtils.WORD_SIZE;
 import static src.Backend.LabelsGenerator.getNonceLabel;
 import static src.Frontend.TypeUtils.getType;
-import static src.PrettyPrinter.print;
 
 public class CompileExpression {
 
@@ -55,32 +53,6 @@ public class CompileExpression {
         return regs;
     }
 
-    private static Instructions generatePushBeforeFunction(BackendScope scope) {
-        Instructions instructions = new Instructions();
-
-        instructions.add(new PushInstruction(Register.RDI, scope));
-        instructions.add(new PushInstruction(Register.RSI, scope));
-        instructions.add(new PushInstruction(Register.RDX, scope));
-        instructions.add(new PushInstruction(Register.RCX, scope));
-        instructions.add(new PushInstruction(Register.R8, scope));
-        instructions.add(new PushInstruction(Register.R9, scope));
-
-        return instructions;
-    }
-
-    private static Instructions generatePopAfterFunction(BackendScope scope) {
-        Instructions instructions = new Instructions();
-
-        instructions.add(new PopInstruction(Register.R9, scope));
-        instructions.add(new PopInstruction(Register.R8, scope));
-        instructions.add(new PopInstruction(Register.RCX, scope));
-        instructions.add(new PopInstruction(Register.RDX, scope));
-        instructions.add(new PopInstruction(Register.RSI, scope));
-        instructions.add(new PopInstruction(Register.RDI, scope));
-
-        return instructions;
-    }
-    
     public static Instructions generateFunctionApp(EApp eApp, String destRegister, BackendScope scope) {
         Instructions instructions = new Instructions();
 
@@ -205,7 +177,7 @@ public class CompileExpression {
             instructions.addAll(exprInstructions0);
 
             if (rdiDestroyed) {
-                instructions.add(new PushInstruction(Register.RDI));
+                instructions.add(new PushInstruction(Register.RDI, scope));
             } else {
                 instructions.add(new MovInstruction(Register.RDI, Register.RAX));
             }
@@ -215,7 +187,7 @@ public class CompileExpression {
             instructions.addAll(exprInstructions1);
 
             if (rsiDestroyed) {
-                instructions.add(new PushInstruction(Register.RSI));
+                instructions.add(new PushInstruction(Register.RSI, scope));
             } else {
                 instructions.add(new MovInstruction(Register.RSI, Register.RAX));
             }
@@ -224,7 +196,7 @@ public class CompileExpression {
         if (exprs.size() > 2 + argsOffset) {
             instructions.addAll(generateExpr(exprs.get(2 + argsOffset), Register.RAX, Register.RAX, scope));
             if (rdxDestroyed) {
-                instructions.add(new PushInstruction(Register.RDX));
+                instructions.add(new PushInstruction(Register.RDX, scope));
             } else {
                 instructions.add(new MovInstruction(Register.RDX, Register.RAX));
             }
@@ -233,7 +205,7 @@ public class CompileExpression {
         if (exprs.size() > 3 + argsOffset) {
             instructions.addAll(generateExpr(exprs.get(3 + argsOffset), Register.RAX, Register.RAX, scope));
             if (rcxDestroyed) {
-                instructions.add(new PushInstruction(Register.RCX));
+                instructions.add(new PushInstruction(Register.RCX, scope));
             } else {
                 instructions.add(new MovInstruction(Register.RCX, Register.RAX));
             }
@@ -242,7 +214,7 @@ public class CompileExpression {
         if (exprs.size() > 4 + argsOffset) {
             instructions.addAll(generateExpr(exprs.get(4 + argsOffset), Register.RAX, Register.RAX, scope));
             if (r8Destroyed) {
-                instructions.add(new PushInstruction(Register.R8));
+                instructions.add(new PushInstruction(Register.R8, scope));
             } else {
                 instructions.add(new MovInstruction(Register.R8, Register.RAX));
             }
@@ -254,11 +226,11 @@ public class CompileExpression {
             instructions.add(new MovInstruction(Register.R9, Register.RAX));
         }
 
-        if (r8Destroyed) { instructions.add(new PopInstruction(Register.R8)); }
-        if (rcxDestroyed) { instructions.add(new PopInstruction(Register.RCX)); }
-        if (rdxDestroyed) { instructions.add(new PopInstruction(Register.RDX)); }
-        if (rsiDestroyed) { instructions.add(new PopInstruction(Register.RSI)); }
-        if (rdiDestroyed) { instructions.add(new PopInstruction(Register.RDI)); }
+        if (r8Destroyed) { instructions.add(new PopInstruction(Register.R8, scope)); }
+        if (rcxDestroyed) { instructions.add(new PopInstruction(Register.RCX, scope)); }
+        if (rdxDestroyed) { instructions.add(new PopInstruction(Register.RDX, scope)); }
+        if (rsiDestroyed) { instructions.add(new PopInstruction(Register.RSI, scope)); }
+        if (rdiDestroyed) { instructions.add(new PopInstruction(Register.RDI, scope)); }
 
         instructions.addRegisters(incrementalUsedRegistersSet);
 
@@ -483,12 +455,12 @@ public class CompileExpression {
         boolean expr1destroysRcx = instructions1.usedRegisters.contains(Register.RCX);
 
         if (expr1destroysRcx) {
-            instructions.add(new PushInstruction(Register.RCX));
+            instructions.add(new PushInstruction(Register.RCX, scope));
         }
         instructions.addAll(instructions1);
 
         if (expr1destroysRcx) {
-            instructions.add(new PopInstruction(Register.RCX));
+            instructions.add(new PopInstruction(Register.RCX, scope));
         }
 
         Instructions oppInstr = mul.mulop_.match(
@@ -605,7 +577,7 @@ public class CompileExpression {
         boolean expr1destroysRcx = expr1Instructions.usedRegisters.contains(Register.RCX);
 
         if (expr1destroysRcx) {
-            instructions.add(new PushInstruction(Register.RCX));
+            instructions.add(new PushInstruction(Register.RCX, scope));
         }
 
         instructions.addAll(expr1Instructions);
@@ -682,7 +654,9 @@ public class CompileExpression {
 
         // od tego memomentu, wskaznik na zaalokowana pamiec jest w RAX
 
-        if (BasicTypeDefinition.STRING.equals(getType(constr.typename_, scope.getGlobalEnvironment(), -1, -1))) {
+        TypeDefinition innerType = getType(constr.typename_, scope.getGlobalEnvironment(), -1, -1);
+
+        if (BasicTypeDefinition.STRING.equals(innerType) || innerType.isInterfaceType()) {
             instructions.addRegister(Register.RDI);
             instructions.addRegister(Register.RDX);
             instructions.addRegister(Register.RCX);
@@ -692,23 +666,29 @@ public class CompileExpression {
             instructions.add(new MovInstruction(Register.RDI, MemoryReference.getRaw(Register.RAX)));
             instructions.add(new MovInstruction(Register.RCX, Register.RAX));
 
-            Label start = LabelsGenerator.getNonceLabel("str_arr_init");
-            Label end = LabelsGenerator.getNonceLabel("str_arr_init_end");
+            Label start = LabelsGenerator.getNonceLabel("elem_arr_init");
+            Label end = LabelsGenerator.getNonceLabel("elem_arr_init_end");
             instructions.add(start);
             instructions.add(new CompareInstruction(Register.RDI, YieldUtils.number(0)));
             instructions.add(new JumpInstruction(end, JumpInstruction.Type.EQU));
             instructions.add(new AddInstruction(Register.RCX, YieldUtils.number(WORD_SIZE)));
 
-            instructions.add(new PushInstruction(Register.RDX));
-            instructions.add(new PushInstruction(Register.RCX));
-            instructions.add(new PushInstruction(Register.RDI));
+            instructions.add(new PushInstruction(Register.RDX, scope));
+            instructions.add(new PushInstruction(Register.RCX, scope));
+            instructions.add(new PushInstruction(Register.RDI, scope));
 
             instructions.addRegisters(callUnsafeRegs());
-            instructions.add(new CallInstruction(ExternalFunctions.EMPTY_STRING));
+            if (innerType.isInterfaceType()) {
+                int interfaceSize = innerType.getInterfaceDefinition().methodsOffsetTable.size() + 1;
+                instructions.add(new MovInstruction(Register.RDI, YieldUtils.number(interfaceSize)));
+                instructions.add(new CallInstruction(ExternalFunctions.MALLOC_SIZE));
+            } else {
+                instructions.add(new CallInstruction(ExternalFunctions.EMPTY_STRING));
+            }
 
-            instructions.add(new PopInstruction(Register.RDI));
-            instructions.add(new PopInstruction(Register.RCX));
-            instructions.add(new PopInstruction(Register.RDX));
+            instructions.add(new PopInstruction(Register.RDI, scope));
+            instructions.add(new PopInstruction(Register.RCX, scope));
+            instructions.add(new PopInstruction(Register.RDX, scope));
 
             instructions.add(new MovInstruction(MemoryReference.getRaw(Register.RCX), Register.RAX));
             instructions.add(new SubInstruction(Register.RDI, YieldUtils.number(1)));
@@ -738,13 +718,13 @@ public class CompileExpression {
         boolean expr2destroysRcx = expr2instructions.usedRegisters.contains(Register.RCX);
 
         if (expr2destroysRcx) {
-            instructions.add(new PushInstruction(Register.RCX));
+            instructions.add(new PushInstruction(Register.RCX, scope));
         }
 
         instructions.addAll(expr2instructions);
 
         if (expr2destroysRcx) {
-            instructions.add(new PopInstruction(Register.RCX));
+            instructions.add(new PopInstruction(Register.RCX, scope));
         }
 
         instructions.add(new MovInstruction(Register.RAX, MemoryReference.getWithConstOffset(Register.RCX, Register.RAX, 8 , WORD_SIZE)));
@@ -821,12 +801,44 @@ public class CompileExpression {
     }
 
     public static Instructions generateEConstr(EConstr constr, String destRegister, BackendScope scope) {
-        int size = scope.getType(constr.ident_).getClassDefinition().getClassSize();
+        ClassTypeDefinition classType = scope.getType(constr.ident_).getClassDefinition();
+        int size = classType.getClassSize();
 
         Instructions instructions = new Instructions();
         instructions.add(new MovInstruction(Register.RDI, YieldUtils.number(size * WORD_SIZE)));
 
         instructions.add(new CallInstruction(ExternalFunctions.MALLOC_SIZE));
+        instructions.add(new MovInstruction(Register.RDI, Register.RAX));
+
+        for (String methodName : classType.methods.keySet()) {
+            int methodOffset = classType.getMethodOffset(methodName);
+            MethodDeclaration method = classType.methods.get(methodName);
+            instructions.add(new MovInstruction(MemoryReference.getWithOffset(Register.RDI, methodOffset), method.label.getLabelName()));
+        }
+
+        for (String fieldName : classType.fields.keySet()) {
+            int fieldOffset = classType.getFieldOffset(fieldName);
+            ClassFieldDeclaration fieldDeclaration = classType.fields.get(fieldName);
+
+            if (BasicTypeDefinition.STRING.equals((fieldDeclaration.type))) {
+                instructions.add(new PushInstruction(Register.RDI, scope));
+                instructions.add(new CallInstruction(ExternalFunctions.EMPTY_STRING));
+                instructions.add(new PopInstruction(Register.RDI, scope));
+                instructions.addRegisters(callUnsafeRegs());
+
+                instructions.add(new MovInstruction(MemoryReference.getWithOffset(Register.RDI, fieldOffset), Register.RAX));
+            } else if (fieldDeclaration.type.isInterfaceType()) {
+                int interfaceSize = fieldDeclaration.type.getInterfaceDefinition().methodsOffsetTable.size() + 1;
+                instructions.add(new PushInstruction(Register.RDI, scope));
+                instructions.add(new MovInstruction(Register.RDI, YieldUtils.number(interfaceSize)));
+                instructions.add(new CallInstruction(ExternalFunctions.MALLOC_SIZE));
+                instructions.add(new PopInstruction(Register.RDI, scope));
+
+                instructions.addRegisters(callUnsafeRegs());
+
+                instructions.add(new MovInstruction(MemoryReference.getWithOffset(Register.RDI, fieldOffset), Register.RAX));
+            }
+        }
 
         if (!Register.RAX.equals(destRegister)) {
             instructions.add(new MovInstruction(destRegister, Register.RAX));

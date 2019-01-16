@@ -8,7 +8,7 @@ import java.util.Objects;
 
 import static src.Backend.Instructions.ConstantUtils.WORD_SIZE;
 
-public class ClassTypeDefinition implements TypeDefinition, Arrayable {
+public class ClassTypeDefinition implements TypeDefinition, Arrayable, MethodType {
     public String className;
     public Map<String, ClassFieldDeclaration> fields;
     public Map<String, MethodDeclaration> methods;

@@ -1,5 +1,6 @@
 package src.Backend;
 
+import com.sun.org.apache.regexp.internal.RE;
 import org.apache.commons.lang3.StringEscapeUtils;
 import src.Absyn.*;
 import src.Backend.Definitions.BackendScope;
@@ -7,8 +8,7 @@ import src.Backend.Definitions.ExternalFunctions;
 import src.Backend.Definitions.Instructions;
 import src.Backend.Definitions.Register;
 import src.Backend.Instructions.*;
-import src.Definitions.BasicTypeDefinition;
-import src.Definitions.TypeDefinition;
+import src.Definitions.*;
 import src.Exceptions.CompilerException;
 
 import static src.Backend.CompileExpression.callUnsafeRegs;
@@ -22,8 +22,7 @@ public class CompileStatement {
 
     public static Instructions generateStmt(Stmt stmt, BackendScope scope) {
         Instructions instructions = new Instructions();
-//        instructions.add(new Comment("statement " + StringEscapeUtils.escapeJava(print(stmt))));
-//        instructions.add(new Comment(""));
+
         instructions.addAll(stmt.match(
                 (empty) -> new Instructions(),
                 (bStmt) -> generateBStmt(bStmt, scope),
@@ -89,13 +88,13 @@ public class CompileStatement {
         Instructions exprInstr1 = generateExpr(arrElem.expr_1, Register.RAX, Register.RAX, scope);
 
         if (exprInstr1.usedRegisters.contains(Register.RCX)) {
-            instructions.add(new PushInstruction(Register.RCX));
+            instructions.add(new PushInstruction(Register.RCX, scope));
         }
 
         instructions.addAll(exprInstr1);
 
         if (exprInstr1.usedRegisters.contains(Register.RCX)) {
-            instructions.add(new PopInstruction(Register.RCX));
+            instructions.add(new PopInstruction(Register.RCX, scope));
         }
 
         instructions.add(new AddInstruction(Register.RAX, Register.RCX));
@@ -140,13 +139,13 @@ public class CompileStatement {
         Instructions exprInstr1 = generateExpr(arrElem.expr_1, Register.RAX, Register.RAX, scope);
 
         if (exprInstr1.usedRegisters.contains(Register.RCX)) {
-            instructions.add(new PushInstruction(Register.RCX));
+            instructions.add(new PushInstruction(Register.RCX, scope));
         }
 
         instructions.addAll(exprInstr1);
 
         if (exprInstr1.usedRegisters.contains(Register.RCX)) {
-            instructions.add(new PopInstruction(Register.RCX));
+            instructions.add(new PopInstruction(Register.RCX, scope));
         }
 
         instructions.add(new AddInstruction(Register.RAX, Register.RCX));
@@ -383,64 +382,93 @@ public class CompileStatement {
 
     public static Instructions generateVariableAss(VariableRawLhs var, TypeDefinition rhsType, String sourceRegister, BackendScope scope) {
         if (var.binding.isField()) {
-            return generateFieldAssFromVar(var, sourceRegister, scope);
+            return generateFieldAssFromVar(var, rhsType, sourceRegister, scope);
         }
 
         int varOffset = scope.getVariable(var.ident_).getOffset() * WORD_SIZE;
 
         Instructions instructions = new Instructions();
 
-        if (scope.getVariable(var.ident_).getType().isInterfaceType() && rhsType.isClassType()) {
-            // TODO: implement interfaces assignment
+        if (scope.getVariable(var.ident_).getType().isInterfaceType()) {
+            Instructions genInterfaceInstr = generateInterfaceAss(scope.getVariable(var.ident_).getType().getInterfaceDefinition(), rhsType, scope);
+
+            if (!sourceRegister.equals(Register.RAX)) {
+                instructions.add(new MovInstruction(Register.RAX, sourceRegister));
+            }
+
+            instructions.add(new MovInstruction(Register.RCX, MemoryReference.getWithOffset(Register.RBP, varOffset)));
+            instructions.addAll(genInterfaceInstr);
+            instructions.addRegisters(genInterfaceInstr.usedRegisters);
+            instructions.addRegister(Register.RCX);
+        } else {
+            instructions.add(new MovInstruction(MemoryReference.getWithOffset(Register.RBP, varOffset), sourceRegister));
         }
-
-
-
-        instructions.add(new MovInstruction(MemoryReference.getWithOffset(Register.RBP, varOffset), sourceRegister));
 
         return instructions;
     }
 
+    // this w RAX
     public static Instructions generateFieldAss(FieldLhs fieldLhs, TypeDefinition rhsType, String sourceRegister, BackendScope scope) {
         Instructions instructions = new Instructions();
-        int offset = fieldLhs.expr_.type.getClassDefinition().getFieldOffset(fieldLhs.ident_);
 
+        int offset = fieldLhs.expr_.type.getClassDefinition().getFieldOffset(fieldLhs.ident_);
         TypeDefinition fieldType = fieldLhs.expr_.type.getClassDefinition().getFieldDeclaration(fieldLhs.ident_, -1, -1).getType();
 
-        if (fieldType.isInterfaceType() && rhsType.isClassType()) {
-            // TODO: imeplemnt interfaces from class assignment
-        }
-
+        // this do RCX
         instructions.add(new MovInstruction(Register.RCX, Register.RAX));
 
         Instructions exprInstr = generateExpr(fieldLhs.expr_, Register.RAX, Register.RAX, scope);
 
         if (exprInstr.usedRegisters.contains(Register.RCX)) {
-            instructions.add(new PushInstruction(Register.RCX));
+            instructions.add(new PushInstruction(Register.RCX, scope));
         }
+        // wartosc do zapisania w RAX
         instructions.addAll(exprInstr);
+
         if (exprInstr.usedRegisters.contains(Register.RCX)) {
-            instructions.add(new PopInstruction(Register.RCX));
+            instructions.add(new PopInstruction(Register.RCX, scope));
         }
 
-        instructions.add(new MovInstruction(MemoryReference.getWithOffset(Register.RAX, offset), Register.RCX));
+
+        if (fieldType.isInterfaceType()) {
+            Instructions generateInterfaceInstr = generateInterfaceAss(fieldType.getInterfaceDefinition(), rhsType, scope);
+            instructions.add(new AddInstruction(Register.RCX, YieldUtils.number(offset)));
+            instructions.addAll(generateInterfaceInstr);
+            instructions.addRegisters(generateInterfaceInstr.usedRegisters);
+
+        } else {
+            instructions.add(new MovInstruction(MemoryReference.getWithOffset(Register.RAX, offset), Register.RCX));
+        }
+
+
+
         instructions.addRegisters(exprInstr.usedRegisters);
         instructions.addRegister(Register.RCX);
 
         return instructions;
     }
 
-    public static Instructions generateFieldAssFromVar(VariableRawLhs lhs, String sourceRegister, BackendScope scope) {
+    public static Instructions generateFieldAssFromVar(VariableRawLhs lhs, TypeDefinition rhsType, String sourceRegister, BackendScope scope) {
         Instructions instructions = new Instructions();
-        // TODO: add 1 to max stack size to fit 'this'
+
         // wartość do zapisania jest w RAX
         int thisOffset = scope.getVariable(THIS_KEYWORD).getOffset() * WORD_SIZE;
         int fieldOffset = lhs.binding.getBindedClass().getClassDefinition().getFieldOffset(lhs.ident_);
+        TypeDefinition lhsType = lhs.binding.getBindedClass().getClassDefinition().fields.get(lhs.ident_).type;
 
 
         instructions.add(new MovInstruction(Register.RCX, MemoryReference.getWithOffset(Register.RBP, thisOffset)));
         instructions.add(new AddInstruction(Register.RCX, YieldUtils.number(fieldOffset)));
-        instructions.add(new MovInstruction(MemoryReference.getRaw(Register.RCX), Register.RAX));
+
+        if (lhsType.isInterfaceType()) {
+            Instructions interfaceAssInstr = generateInterfaceAss(lhsType.getInterfaceDefinition(), rhsType, scope);
+            instructions.add(new PushInstruction(Register.RCX, scope));
+            instructions.addAll(interfaceAssInstr);
+            instructions.add(new PopInstruction(Register.RCX, scope));
+            instructions.addRegisters(interfaceAssInstr.usedRegisters);
+        } else {
+            instructions.add(new MovInstruction(MemoryReference.getRaw(Register.RCX), Register.RAX));
+        }
 
         instructions.addRegister(Register.RCX);
 
@@ -450,6 +478,7 @@ public class CompileStatement {
     public static Instructions generateVariableArrayAss(ArrElemLhs arrElem, TypeDefinition rhsType, String registerOfValue, BackendScope scope) {
         Instructions instructions = new Instructions();
 
+        // RCX bedzie trzymalo wartość którą należy zapisać do elementu tablicy
         if (!registerOfValue.equals(Register.RCX)) {
             instructions.add(new MovInstruction(Register.RCX, registerOfValue));
         }
@@ -457,13 +486,14 @@ public class CompileStatement {
         Instructions exprInstr2 = generateExpr(arrElem.expr_2, Register.RAX, Register.RAX, scope);
 
         if (exprInstr2.usedRegisters.contains(Register.RCX)) {
-            instructions.add(new PushInstruction(Register.RCX));
+            instructions.add(new PushInstruction(Register.RCX, scope));
         }
         instructions.addAll(exprInstr2);
         if (exprInstr2.usedRegisters.contains(Register.RCX)) {
-            instructions.add(new PopInstruction(Register.RCX));
+            instructions.add(new PopInstruction(Register.RCX, scope));
         }
 
+        // Liczymy index tablicy w RDX
         instructions.add(new MovInstruction(Register.RDX, Register.RAX));
         instructions.add(new AddInstruction(Register.RDX, YieldUtils.number(1)));
         instructions.add(new MulInstruction(Register.RDX, YieldUtils.number(WORD_SIZE)));
@@ -471,28 +501,43 @@ public class CompileStatement {
         Instructions exprInstr1 = generateExpr(arrElem.expr_1, Register.RAX, Register.RAX, scope);
 
         if (exprInstr1.usedRegisters.contains(Register.RCX)) {
-            instructions.add(new PushInstruction(Register.RCX));
+            instructions.add(new PushInstruction(Register.RCX, scope));
         }
         if (exprInstr1.usedRegisters.contains(Register.RDX)) {
-            instructions.add(new PushInstruction(Register.RDX));
+            instructions.add(new PushInstruction(Register.RDX, scope));
         }
+        // początek tablicy w RAX
         instructions.addAll(exprInstr1);
         if (exprInstr1.usedRegisters.contains(Register.RDX)) {
-            instructions.add(new PopInstruction(Register.RDX));
+            instructions.add(new PopInstruction(Register.RDX, scope));
         }
         if (exprInstr1.usedRegisters.contains(Register.RCX)) {
-            instructions.add(new PopInstruction(Register.RCX));
+            instructions.add(new PopInstruction(Register.RCX, scope));
         }
 
+        // adres elementu tablicy w RAX
         instructions.add(new AddInstruction(Register.RAX, Register.RDX));
 
         TypeDefinition innerArrayType = arrElem.expr_1.type.getArrayTypeDefinition().getInnerTypeDefinition();
 
-        if (innerArrayType.isInterfaceType() && arrElem.expr_2.type.isClassType()) {
-            //TODO: implement interface assignment from class
+        if (innerArrayType.isInterfaceType()) {
+            instructions.add(new PushInstruction(Register.RAX, scope));
+
+            // rhs byla w RCX, interface w RAX, zamieniamy je miejscami
+            instructions.add(new MovInstruction(Register.RDX, Register.RCX));
+            instructions.add(new MovInstruction(Register.RCX, Register.RAX));
+            instructions.add(new MovInstruction(Register.RAX, Register.RDX));
+
+            Instructions interfaceAssInstr = generateInterfaceAss(innerArrayType.getInterfaceDefinition(), rhsType, scope);
+            instructions.addAll(interfaceAssInstr);
+            instructions.add(new MovInstruction(Register.RCX, Register.RAX));
+            instructions.add(new PopInstruction(Register.RAX, scope));
+
+            instructions.addRegisters(interfaceAssInstr.usedRegisters);
+        } else {
+            instructions.add(new MovInstruction(MemoryReference.getRaw(Register.RAX), Register.RCX));
         }
 
-        instructions.add(new MovInstruction(MemoryReference.getRaw(Register.RAX), Register.RCX));
 
         instructions.addRegisters(exprInstr1.usedRegisters);
         instructions.addRegisters(exprInstr2.usedRegisters);
@@ -511,6 +556,12 @@ public class CompileStatement {
         if (BasicTypeDefinition.STRING.equals(type)) {
             instructions.add(new CallInstruction(ExternalFunctions.EMPTY_STRING));
             instructions.addRegisters(callUnsafeRegs());
+        } else if (type.isInterfaceType()) {
+            instructions.add(new MovInstruction(Register.RDI, type.getInterfaceDefinition().methodsOffsetTable.size() + 1));
+            // +1 bo w interfacie trzymamy jeszcze referencje to rzeczywistego obiektu
+            instructions.add(new CallInstruction(ExternalFunctions.MALLOC_SIZE));
+            instructions.addRegisters(callUnsafeRegs());
+            instructions.addRegister(Register.RDI);
         } else {
             instructions.add(new MovInstruction(Register.RAX, YieldUtils.number(0)));
         }
@@ -519,15 +570,79 @@ public class CompileStatement {
         return instructions;
     }
 
+    // rhs Value to assign is in RAX, returned interface reference in RAX
+    // Interface register in RCX
+    public static Instructions generateInterfaceAss(InterfaceTypeDefinition interfaceType, TypeDefinition rhsType, BackendScope scope) {
+        Instructions instructions = new Instructions();
+
+        MethodType methodType;
+        if (rhsType.isClassType()) {
+            methodType = rhsType.getClassDefinition();
+        } else {
+            methodType = rhsType.getInterfaceDefinition();
+        }
+
+        // referencja do interfacu w RDX
+        instructions.add(new MovInstruction(Register.RDX, Register.RCX));
+
+        // referencja do klasy/rhs-interfacu w RCX
+        instructions.add(new MovInstruction(Register.RCX, Register.RAX));
+
+        if (rhsType.isInterfaceType()) {
+            instructions.add(new MovInstruction(Register.RAX, MemoryReference.getRaw(Register.RCX)));
+            instructions.add(new MovInstruction(MemoryReference.getRaw(Register.RDX), Register.RAX));
+        } else {
+            // zapisz faktyczna wartosc klasy w interfacie
+            instructions.add(new MovInstruction(MemoryReference.getRaw(Register.RDX), Register.RCX));
+        }
+
+        for (String methodName : interfaceType.methodsOffsetTable.keySet()) {
+            int classMethodOffset = methodType.getMethodOffset(methodName);
+            int interfaceMethodOffset = interfaceType.getMethodOffset(methodName);
+
+            instructions.add(new MovInstruction(Register.RDI, Register.RCX));
+            instructions.add(new AddInstruction(Register.RDI, YieldUtils.number(classMethodOffset)));
+            instructions.add(new MovInstruction(Register.RAX, MemoryReference.getRaw(Register.RDI)));
+            instructions.add(new MovInstruction(Register.RDI, Register.RDX));
+            instructions.add(new AddInstruction(Register.RDI, YieldUtils.number(interfaceMethodOffset)));
+            instructions.add(new MovInstruction(MemoryReference.getRaw(Register.RDI), Register.RAX));
+        }
+
+        instructions.add(new MovInstruction(Register.RAX, Register.RDX));
+
+        instructions.addRegisters(callUnsafeRegs());
+        instructions.addRegister(Register.RDI);
+        instructions.addRegister(Register.RCX);
+        instructions.addRegister(Register.RDX);
+
+        return instructions;
+    }
+
     public static Instructions generateInit(Init init, TypeDefinition type, BackendScope scope) {
         Instructions instructions = generateExpr(init.expr_, Register.RAX, Register.RAX, scope);
 
-        if (type.isInterfaceType() && init.expr_.type.isClassType()) {
-            // TODO: generate interface assignment from class type
-        }
-
         scope.declareVariable(init.ident_, type);
         int offset = scope.getVariable(init.ident_).getOffset() * WORD_SIZE;
+
+        TypeDefinition rhsType = init.expr_.type;
+
+        if (type.isInterfaceType()) {
+            InterfaceTypeDefinition interfaceType = type.getInterfaceDefinition();
+
+            instructions.add(new PushInstruction(Register.RAX, scope));
+            instructions.add(new MovInstruction(Register.RDI, interfaceType.methodsOffsetTable.size() + 1));
+            // +1 bo w interfacie trzymamy jeszcze referencje to rzeczywistego obiektu
+            instructions.add(new CallInstruction(ExternalFunctions.MALLOC_SIZE));
+            instructions.add(new MovInstruction(Register.RCX, Register.RCX));
+            // rhs w RAX
+            instructions.add(new PopInstruction(Register.RAX, scope));
+
+            Instructions interfaceAssInsr = generateInterfaceAss(interfaceType, rhsType, scope);
+
+            instructions.addAll(interfaceAssInsr);
+            instructions.addRegisters(interfaceAssInsr.usedRegisters);
+        }
+
         instructions.add(new MovInstruction(MemoryReference.getWithOffset(Register.RBP, offset), Register.RAX));
 
 
@@ -602,17 +717,17 @@ public class CompileStatement {
         Instructions stmtInstr = generateStmt(forArr.stmt_, scope);
 
         if (stmtInstr.usedRegisters.contains(Register.RCX)) {
-            instructions.add(new PushInstruction(Register.RCX));
+            instructions.add(new PushInstruction(Register.RCX, scope));
         }
         if (stmtInstr.usedRegisters.contains(Register.RDX)) {
-            instructions.add(new PushInstruction(Register.RDX));
+            instructions.add(new PushInstruction(Register.RDX, scope));
         }
         instructions.addAll(stmtInstr);
         if (stmtInstr.usedRegisters.contains(Register.RDX)) {
-            instructions.add(new PopInstruction(Register.RDX));
+            instructions.add(new PopInstruction(Register.RDX, scope));
         }
         if (stmtInstr.usedRegisters.contains(Register.RCX)) {
-            instructions.add(new PopInstruction(Register.RCX));
+            instructions.add(new PopInstruction(Register.RCX, scope));
         }
 
         instructions.add(new SubInstruction(Register.RDX, YieldUtils.number(1)));

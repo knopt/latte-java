@@ -8,7 +8,7 @@ import java.util.Objects;
 
 import static src.Backend.Instructions.ConstantUtils.WORD_SIZE;
 
-public class InterfaceTypeDefinition implements TypeDefinition, Arrayable {
+public class InterfaceTypeDefinition implements TypeDefinition, Arrayable, MethodType {
     public String className;
     public Map<String, CallableDeclaration> methods;
     public Map<String, Integer> methodsOffsetTable;
