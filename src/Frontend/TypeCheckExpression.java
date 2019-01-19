@@ -296,6 +296,10 @@ public class TypeCheckExpression {
             return castedToType;
         }
 
+        if (castedToType.equals(BasicTypeDefinition.BOOLEAN) && castedType.equals(BasicTypeDefinition.INT)) {
+            return castedToType;
+        }
+
         if (BasicTypeDefinition.VOID.equals(castedToType.isBasicType())) {
             return castedToType;
         }

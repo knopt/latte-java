@@ -155,38 +155,47 @@ public class CompileExpression {
         Set<String> incrementalUsedRegistersSet = new HashSet<>();
 
 
-        if (exprs.size() > 5 + argsOffset) {
-            incrementalUsedRegistersSet.addAll(exprInstructions5.usedRegisters);
-        }
+//        if (exprs.size() > 5 + argsOffset) {
+//        }
+
+        incrementalUsedRegistersSet.addAll(exprInstructions5.usedRegisters);
 
         if (exprs.size() > 4 + argsOffset && incrementalUsedRegistersSet.contains(Register.R8)) {
             r8Destroyed = true;
-            incrementalUsedRegistersSet.addAll(exprInstructions4.usedRegisters);
+//            incrementalUsedRegistersSet.addAll(exprInstructions4.usedRegisters);
         }
+        incrementalUsedRegistersSet.addAll(exprInstructions4.usedRegisters);
 
         if (exprs.size() > 3 + argsOffset && incrementalUsedRegistersSet.contains(Register.RCX)) {
             rcxDestroyed = true;
-            incrementalUsedRegistersSet.addAll(exprInstructions3.usedRegisters);
+//            incrementalUsedRegistersSet.addAll(exprInstructions3.usedRegisters);
         }
+        incrementalUsedRegistersSet.addAll(exprInstructions3.usedRegisters);
 
         if (exprs.size() > 2 + argsOffset && incrementalUsedRegistersSet.contains(Register.RDX)) {
             rdxDestroyed = true;
-            incrementalUsedRegistersSet.addAll(exprInstructions2.usedRegisters);
+//            incrementalUsedRegistersSet.addAll(exprInstructions2.usedRegisters);
         }
+        incrementalUsedRegistersSet.addAll(exprInstructions2.usedRegisters);
 
         if (exprs.size() > 1 + argsOffset && incrementalUsedRegistersSet.contains(Register.RSI)) {
             rsiDestroyed = true;
-            incrementalUsedRegistersSet.addAll(exprInstructions1.usedRegisters);
+//            incrementalUsedRegistersSet.addAll(exprInstructions1.usedRegisters);
         }
+        incrementalUsedRegistersSet.addAll(exprInstructions1.usedRegisters);
 
         if (!isMethod && exprs.size() > 0 && incrementalUsedRegistersSet.contains(Register.RDI)) {
             rdiDestroyed = true;
-            incrementalUsedRegistersSet.addAll(exprInstructions0.usedRegisters);
+//            incrementalUsedRegistersSet.addAll(exprInstructions0.usedRegisters);
         }
 
         if (isMethod && incrementalUsedRegistersSet.contains(Register.RDI)) {
             rdiDestroyed = true;
         }
+
+        incrementalUsedRegistersSet.addAll(exprInstructions0.usedRegisters);
+
+//        System.err.println("registers used: " + incrementalUsedRegistersSet);
 
 
         if (!isMethod && exprs.size() > 0) {
@@ -636,9 +645,45 @@ public class CompileExpression {
 
         TypeDefinition castedToType = getType(cast.typename_, scope.getGlobalEnvironment(), cast.line_num, cast.col_num);
 
+        if (castedToType.equals(cast.expr_.type)) {
+            return exprInstructions;
+        }
+
         if (castedToType.equals(BasicTypeDefinition.INT)) {
             // do nothing, treat register value as an int
             return exprInstructions;
+        }
+
+        if (castedToType.equals(BasicTypeDefinition.BOOLEAN) && cast.expr_.type.equals(BasicTypeDefinition.INT)) {
+            Label end = LabelsGenerator.getNonceLabel("cast_to_bool_end");
+
+            Instructions instructions = new Instructions();
+            instructions.addAll(exprInstructions);
+            instructions.addRegisters(exprInstructions.usedRegisters);
+
+            instructions.add(new CompareInstruction(destRegister, YieldUtils.number(0)));
+            instructions.add(new JumpInstruction(end, JumpInstruction.Type.EQU));
+            instructions.add(new MovInstruction(destRegister, YieldUtils.number(1)));
+            instructions.add(end);
+
+            return instructions;
+        }
+
+        if (castedToType.isClassType() && cast.expr_.type.isNullType()) {
+            return exprInstructions;
+        }
+
+        if (castedToType.isInterfaceType() && cast.expr_.type.isNullType()) {
+            Instructions instructions = new Instructions();
+            int interfaceSize = castedToType.getInterfaceDefinition().methodsOffsetTable.size() + 1;
+
+            instructions.add(new MovInstruction(Register.RDI, YieldUtils.number(interfaceSize)));
+            instructions.add(new CallInstruction(ExternalFunctions.MALLOC_SIZE));
+
+            instructions.addRegisters(callUnsafeRegs());
+            instructions.addRegister(Register.RDI);
+
+            return instructions;
         }
 
         return notImplemented(cast);

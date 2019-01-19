@@ -71,9 +71,7 @@ public class TypeCheck {
     }
 
     public static TypeDefinition gatherTypeDeclarations(ClassDec classDec) {
-        if (Character.isLowerCase(classDec.ident_.charAt(0))) {
-            throw new TypeCheckException("Class name should start with upper case", classDec.line_num, classDec.col_num);
-        }
+//        if 
 
         return new ClassTypeDefinition(classDec.ident_);
     }

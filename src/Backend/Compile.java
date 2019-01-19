@@ -5,6 +5,7 @@ import src.Absyn.MBody;
 import src.Absyn.Stmt;
 import src.Backend.Definitions.BackendScope;
 import src.Backend.Definitions.ExternalFunctions;
+import src.Backend.Definitions.Instructions;
 import src.Backend.Definitions.Register;
 import src.Backend.Instructions.*;
 import src.Definitions.FunctionDeclaration;
@@ -175,15 +176,17 @@ public class Compile {
     public List<AssemblyInstruction> generatePushCallableEntryArgumentsToStack(List<VariableDefinition> args, BackendScope scope, TypeDefinition methodsCallerType) {
         List<AssemblyInstruction> instructions = new ArrayList<>();
 
+        instructions.add(new Comment("generate push callable entry args"));
+
         int argsOffset = 0;
 
         boolean isMethod = methodsCallerType != null;
 
         if (isMethod) {
             argsOffset = -1;
-            scope.declareVariable(THIS_KEYWORD, methodsCallerType);
-            int offset = scope.getVariable(THIS_KEYWORD).getOffset() * WORD_SIZE;
-            instructions.add(new MovInstruction(MemoryReference.getWithOffset(Register.RBP, offset), Register.RDI));
+//            scope.declareVariable(THIS_KEYWORD, methodsCallerType);
+//            int offset = scope.getVariable(THIS_KEYWORD).getOffset() * WORD_SIZE;
+//            instructions.add(new MovInstruction(MemoryReference.getWithOffset(Register.RBP, offset), Register.RDI));
         }
 
         if (!isMethod && args.size() > 0) {
@@ -239,6 +242,8 @@ public class Compile {
             scope.declareVariable(args.get(i).getVariableName(), args.get(i).getType(), offset, false);
         }
 
+        instructions.add(new Comment("Generate entry end"));
+
         return instructions;
     }
 
@@ -258,8 +263,20 @@ public class Compile {
     public Boolean generateBody(MBody body, BackendScope scope) {
         BlockS block = body.block_.match((blockS) -> blockS);
 
+        Instructions instructions = new Instructions();
+
         for (Stmt stmt : block.liststmt_) {
-            addInstructions(CompileStatement.generateStmt(stmt, scope).getInstructions());
+            Instructions stmtInstructions = CompileStatement.generateStmt(stmt, scope);
+            instructions.addAll(stmtInstructions);
+            instructions.addRegisters(stmtInstructions.usedRegisters);
+        }
+
+        if (instructions.usedRegisters.contains(Register.RDX)) {
+            addInstructions(new PushInstruction(Register.RDX));
+            addInstructions(instructions.getInstructions());
+            addInstructions(new PopInstruction(Register.RDX));
+        } else {
+            addInstructions(instructions.getInstructions());
         }
 
         return true;

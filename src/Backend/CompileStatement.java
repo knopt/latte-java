@@ -707,18 +707,20 @@ public class CompileStatement {
 
         instructions.addRegister(Register.RDX);
         instructions.addRegister(Register.RCX);
+        instructions.addRegister(Register.RDI);
 
         Instructions exprInstr = generateExpr(forArr.expr_, Register.RAX, Register.RAX, scope);
 
         instructions.addAll(exprInstr); // get array beginning
         instructions.add(new MovInstruction(Register.RCX, Register.RAX));
         instructions.add(new MovInstruction(Register.RDX, MemoryReference.getRaw(Register.RCX)));
+        instructions.add(new MovInstruction(Register.RDI, YieldUtils.number(1)));
 
         instructions.add(start);
-        instructions.add(new CompareInstruction(Register.RDX, YieldUtils.number(0)));
-        instructions.add(new JumpInstruction(end, JumpInstruction.Type.EQU));
+        instructions.add(new CompareInstruction(Register.RDI, Register.RDX));
+        instructions.add(new JumpInstruction(end, JumpInstruction.Type.GTH));
 
-        instructions.add(new MovInstruction(Register.RAX, Register.RDX));
+        instructions.add(new MovInstruction(Register.RAX, Register.RDI));
         instructions.add(new MulInstruction(Register.RAX, YieldUtils.number(WORD_SIZE)));
         instructions.add(new AddInstruction(Register.RAX, Register.RCX)); // add address of begining of an array
         instructions.add(new MovInstruction(Register.RAX, MemoryReference.getRaw(Register.RAX)));
@@ -732,7 +734,15 @@ public class CompileStatement {
         if (stmtInstr.usedRegisters.contains(Register.RDX)) {
             instructions.add(new PushInstruction(Register.RDX, scope));
         }
+        if (stmtInstr.usedRegisters.contains(Register.RDI)) {
+            instructions.add(new PushInstruction(Register.RDI));
+        }
+
         instructions.addAll(stmtInstr);
+
+        if (stmtInstr.usedRegisters.contains(Register.RDI)) {
+            instructions.add(new PopInstruction(Register.RDI));
+        }
         if (stmtInstr.usedRegisters.contains(Register.RDX)) {
             instructions.add(new PopInstruction(Register.RDX, scope));
         }
@@ -740,7 +750,7 @@ public class CompileStatement {
             instructions.add(new PopInstruction(Register.RCX, scope));
         }
 
-        instructions.add(new SubInstruction(Register.RDX, YieldUtils.number(1)));
+        instructions.add(new AddInstruction(Register.RDI, YieldUtils.number(1)));
 
         instructions.add(new JumpInstruction(start, JumpInstruction.Type.ALWAYS));
         instructions.add(end);

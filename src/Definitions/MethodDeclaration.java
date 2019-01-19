@@ -79,7 +79,7 @@ public class MethodDeclaration implements CallableDeclaration {
     }
 
     public void assignLabel() {
-        this.label = LabelsGenerator.getNonceLabel("_" + callerType.getName() + "_" + getName());
+        this.label = LabelsGenerator.getNonceLabel("__" + callerType.getName() + "_" + getName());
     }
 
     @Override
