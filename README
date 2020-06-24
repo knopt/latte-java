@@ -1,29 +1,18 @@
-Tomasz Knopik 359778
+Assembly x86_64 compiler for `src/Latte.cf` grammar. 
 
-Kompilator do assemblera x86_64. Napisany w Javie, przy użyciu bnfc.
-
-Uruchomienie kompilatora:
+To run:
 ```
 make
 ./latc_x86_64 input.lat
 ```
 
-Polecenie `make` kompiluje pliki javy.
-Polecenie latc_x86_64 kompiluje plik input.lat do pliku assemblera x86_64 input.s, kompiluje plik lib/runtime.c, tworzy wykonywalny plik input ze zlinkownym plikiem lib/runtime.o
+`make` compiles Java sources
+`latc_x86_64` compiles `input.lat` to assembly x86_64 `input.s`, compiles `lib/runtime.c`, creates executable `input` with linked `lib/runtime.o`
 
-Używane zależności zewnętrzne to  JLex, java-cup, java-cup-runtime (wymagane przez klasy generowane przez bnfc), commons-lang (podstawowa biblioteka javowa do escapeowania znaków specjalnych ze stringów).
+Dependencies: `JLex`, `java-cup`, `java-cup-runtime`, `commons-lang`.
 
-Katalog src zawiera wszystkie pliki źródłowe. 
-Podkatalog src/Absyn zawiera wygenerowane przez bnfc (oraz częściowo zmodyfikowane przeze mnie) klasy drzewa AST.
-Podkatalog src/Exception zawiera używane wyjątki javowe
-Podkatalog src/Definitions zawiera klasy używane w całym projekcie takie jak klasy opisujące typy, środowisko wykonania programu itp.
-Podkatalog src/Frontend zawiera klasy używane do statycznej analizy typów
-Podkatalog src/Backend zawiera klasy używane do generacji kodu
-
-Zaimplementowane rozszerzenia:
-- tablice
-- struktury
-- obiekty (pola, metody, bez dziedziczenia)
-- metody wirtualne / interface'y - częściowo zaimplementowane - dokończę implementację na kolejny termin tj. 21.01
-
-Na tym etapie projektu, niektóre elementy rozszerzeń mogą posiadać pewne braki, uzupełnie je do 21.01
+Compiler supports:
+- arrays
+- structs
+- objects
+- interfaces
